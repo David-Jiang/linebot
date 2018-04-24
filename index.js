@@ -37,6 +37,7 @@ bot.on('message', function (event) {
 			if (_.startsWith(event.message.text,'-a')) {
 				let stockId = event.message.text.replace('-a','').trim();
 				let index = _.findIndex(userInfoArr, function(o) { return o.userId === id; });
+				console.log(index);
 				let temp = userInfoArr[index].stockIdArr;
 				if (stockId.length == 4 && !_.includes(temp, stockId)) {
 					temp.push(stockId);
