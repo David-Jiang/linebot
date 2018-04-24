@@ -22,15 +22,13 @@ const userInfo = {
 let userInfoArr = [];
 
 bot.on('message', function (event) {
-	let userName = '';
-	let id = '';
-	event.source.profile().then(function (profile) {
+	let currentUser = {};
+	currentUser = event.source.profile().then(function (profile) {
 		if (!_.find(userInfoArr, function(o) { return o.userId == profile.userId; })) {
 			userInfo.userId = profile.userId;
 			userInfoArr.push(userInfo);
 		}
-		userName = profile.displayName;
-		id = profile.userId;
+		return profile;
 	});
 	console.log(userName);
 	console.log(id);
@@ -38,14 +36,14 @@ bot.on('message', function (event) {
 		case 'text':
 			if (_.startsWith(event.message.text,'-a')) {
 				let stockId = event.message.text.replace('-a','').trim();
-				let index = _.findIndex(userInfoArr, function(o) { return o.userId === id; });
+				let index = _.findIndex(userInfoArr, function(o) { return o.userId === currentUser.userId; });
 				let temp = userInfoArr[index].stockIdArr;
 				if (stockId.length == 4 && !_.includes(temp, stockId)) {
 					temp.push(stockId);
 				}
 				//userInfoArr[index].stockIdArr = temp;
 			} else {
-				event.reply('您好，' + userName + '能否為您效勞？');
+				event.reply('您好，' + currentUser.displayName + '能否為您效勞？');
 			}
 			break;
 		case 'sticker':
