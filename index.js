@@ -16,7 +16,7 @@ const linebotParser = bot.parser();
 app.post('/linewebhook', linebotParser);
 
 const aqiOpt = {
-	uri: "https://tw.stock.yahoo.com/q/q?s=2337"
+	uri: "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=tse_2330.tw_20180424&json=1&delay=0&_=1524563645436"
 };
 app.get('/',function(req,res){
 	rp(aqiOpt)
