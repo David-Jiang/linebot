@@ -22,40 +22,38 @@ const userInfo = {
 let userInfoArr = [];
 
 bot.on('message', function (event) {
-	let currentUser = {};
 	event.source.profile().then(function (profile) {
 		if (!_.find(userInfoArr, function(o) { return o.userId == profile.userId; })) {
 			userInfo.userId = profile.userId;
 			userInfoArr.push(userInfo);
 		}
-		Object.assign(profile, currentUser);
-	});
-	switch (event.message.type) {
-		case 'text':
-			if (_.startsWith(event.message.text,'-a')) {
-				let stockId = event.message.text.replace('-a','').trim();
-				let index = _.findIndex(userInfoArr, function(o) { return o.userId === currentUser.userId; });
-				let temp = userInfoArr[index].stockIdArr;
-				if (stockId.length == 4 && !_.includes(temp, stockId)) {
-					temp.push(stockId);
+		switch (event.message.type) {
+			case 'text':
+				if (_.startsWith(event.message.text,'-a')) {
+					let stockId = event.message.text.replace('-a','').trim();
+					let index = _.findIndex(userInfoArr, function(o) { return o.userId === profile.userId; });
+					let temp = userInfoArr[index].stockIdArr;
+					if (stockId.length == 4 && !_.includes(temp, stockId)) {
+						temp.push(stockId);
+					}
+					//userInfoArr[index].stockIdArr = temp;
+				} else {
+					event.reply('您好，' + profile.displayName + '能否為您效勞？');
 				}
-				//userInfoArr[index].stockIdArr = temp;
-			} else {
-				event.reply('您好，' + currentUser.displayName + '能否為您效勞？');
-			}
-			break;
-		case 'sticker':
-			event.reply({
-				type: 'sticker',
-				packageId: 1,
-				stickerId: 4
-			});
-			break;
-	default:
-			event.reply('Unknow message: ' + JSON.stringify(event));
-			break;
-
-	}
+				break;
+			case 'sticker':
+				event.reply({
+					type: 'sticker',
+					packageId: 1,
+					stickerId: 4
+				});
+				break;
+		default:
+				event.reply('Unknow message: ' + JSON.stringify(event));
+				break;
+	
+		}
+	});
 });
 
 app.listen(process.env.PORT || 80, function () {
