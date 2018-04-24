@@ -30,8 +30,6 @@ bot.on('message', function (event) {
 		}
 		return profile;
 	});
-	console.log(userName);
-	console.log(id);
 	switch (event.message.type) {
 		case 'text':
 			if (_.startsWith(event.message.text,'-a')) {
