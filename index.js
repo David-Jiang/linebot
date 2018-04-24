@@ -19,7 +19,7 @@ const userInfo = {
 	stockIdArr: []
 };
 
-let userInfoArr<userInfo> = [];
+let userInfoArr = [];
 
 bot.on('message', function (event) {
 	let userName = '';
