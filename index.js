@@ -16,7 +16,8 @@ app.post('/linewebhook', linebotParser);
 
 const userInfo = {
 	userId: '',
-	stockIdArr: []
+	stockIdArr: [],
+	subscr: false
 };
 
 let userInfoArr = [];
@@ -36,9 +37,14 @@ bot.on('message', function (event) {
 					if (stockId.length == 4 && !_.includes(temp, stockId)) {
 						temp.push(stockId);
 					}
-					//userInfoArr[index].stockIdArr = temp;
+					userInfoArr[index].subscr = true;
+					event.reply('您好' + profile.displayName + '，已開啟推撥成功');
+				} else if (_.startsWith(event.message.text,'-r')) {
+					let userInfo = _.find(userInfoArr, function(o) { return o.userId === profile.userId; });
+					userInfo.subscr = false;
+					event.reply('您好' + profile.displayName + '，已取消推播');
 				} else {
-					event.reply('您好，' + profile.displayName + '能否為您效勞？');
+					event.reply('您好' + profile.displayName + '，能否為您效勞？');
 				}
 				break;
 			case 'sticker':
@@ -49,7 +55,7 @@ bot.on('message', function (event) {
 				});
 				break;
 		default:
-				event.reply('Unknow message: ' + JSON.stringify(event));
+				event.reply('請輸入正確訊息唷');
 				break;
 	
 		}
@@ -62,7 +68,7 @@ app.listen(process.env.PORT || 80, function () {
 
 setInterval(function() {
 	_.forEach(userInfoArr, function(vo) {
-		if (vo.stockIdArr.length > 0) {
+		if (vo.subscr && vo.stockIdArr.length > 0) {
 			bot.push(vo.userId, {
 				type: 'text',
 				text: '你訂閱股票代號為：' + _.join(vo.stockIdArr, ',')
