@@ -24,14 +24,14 @@ let userInfoArr = [];
 bot.on('message', function (event) {
 	let userName = '';
 	let id = '';
-	/* event.source.profile().then(function (profile) {
+	event.source.profile().then(function (profile) {
 		if (!_.find(userInfoArr, function(o) { return o.userId == profile.userId; })) {
 			userInfo.userId = profile.userId;
 			userInfoArr.push(userInfo);
 		}
 		userName = profile.displayName;
 		id = profile.userId;
-	}); */
+	});
 	switch (event.message.type) {
 		case 'text':
 			if (_.startsWith(event.message.text,'-a')) {
