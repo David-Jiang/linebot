@@ -37,11 +37,11 @@ bot.on('message', function (event) {
 			if (_.startsWith(event.message.text,'-a')) {
 				let stockId = event.message.text.replace('-a','').trim();
 				let index = _.findIndex(userInfo, function(o) { return o.userId === id; });
-				let temp = _.clone(userInfo[index].stockIdArr);
+				let temp = userInfo[index].stockIdArr;
 				if (stockId.length == 4 && !_.includes(temp, stockId)) {
 					temp.push(stockId);
 				}
-				userInfo[index].stockIdArr = temp;
+				//userInfo[index].stockIdArr = temp;
 			} else {
 				event.reply('您好，' + userName + '能否為您效勞？');
 			}
@@ -66,9 +66,11 @@ app.listen(process.env.PORT || 80, function () {
 
 setInterval(function() {
 	_.forEach(userInfoArr, function(vo) {
-		bot.push(vo.userId, {
-			type: 'text',
-			text: '你訂閱股票代號為：' + _.join(vo.stockIdArr, ',')
-		});
+		if (vo.stockIdArr.length > 0) {
+			bot.push(vo.userId, {
+				type: 'text',
+				text: '你訂閱股票代號為：' + _.join(vo.stockIdArr, ',')
+			});
+		}
 	});
-} ,10000);
+} ,30000);
