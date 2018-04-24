@@ -23,12 +23,12 @@ let userInfoArr = [];
 
 bot.on('message', function (event) {
 	let currentUser = {};
-	currentUser = event.source.profile().then(function (profile) {
+	event.source.profile().then(function (profile) {
 		if (!_.find(userInfoArr, function(o) { return o.userId == profile.userId; })) {
 			userInfo.userId = profile.userId;
 			userInfoArr.push(userInfo);
 		}
-		return profile;
+		Object.assign(profile, currentUser);
 	});
 	switch (event.message.type) {
 		case 'text':
