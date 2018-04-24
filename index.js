@@ -25,8 +25,6 @@ bot.on('message', function (event) {
 	let userName = '';
 	let id = '';
 	event.source.profile().then(function (profile) {
-		console.log(profile);
-		console.log(profile.userId);
 		if (!_.find(userInfoArr, function(o) { return o.userId == profile.userId; })) {
 			userInfo.userId = profile.userId;
 			userInfoArr.push(userInfo);
@@ -34,6 +32,8 @@ bot.on('message', function (event) {
 		userName = profile.displayName;
 		id = profile.userId;
 	});
+	console.log(userName);
+	console.log(id);
 	switch (event.message.type) {
 		case 'text':
 			if (_.startsWith(event.message.text,'-a')) {
