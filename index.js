@@ -14,6 +14,20 @@ const linebotParser = bot.parser();
 
 app.post('/linewebhook', linebotParser);
 
+const aqiOpt = {
+	uri: "https://tw.stock.yahoo.com/q/q?s=2337"
+};
+app.get('/',function(req,res){
+	rp(aqiOpt)
+	.then(function (repos) {
+			console.log(repos)
+	})
+	.catch(function (err) {
+			res.send("無法取得空氣品質資料～");
+	});
+});
+
+
 const userInfo = {
 	userId: '',
 	stockIdArr: [],
