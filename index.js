@@ -25,6 +25,8 @@ bot.on('message', function (event) {
 	let userName = '';
 	let id = '';
 	event.source.profile().then(function (profile) {
+		console.log(profile);
+		console.log(profile.userId);
 		if (!_.find(userInfoArr, function(o) { return o.userId == profile.userId; })) {
 			userInfo.userId = profile.userId;
 			userInfoArr.push(userInfo);
@@ -37,7 +39,6 @@ bot.on('message', function (event) {
 			if (_.startsWith(event.message.text,'-a')) {
 				let stockId = event.message.text.replace('-a','').trim();
 				let index = _.findIndex(userInfoArr, function(o) { return o.userId === id; });
-				console.log(index);
 				let temp = userInfoArr[index].stockIdArr;
 				if (stockId.length == 4 && !_.includes(temp, stockId)) {
 					temp.push(stockId);
