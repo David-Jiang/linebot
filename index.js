@@ -30,6 +30,10 @@ const stockInfo = {
 	hightPrice: 0.0
 };
 let stockList = [];
+var copy = Object.assign({}, stockInfo);
+copy.stockId = "2082"
+console.log("origin" + stockInfo)
+console.log("current" + copy)
 
 bot.on('message', function (event) {
 	event.source.profile().then(function (profile) {
@@ -119,7 +123,7 @@ const reqOpt = {
     	'content-type': 'application/json'
     }
 };
-/* rp(reqOpt)
+rp(reqOpt)
 	.then(function (repos) {
 		setInterval(function() {
 			let temp = '';
@@ -148,5 +152,5 @@ const reqOpt = {
 	})
 	.catch(function (err) {
 		console.log("前導網頁get cookie發生錯誤:" + err);
-	}); */
+	});
 
