@@ -91,16 +91,28 @@ setInterval(function() {
 } ,10000);
 
 
+const jar = rp.jar();
+const reqOpt = {
+	uri: "http://mis.twse.com.tw/stock/fibest.jsp?lang=zh_tw",
+	jar,
+  headers:
+  	{
+    	'content-type': 'application/json'
+    }
+};
 
-/* rp({uri: "http://mis.twse.com.tw/stock/fibest.jsp?lang=zh_tw"})
+rp(reqOpt)
 	.then(function (repos) {
 		setInterval(function() {
 			let temp = '';
 			_.forEach(stockList , function(stockVO) { 
   			temp += 'tse_' + stockVO.stockId + '.tw' + '%7c';
 			});
-			rp({uri: "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?_=" + Date.now() + "&ex_ch=" + temp.substring(0, temp.length - 3)})
+			
+			reqOpt.uri = "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?_=" + Date.now() + "&ex_ch=" + temp.substring(0, temp.length - 3);
+			rp(reqOpt)
 			.then(function (repos) {
+				console.log(repos)
 				var jsonObject = JSON.parse(repos);
 		
 				_.forEach(jsonObject.msgArray , function(vo) { 
@@ -114,5 +126,5 @@ setInterval(function() {
 	})
 	.catch(function (err) {
 		console.log("前導網頁get cookie發生錯誤:" + err);
-	}); */
+	});
 
