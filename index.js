@@ -119,6 +119,7 @@ rp(reqOpt)
 				var jsonObject = JSON.parse(repos);
 		
 				_.forEach(jsonObject.msgArray , function(vo) { 
+					console.log(stocvo.chkList)
 					_.forEach(stockList , function(stockVO) { 
 							if (vo.ch.replace(".tw","") == stockVO.stockId) {
 								stockList.startPrice = vo.y;
@@ -129,7 +130,6 @@ rp(reqOpt)
 							}
 					});
 				});
-				console.log(stockList)
 			})
 			.catch(function (err) {
 				console.log("getStockInfo發生錯誤:" + err);
