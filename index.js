@@ -117,7 +117,7 @@ rp({uri: "http://mis.twse.com.tw/stock/fibest.jsp?lang=zh_tw"})
 			.catch(function (err) {
 				console.log("getStockInfo發生錯誤:" + err);
 			});
-		} ,10000);
+		} ,60000);
 	})
 	.catch(function (err) {
 		console.log("前導網頁get cookie發生錯誤:" + err);
