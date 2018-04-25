@@ -1,7 +1,7 @@
-const linebot = require('linebot');
-const express = require('express');
-const rp = require('request-promise');
-const _ = require('lodash');
+const linebot = require('linebot')
+const express = require('express')
+const rp = require('request-promise')
+const _ = require('lodash')
 
 const bot = linebot({
 	channelId: process.env.CHANNEL_ID,
@@ -9,18 +9,18 @@ const bot = linebot({
 	channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN
 });
 
-const app = express();
+const app = express()
 
-const linebotParser = bot.parser();
+const linebotParser = bot.parser()
 
-app.post('/linewebhook', linebotParser);
+app.post('/linewebhook', linebotParser)
 
 const userInfo = {
 	userId: '',
 	stockIdArr: [],
 	subscr: false
 };
-let userInfoArr = [];
+let userInfoArr = []
 
 const stockInfo = {
 	stockId: '',
@@ -29,11 +29,11 @@ const stockInfo = {
 	lowPrice: 0.0,
 	hightPrice: 0.0
 };
-let stockList = [];
+let stockList = []
 
 bot.on('message', function (event) {
 	event.source.profile().then(function (profile) {
-		if (!_.find(userInfoArr, function(o) { return o.userId == profile.userId; })) {
+		if (!_.find(userInfoArr, function(o) { return o.userId == profile.userId })) {
 			userInfo.userId = profile.userId
 			userInfoArr.push(userInfo)
 		}
@@ -84,19 +84,19 @@ bot.on('message', function (event) {
 });
 
 app.listen(process.env.PORT || 80, function () {
-	console.log('LineBot is running.');
+	console.log('LineBot is running.')
 });
 
 setInterval(function() {
 	_.forEach(userInfoArr, function(vo) {
 		if (vo.subscr && vo.stockIdArr.length > 0) {
-			let showMessage = '';
+			let showMessage = ''
 			_.forEach(vo.stockIdArr , function(stockId) {
-				let obj = _.find(stockList, function(o) { return o.stockId == stockId && o.currPrice > 0; });
+				let obj = _.find(stockList, function(o) { return o.stockId == stockId && o.currPrice > 0 })
 				if (obj) {
 					showMessage += "股票代號:" + obj.stockId + "\n目前股價:" + obj.currPrice + "(" + 
 						(obj.currPrice - obj.startPrice > 0 ? "+" : "") + (obj.currPrice - obj.startPrice) + ")\n" +
-						"最高價:" + obj.hightPrice + "\n最高價:" + obj.lowPrice
+						"最高價:" + obj.hightPrice + "\n最高價:" + obj.lowPrice + "\n"
 				}
 			});
 
@@ -123,31 +123,31 @@ const reqOpt = {
 rp(reqOpt)
 	.then(function (repos) {
 		setInterval(function() {
-			let temp = '';
+			let temp = ''
 			_.forEach(stockList , function(stockVO) { 
-  			temp += 'tse_' + stockVO.stockId + '.tw' + '%7c';
+  			temp += 'tse_' + stockVO.stockId + '.tw' + '%7c'
 			});
-			reqOpt.uri = "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?_=" + Date.now() + "&ex_ch=" + temp.substring(0, temp.length - 3);
+			reqOpt.uri = "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?_=" + Date.now() + "&ex_ch=" + temp.substring(0, temp.length - 3)
 			if (stockList.length > 0) {
 				rp(reqOpt)
 				.then(function (repos) {
-					var jsonObject = JSON.parse(repos);
+					var jsonObject = JSON.parse(repos)
 		
 					_.forEach(jsonObject.msgArray , function(vo) { 
 						let info = _.find(stockList, function(o) { return o.stockId == vo.ch.replace(".tw",""); })
-						info.startPrice = vo.y;
-						info.lowPrice = vo.l;
-						info.hightPrice = vo.h;
-						info.currPrice = vo.z;
-					});
+						info.startPrice = vo.y
+						info.lowPrice = vo.l
+						info.hightPrice = vo.h
+						info.currPrice = vo.z
+					})
 				})
 				.catch(function (err) {
-					console.log("getStockInfo發生錯誤:" + err);
-				});
+					console.log("getStockInfo發生錯誤:" + err)
+				})
 			}
-		} ,20000);
+		} ,20000)
 	})
 	.catch(function (err) {
-		console.log("前導網頁get cookie發生錯誤:" + err);
-	});
+		console.log("前導網頁get cookie發生錯誤:" + err)
+	})
 
