@@ -82,10 +82,10 @@ app.listen(process.env.PORT || 80, function () {
 setInterval(function() {
 	_.forEach(userInfoArr, function(vo) {
 		if (vo.subscr && vo.stockIdArr.length > 0) {
-			bot.push(vo.userId, {
+			/* bot.push(vo.userId, {
 				type: 'text',
 				text: '你訂閱股票代號為：' + _.join(vo.stockIdArr, ',')
-			});
+			}); */
 		}
 	});
 } ,10000);
@@ -99,6 +99,7 @@ rp({uri: "http://mis.twse.com.tw/stock/fibest.jsp?lang=zh_tw"})
 			_.forEach(stockList , function(stockVO) { 
   			temp += 'tse_' + stockVO.stockId + '.tw' + '%7c';
 			});
+			console.log("http://mis.twse.com.tw/stock/api/getStockInfo.jsp?_=" + Date.now() + "&ex_ch=" + temp.substring(0, temp.length - 3)}))
 			rp({uri: "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?_=" + Date.now() + "&ex_ch=" + temp.substring(0, temp.length - 3)})
 			.then(function (repos) {
 				var jsonObject = JSON.parse(repos);
@@ -110,7 +111,7 @@ rp({uri: "http://mis.twse.com.tw/stock/fibest.jsp?lang=zh_tw"})
 			.catch(function (err) {
 				console.log("getStockInfo發生錯誤:" + err);
 			});
-		} ,20000);
+		} ,10000);
 	})
 	.catch(function (err) {
 		console.log("前導網頁get cookie發生錯誤:" + err);
