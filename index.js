@@ -122,10 +122,10 @@ rp(reqOpt)
 					_.forEach(stockList , function(stockVO) { 
 							if (vo.ch.indexOf(stockVO.stockId) > -1) {
 								console.log("yes");
-								stockList.startPrice = vo.y;
-								stockList.lowPrice = vo.l;
-								stockList.hightPrice = vo.h;
-								stockList.currPrice = vo.pz;
+								stockVO.startPrice = vo.y;
+								stockVO.lowPrice = vo.l;
+								stockVO.hightPrice = vo.h;
+								stockVO.currPrice = vo.pz;
 								return false;
 							} else {
 								console.log("no");
