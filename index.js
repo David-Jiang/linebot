@@ -32,8 +32,8 @@ const stockInfo = {
 let stockList = [];
 var copy = Object.assign({}, stockInfo);
 copy.stockId = "2082"
-console.log("origin" + stockInfo)
-console.log("current" + copy)
+console.log("origin" + stockInfo.stockId)
+console.log("current" + copy.stockId)
 
 bot.on('message', function (event) {
 	event.source.profile().then(function (profile) {
