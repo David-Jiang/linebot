@@ -85,7 +85,7 @@ setInterval(function() {
 			let showMessage = '';
 			_.forEach(vo.stockIdArr , function(stockId) {
 				let obj = _.find(stockList, function(o) { return o.stockId == stockId; });
-				showMessage += "股票代號:" + obj.stockId + "/ 目前股價:" + obj.currPrice + "/ 漲跌:" + (obj.currPrice - obj.startPrice) +" %0D%0A "
+				showMessage += "股票代號:" + obj.stockId + "\n 目前股價:" + obj.currPrice + "\n 漲跌:" + (obj.currPrice - obj.startPrice >= 0 ? 0x100033 : 0x1000AD)
 			});
 			bot.push(vo.userId, {
 				type: 'text',
@@ -106,7 +106,7 @@ const reqOpt = {
     }
 };
 
-/* rp(reqOpt)
+rp(reqOpt)
 	.then(function (repos) {
 		setInterval(function() {
 			let temp = '';
@@ -134,5 +134,5 @@ const reqOpt = {
 	})
 	.catch(function (err) {
 		console.log("前導網頁get cookie發生錯誤:" + err);
-	}); */
+	});
 
