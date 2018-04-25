@@ -84,7 +84,8 @@ setInterval(function() {
 		if (vo.subscr && vo.stockIdArr.length > 0) {
 			let showMessage = '';
 			_.forEach(vo.stockIdArr , function(stockId) {
-				showMessage += JSON.stringify(_.find(stockList, function(o) { return o.stockId == stockId; }));
+				let obj = _.find(stockList, function(o) { return o.stockId == stockId; });
+				showMessage += "股票代號:" + obj.stockId + "/ 目前股價:" + obj.currPrice + "/ 漲跌:" + (obj.currPrice - obj.startPrice) +" * "
 			});
 			bot.push(vo.userId, {
 				type: 'text',
@@ -123,7 +124,7 @@ rp(reqOpt)
 					info.startPrice = vo.y;
 					info.lowPrice = vo.l;
 					info.hightPrice = vo.h;
-					info.currPrice = vo.pz;
+					info.currPrice = vo.z;
 				});
 			})
 			.catch(function (err) {
