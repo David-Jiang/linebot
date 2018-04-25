@@ -100,7 +100,7 @@ rp({uri: "http://mis.twse.com.tw/stock/fibest.jsp?lang=zh_tw"})
   			temp += 'tse_' + stockVO.stockId + '.tw' + '%7c';
 			});
 			console.log("http://mis.twse.com.tw/stock/api/getStockInfo.jsp?_=" + Date.now() + "&ex_ch=" + temp.substring(0, temp.length - 3))
-			rp({uri: "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?_=" + Date.now() + "&ex_ch=" + temp.substring(0, temp.length - 3))
+			rp({uri: "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?_=" + Date.now() + "&ex_ch=" + temp.substring(0, temp.length - 3)})
 			.then(function (repos) {
 				var jsonObject = JSON.parse(repos);
 		
