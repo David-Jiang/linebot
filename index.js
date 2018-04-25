@@ -106,6 +106,7 @@ rp({uri: "http://mis.twse.com.tw/stock/fibest.jsp?lang=zh_tw"})
     			'ex_ch': temp.substring(0, temp.length - 3)
 				}
 			};
+			console.log(getStockOpt)
 			rp(getStockOpt)
 			.then(function (repos) {
 				var jsonObject = JSON.parse(repos);
