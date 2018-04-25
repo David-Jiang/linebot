@@ -100,11 +100,7 @@ rp({uri: "http://mis.twse.com.tw/stock/fibest.jsp?lang=zh_tw"})
   			temp += 'tse_' + stockVO.stockId + '.tw' + '%7c';
 			});
 			const getStockOpt = {
-				uri: "https://mis.twse.com.tw/stock/api/getStockInfo.jsp",
-				qs: {
-					'_': Date.now(),
-    			'ex_ch': temp.substring(0, temp.length - 3)
-				}
+				uri: "https://mis.twse.com.tw/stock/api/getStockInfo.jsp?_=" + Date.now() + '&ex_ch=' + temp.substring(0, temp.length - 3)
 			};
 			console.log(getStockOpt)
 			rp(getStockOpt)
