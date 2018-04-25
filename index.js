@@ -92,7 +92,7 @@ setInterval(function() {
 			});
 		}
 	});
-} ,10000);
+} ,60000);
 
 
 const jar = rp.jar();
@@ -124,13 +124,12 @@ rp(reqOpt)
 					info.lowPrice = vo.l;
 					info.hightPrice = vo.h;
 					info.currPrice = vo.pz;
-					console.log(info);
 				});
 			})
 			.catch(function (err) {
 				console.log("getStockInfo發生錯誤:" + err);
 			});
-		} ,30000);
+		} ,20000);
 	})
 	.catch(function (err) {
 		console.log("前導網頁get cookie發生錯誤:" + err);
