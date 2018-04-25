@@ -96,7 +96,7 @@ rp({uri: "http://mis.twse.com.tw/stock/fibest.jsp?lang=zh_tw"})
 	.then(function (repos) {
 		setInterval(function() {
 			let temp = '';
-			$.each(stockList , function(index, stockVO) { 
+			_.forEach(stockList , function(stockVO) { 
   			temp += 'tse_' + stockVO.stockId + '.tw' + '%7c';
 			});
 			const getStockOpt = {
@@ -110,7 +110,7 @@ rp({uri: "http://mis.twse.com.tw/stock/fibest.jsp?lang=zh_tw"})
 			.then(function (repos) {
 				var jsonObject = JSON.parse(repos);
 		
-				$.each(jsonObject.msgArray , function(index, vo) { 
+				_.forEach(jsonObject.msgArray , function(vo) { 
 					console.log(vo.h);
 				});
 			})
