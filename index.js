@@ -15,27 +15,21 @@ const linebotParser = bot.parser();
 
 app.post('/linewebhook', linebotParser);
 
-const aqiOpt = {
-	uri: "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=tse_2330.tw_20180424&json=1&delay=0&_=1524563645436"
-};
-app.get('/',function(req,res){
-	rp(aqiOpt)
-	.then(function (repos) {
-			console.log(repos)
-	})
-	.catch(function (err) {
-			res.send("無法取得空氣品質資料～");
-	});
-});
-
-
 const userInfo = {
 	userId: '',
 	stockIdArr: [],
 	subscr: false
 };
-
 let userInfoArr = [];
+
+const stockInfo = {
+	stockId: '',
+	startPrice: 0.0,
+	currPrice: 0.0,
+	lowPrice: 0.0,
+	hightPrice: 0.0
+};
+let stockList = [];
 
 bot.on('message', function (event) {
 	event.source.profile().then(function (profile) {
@@ -54,6 +48,10 @@ bot.on('message', function (event) {
 					}
 					userInfoArr[index].subscr = true;
 					event.reply('您好' + profile.displayName + '，已開啟推撥成功');
+					if (!_.includes(stockList, stockId)) {
+						stockInfo.stockId = stockId;
+						stockList.push(stockInfo);
+					}
 				} else if (_.startsWith(event.message.text,'-r')) {
 					let userInfo = _.find(userInfoArr, function(o) { return o.userId === profile.userId; });
 					userInfo.subscr = false;
@@ -91,3 +89,37 @@ setInterval(function() {
 		}
 	});
 } ,10000);
+
+
+
+rp({uri: "http://mis.twse.com.tw/stock/fibest.jsp?lang=zh_tw"})
+	.then(function (repos) {
+		setInterval(function() {
+			let temp = '';
+			$.each(stockList , function(index, stockVO) { 
+  			temp += 'tse_' + stockVO.stockId + '.tw' + '%7c';
+			});
+			const getStockOpt = {
+				uri: "https://mis.twse.com.tw/stock/api/getStockInfo.jsp",
+				qs: {
+					'_': Date.now(),
+    			'ex_ch': temp.substring(0, temp.length - 3)
+				}
+			};
+			rp(getStockOpt)
+			.then(function (repos) {
+				var jsonObject = JSON.parse(repos);
+		
+				$.each(jsonObject.msgArray , function(index, vo) { 
+					console.log(vo.h);
+				});
+			})
+			.catch(function (err) {
+				console.log("getStockInfo發生錯誤:" + err);
+			});
+		} ,10000);
+	})
+	.catch(function (err) {
+		console.log("前導網頁get cookie發生錯誤:" + err);
+	});
+
