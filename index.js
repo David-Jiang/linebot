@@ -117,25 +117,24 @@ rp(reqOpt)
 			_.forEach(stockList , function(stockVO) { 
   			temp += 'tse_' + stockVO.stockId + '.tw' + '%7c';
 			});
-			
 			reqOpt.uri = "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?_=" + Date.now() + "&ex_ch=" + temp.substring(0, temp.length - 3);
-			console.log(reqOpt.uri)
-			rp(reqOpt)
-			.then(function (repos) {
-				var jsonObject = JSON.parse(repos);
+			if (stockList.length > 0) {
+				rp(reqOpt)
+				.then(function (repos) {
+					var jsonObject = JSON.parse(repos);
 		
-				_.forEach(jsonObject.msgArray , function(vo) { 
-					let info = _.find(stockList, function(o) { return o.stockId == vo.ch.replace(".tw",""); })
-					info.startPrice = vo.y;
-					info.lowPrice = vo.l;
-					info.hightPrice = vo.h;
-					info.currPrice = vo.z;
+					_.forEach(jsonObject.msgArray , function(vo) { 
+						let info = _.find(stockList, function(o) { return o.stockId == vo.ch.replace(".tw",""); })
+						info.startPrice = vo.y;
+						info.lowPrice = vo.l;
+						info.hightPrice = vo.h;
+						info.currPrice = vo.z;
+					});
+				})
+				.catch(function (err) {
+					console.log("getStockInfo發生錯誤:" + err);
 				});
-				console.log(stockList)
-			})
-			.catch(function (err) {
-				console.log("getStockInfo發生錯誤:" + err);
-			});
+			}
 		} ,20000);
 	})
 	.catch(function (err) {
