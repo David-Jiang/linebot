@@ -116,7 +116,6 @@ rp(reqOpt)
 			reqOpt.uri = "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?_=" + Date.now() + "&ex_ch=" + temp.substring(0, temp.length - 3);
 			rp(reqOpt)
 			.then(function (repos) {
-				console.log(repos)
 				var jsonObject = JSON.parse(repos);
 		
 				_.forEach(jsonObject.msgArray , function(vo) { 
@@ -130,6 +129,7 @@ rp(reqOpt)
 							}
 					});
 				});
+				console.log(stockList)
 			})
 			.catch(function (err) {
 				console.log("getStockInfo發生錯誤:" + err);
