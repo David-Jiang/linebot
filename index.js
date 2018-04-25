@@ -82,10 +82,14 @@ app.listen(process.env.PORT || 80, function () {
 setInterval(function() {
 	_.forEach(userInfoArr, function(vo) {
 		if (vo.subscr && vo.stockIdArr.length > 0) {
-			/* bot.push(vo.userId, {
+			let showMessage = '';
+			_.forEach(vo.stockIdArr , function(stockId) {
+				showMessage += JSON.stringify(_.find(stockList, function(o) { return o.stockId == stockId; }));
+			});
+			bot.push(vo.userId, {
 				type: 'text',
-				text: '你訂閱股票代號為：' + _.join(vo.stockIdArr, ',')
-			}); */
+				text: '你訂閱股票代號為：' + _.join(showMessage, ',')
+			});
 		}
 	});
 } ,10000);
@@ -101,7 +105,7 @@ const reqOpt = {
     }
 };
 
-/* rp(reqOpt)
+rp(reqOpt)
 	.then(function (repos) {
 		setInterval(function() {
 			let temp = '';
@@ -112,11 +116,18 @@ const reqOpt = {
 			reqOpt.uri = "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?_=" + Date.now() + "&ex_ch=" + temp.substring(0, temp.length - 3);
 			rp(reqOpt)
 			.then(function (repos) {
-				console.log(repos)
 				var jsonObject = JSON.parse(repos);
 		
 				_.forEach(jsonObject.msgArray , function(vo) { 
-					console.log(vo.h);
+					_.forEach(stockList , function(stockVO) { 
+							if (vo.ch.replace(".tw","") == stockVO.stockId) {
+								stockList.startPrice = vo.y;
+								stockList.lowPrice = vo.l;
+								stockList.hightPrice = vo.h;
+								stockList.currPrice = vo.pz;
+								return false;
+							}
+					});
 				});
 			})
 			.catch(function (err) {
@@ -126,5 +137,5 @@ const reqOpt = {
 	})
 	.catch(function (err) {
 		console.log("前導網頁get cookie發生錯誤:" + err);
-	}); */
+	});
 
