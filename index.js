@@ -87,7 +87,7 @@ app.listen(process.env.PORT || 80, function () {
 	console.log('LineBot is running.')
 });
 
-setInterval(function() {
+/* setInterval(function() {
 	_.forEach(userInfoArr, function(vo) {
 		if (vo.subscr && vo.stockIdArr.length > 0) {
 			let showMessage = ''
@@ -98,20 +98,20 @@ setInterval(function() {
 						(obj.currPrice - obj.startPrice > 0 ? "+" : "") + (obj.currPrice - obj.startPrice) + ")\n" +
 						"最高價:" + obj.hightPrice + "\n最高價:" + obj.lowPrice + "\n"
 				}
-			});
+			})
 
 			if (showMessage) {
 				bot.push(vo.userId, {
 					type: 'text',
 					text: showMessage
-				});
+				})
 			}
 		}
 	});
-} ,60000);
+} ,60000) */
 
 
-const jar = rp.jar();
+const jar = rp.jar()
 const reqOpt = {
 	uri: "http://mis.twse.com.tw/stock/fibest.jsp?lang=zh_tw",
 	jar,
@@ -119,8 +119,8 @@ const reqOpt = {
   	{
     	'content-type': 'application/json'
     }
-};
-rp(reqOpt)
+}
+/* rp(reqOpt)
 	.then(function (repos) {
 		setInterval(function() {
 			let temp = ''
@@ -149,5 +149,5 @@ rp(reqOpt)
 	})
 	.catch(function (err) {
 		console.log("前導網頁get cookie發生錯誤:" + err)
-	})
+	}) */
 
