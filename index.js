@@ -43,14 +43,21 @@ bot.on('message', function (event) {
 					let stockId = event.message.text.replace('-a','').trim();
 					let index = _.findIndex(userInfoArr, function(o) { return o.userId === profile.userId; });
 					let temp = userInfoArr[index].stockIdArr;
-					if (stockId.length == 4 && !_.includes(temp, stockId)) {
-						temp.push(stockId);
-					}
-					userInfoArr[index].subscr = true;
-					event.reply('您好' + profile.displayName + '，已開啟推撥成功');
-					if (!_.find(stockList, function(o) { return o.stockId == stockId; })) {
-						stockInfo.stockId = stockId;
-						stockList.push(stockInfo);
+					
+					if (stockId.length == 4) {
+						if (_.includes(temp, stockId)) {
+							event.reply('您好' + profile.displayName + '，股票代號:' + stockId + "已經存在推播清單囉");
+						} else {
+							userInfoArr[index].subscr = true;
+							if (!_.find(stockList, function(o) { return o.stockId == stockId; })) {
+								stockInfo.stockId = stockId;
+								stockList.push(stockInfo);
+							}
+							event.reply('您好' + profile.displayName + '，已成功開啟推播股票代號:' + stockId);
+							temp.push(stockId);
+						}
+					} else {
+						event.reply('您好' + profile.displayName + '，請輸入正確股票代號格式唷');
 					}
 				} else if (_.startsWith(event.message.text,'-r')) {
 					let userInfo = _.find(userInfoArr, function(o) { return o.userId === profile.userId; });
@@ -87,7 +94,7 @@ setInterval(function() {
 				let obj = _.find(stockList, function(o) { return o.stockId == stockId && o.currPrice > 0; });
 				if (obj) {
 					showMessage += "股票代號:" + obj.stockId + "\n目前股價:" + obj.currPrice + "(" + 
-						(obj.currPrice - obj.startPrice > 0 ? "+" : "-") + (obj.currPrice - obj.startPrice) + ")\n" +
+						(obj.currPrice - obj.startPrice > 0 ? "+" : "") + (obj.currPrice - obj.startPrice) + ")\n" +
 						"最高價:" + obj.hightPrice + "\n最高價:" + obj.lowPrice
 				}
 			});
@@ -112,7 +119,7 @@ const reqOpt = {
     	'content-type': 'application/json'
     }
 };
-rp(reqOpt)
+/* rp(reqOpt)
 	.then(function (repos) {
 		setInterval(function() {
 			let temp = '';
@@ -141,5 +148,5 @@ rp(reqOpt)
 	})
 	.catch(function (err) {
 		console.log("前導網頁get cookie發生錯誤:" + err);
-	});
+	}); */
 
