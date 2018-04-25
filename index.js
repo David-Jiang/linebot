@@ -99,11 +99,7 @@ rp({uri: "http://mis.twse.com.tw/stock/fibest.jsp?lang=zh_tw"})
 			_.forEach(stockList , function(stockVO) { 
   			temp += 'tse_' + stockVO.stockId + '.tw' + '%7c';
 			});
-			const getStockOpt = {
-				uri: "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?_=" + Date.now() + '&ex_ch=' + temp.substring(0, temp.length - 3)
-			};
-			console.log(getStockOpt)
-			rp(getStockOpt)
+			rp({uri: "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?_=" + Date.now() + "&ex_ch=" + temp.substring(0, temp.length - 3)})
 			.then(function (repos) {
 				var jsonObject = JSON.parse(repos);
 		
@@ -114,7 +110,7 @@ rp({uri: "http://mis.twse.com.tw/stock/fibest.jsp?lang=zh_tw"})
 			.catch(function (err) {
 				console.log("getStockInfo發生錯誤:" + err);
 			});
-		} ,60000);
+		} ,20000);
 	})
 	.catch(function (err) {
 		console.log("前導網頁get cookie發生錯誤:" + err);
