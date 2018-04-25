@@ -119,18 +119,12 @@ rp(reqOpt)
 				var jsonObject = JSON.parse(repos);
 		
 				_.forEach(jsonObject.msgArray , function(vo) { 
-					_.forEach(stockList , function(stockVO) { 
-							if (vo.ch.indexOf(stockVO.stockId) > -1) {
-								console.log("yes");
-								stockVO.startPrice = vo.y;
-								stockVO.lowPrice = vo.l;
-								stockVO.hightPrice = vo.h;
-								stockVO.currPrice = vo.pz;
-								return false;
-							} else {
-								console.log("no");
-							}
-					});
+					let info = _.find(stockList, function(o) { return o.stockId == vo.ch.replace(".tw",""); })
+					info.startPrice = vo.y;
+					info.lowPrice = vo.l;
+					info.hightPrice = vo.h;
+					info.currPrice = vo.pz;
+					console.log(info);
 				});
 			})
 			.catch(function (err) {
