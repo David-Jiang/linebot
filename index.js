@@ -48,7 +48,7 @@ bot.on('message', function (event) {
 					}
 					userInfoArr[index].subscr = true;
 					event.reply('您好' + profile.displayName + '，已開啟推撥成功');
-					if (!_.includes(stockList, stockId)) {
+					if (!_.find(stockList, function(o) { return o.stockId == stockId; })) {
 						stockInfo.stockId = stockId;
 						stockList.push(stockInfo);
 					}
