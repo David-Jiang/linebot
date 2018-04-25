@@ -84,13 +84,18 @@ setInterval(function() {
 		if (vo.subscr && vo.stockIdArr.length > 0) {
 			let showMessage = '';
 			_.forEach(vo.stockIdArr , function(stockId) {
-				let obj = _.find(stockList, function(o) { return o.stockId == stockId; });
-				showMessage += "股票代號:" + obj.stockId + "\n 目前股價:" + obj.currPrice + "\n 漲跌:" + (obj.currPrice - obj.startPrice >= 0 ? 0x100033 : 0x1000AD)
+				let obj = _.find(stockList, function(o) { return o.stockId == stockId && o.currPrice > 0; });
+				showMessage += "股票代號:" + obj.stockId + "\n目前股價:" + obj.currPrice + "(" + 
+				(obj.currPrice - obj.startPrice > 0 ? "+" : "-") + (obj.currPrice - obj.startPrice) + ")\n" +
+				"最高價:" + obj.hightPrice + "\n最高價:" + obj.lowPrice
 			});
-			bot.push(vo.userId, {
-				type: 'text',
-				text: showMessage
-			});
+
+			if (showMessage) {
+				bot.push(vo.userId, {
+					type: 'text',
+					text: showMessage
+				});
+			}
 		}
 	});
 } ,60000);
