@@ -88,7 +88,7 @@ setInterval(function() {
 			});
 			bot.push(vo.userId, {
 				type: 'text',
-				text: '你訂閱股票代號為：' + _.join(showMessage, ',')
+				text: '你訂閱股票代號為：' + showMessage
 			});
 		}
 	});
@@ -116,6 +116,7 @@ rp(reqOpt)
 			reqOpt.uri = "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?_=" + Date.now() + "&ex_ch=" + temp.substring(0, temp.length - 3);
 			rp(reqOpt)
 			.then(function (repos) {
+				console.log(repos)
 				var jsonObject = JSON.parse(repos);
 		
 				_.forEach(jsonObject.msgArray , function(vo) { 
