@@ -119,14 +119,16 @@ rp(reqOpt)
 				var jsonObject = JSON.parse(repos);
 		
 				_.forEach(jsonObject.msgArray , function(vo) { 
-					console.log(vo.ch)
 					_.forEach(stockList , function(stockVO) { 
-							if (vo.ch.replace(".tw","") == stockVO.stockId) {
+							if (vo.ch.indexOf(stockVO.stockId) > -1) {
+								console.log("yes");
 								stockList.startPrice = vo.y;
 								stockList.lowPrice = vo.l;
 								stockList.hightPrice = vo.h;
 								stockList.currPrice = vo.pz;
 								return false;
+							} else {
+								console.log("no");
 							}
 					});
 				});
