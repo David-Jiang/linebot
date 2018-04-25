@@ -85,7 +85,7 @@ setInterval(function() {
 			let showMessage = '';
 			_.forEach(vo.stockIdArr , function(stockId) {
 				let obj = _.find(stockList, function(o) { return o.stockId == stockId; });
-				showMessage += "股票代號:" + obj.stockId + "/ 目前股價:" + obj.currPrice + "/ 漲跌:" + (obj.currPrice - obj.startPrice) +" * "
+				showMessage += "股票代號:" + obj.stockId + "/ 目前股價:" + obj.currPrice + "/ 漲跌:" + (obj.currPrice - obj.startPrice) +" %0D%0A "
 			});
 			bot.push(vo.userId, {
 				type: 'text',
