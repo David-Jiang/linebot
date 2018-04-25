@@ -110,7 +110,6 @@ const reqOpt = {
     	'content-type': 'application/json'
     }
 };
-
 rp(reqOpt)
 	.then(function (repos) {
 		setInterval(function() {
@@ -131,6 +130,7 @@ rp(reqOpt)
 					info.hightPrice = vo.h;
 					info.currPrice = vo.z;
 				});
+				console.log(stockList)
 			})
 			.catch(function (err) {
 				console.log("getStockInfo發生錯誤:" + err);
