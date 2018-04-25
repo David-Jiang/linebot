@@ -119,7 +119,7 @@ rp(reqOpt)
 				var jsonObject = JSON.parse(repos);
 		
 				_.forEach(jsonObject.msgArray , function(vo) { 
-					console.log(stocvo.chkList)
+					console.log(vo.ch)
 					_.forEach(stockList , function(stockVO) { 
 							if (vo.ch.replace(".tw","") == stockVO.stockId) {
 								stockList.startPrice = vo.y;
