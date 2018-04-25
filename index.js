@@ -30,45 +30,42 @@ const stockInfo = {
 	hightPrice: 0.0
 };
 let stockList = [];
-var copy = Object.assign({}, stockInfo);
-copy.stockId = "2082"
-console.log("origin" + stockInfo.stockId)
-console.log("current" + copy.stockId)
 
 bot.on('message', function (event) {
 	event.source.profile().then(function (profile) {
 		if (!_.find(userInfoArr, function(o) { return o.userId == profile.userId; })) {
-			userInfo.userId = profile.userId;
-			userInfoArr.push(userInfo);
+			userInfo.userId = profile.userId
+			userInfoArr.push(userInfo)
 		}
 		switch (event.message.type) {
 			case 'text':
 				if (_.startsWith(event.message.text,'-a')) {
-					let stockId = event.message.text.replace('-a','').trim();
-					let index = _.findIndex(userInfoArr, function(o) { return o.userId === profile.userId; });
-					let temp = userInfoArr[index].stockIdArr;
+					let stockId = event.message.text.replace('-a','').trim()
+					let index = _.findIndex(userInfoArr, function(o) { return o.userId === profile.userId })
+					let userStockIdArr = userInfoArr[index].stockIdArr
 					
 					if (stockId.length == 4) {
-						if (_.includes(temp, stockId)) {
-							event.reply('您好' + profile.displayName + '，股票代號:' + stockId + "已經存在推播清單囉");
+						if (_.includes(userStockIdArr, stockId)) {
+							event.reply('您好' + profile.displayName + '，股票代號:' + stockId + "已經存在推播清單囉")
 						} else {
-							userInfoArr[index].subscr = true;
+							userInfoArr[index].subscr = true
 							if (!_.find(stockList, function(o) { return o.stockId == stockId; })) {
-								stockInfo.stockId = stockId;
-								stockList.push(stockInfo);
+								let stock = Object.assign({}, stockInfo)
+								stock.stockId = stockId
+								stockList.push(stock)
 							}
-							event.reply('您好' + profile.displayName + '，已成功開啟推播股票代號:' + stockId);
-							temp.push(stockId);
+							event.reply('您好' + profile.displayName + '，已成功開啟推播股票代號:' + stockId)
+							userStockIdArr.push(stockId)
 						}
 					} else {
-						event.reply('您好' + profile.displayName + '，請輸入正確股票代號格式唷');
+						event.reply('您好' + profile.displayName + '，請輸入正確股票代號格式唷')
 					}
 				} else if (_.startsWith(event.message.text,'-r')) {
-					let userInfo = _.find(userInfoArr, function(o) { return o.userId === profile.userId; });
-					userInfo.subscr = false;
-					event.reply('您好' + profile.displayName + '，已取消推播');
+					let userInfo = _.find(userInfoArr, function(o) { return o.userId === profile.userId; })
+					userInfo.subscr = false
+					event.reply('您好' + profile.displayName + '，已取消推播')
 				} else {
-					event.reply('您好' + profile.displayName + '，能否為您效勞？');
+					event.reply('您好' + profile.displayName + '，能否為您效勞？')
 				}
 				break;
 			case 'sticker':
