@@ -16,13 +16,6 @@
     "request": "^2.83.0",
     "request-promise": "^4.2.2"
   },
-  "babel": {
-    "presets": [
-      "es2015",
-      "react",
-      "@babel/preset-stage-0"
-    ]
-  },
   "devDependencies": {
     "@babel/preset-stage-0": "^7.0.0-beta.46"
   }
