@@ -70,7 +70,7 @@ bot.on('message', function (event) {
 					userInfo.subscr = false
 					event.reply('您好' + profile.displayName + '，已取消推播')
 				} else if (_.startsWith(event.message.text,'-c')) {
-					let stockId = event.message.text.replace('-a','').trim()
+					let stockId = event.message.text.replace('-c','').trim()
 					if (stockId.length == 4) {
 						let showMessage = ''
 						let obj = _.find(stockList, function(o) { return o.stockId == stockId && o.currPrice > 0 })
