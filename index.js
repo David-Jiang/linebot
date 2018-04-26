@@ -95,7 +95,7 @@ setInterval(function() {
 			_.forEach(vo.stockIdArr , function(stockId) {
 				let obj = _.find(stockList, function(o) { return o.stockId == stockId && o.currPrice > 0 })
 				if (obj) {
-					showMessage += "股票:" + obj.stockName + "(" + obj.stockId + ")" + "\n目前股價:" + obj.currPrice + "(" + 
+					showMessage += "股票:" + obj.stockName + "(" + obj.stockId + ")" + "\n目前價:" + obj.currPrice + "(" + 
 						(obj.currPrice - obj.startPrice > 0 ? "+" : "") + returnFloat(obj.currPrice - obj.startPrice) + ")\n" +
 						"最高價:" + obj.hightPrice + "\n最低價:" + obj.lowPrice + "\n"
 				}
@@ -153,8 +153,8 @@ rp(reqOpt)
 		console.log("前導網頁get cookie發生錯誤:" + err)
 	})
 
-	function returnFloat(value) {
-		let value = Math.round(parseFloat(value)*100) / 100
+	function returnFloat(num) {
+		let value = Math.round(parseFloat(num)*100) / 100
 		let xsd = value.toString().split(".")
 		if (xsd.length == 1) {
 			value=value.toString()+".00"
