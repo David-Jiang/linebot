@@ -2,6 +2,9 @@ const linebot = require('linebot')
 const express = require('express')
 const rp = require('request-promise')
 const _ = require('lodash')
+import {aObject} from './text'
+
+console.log("有成功嗎?")
 
 const bot = linebot({
 	channelId: process.env.CHANNEL_ID,
@@ -142,7 +145,6 @@ rp(reqOpt)
   			temp += 'tse_' + stockVO.stockId + '.tw' + '%7c'
 			});
 			reqOpt.uri = "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?_=" + Date.now() + "&ex_ch=" + temp.substring(0, temp.length - 3)
-			console.log(reqOpt.uri)
 			if (stockList.length > 0) {
 				rp(reqOpt)
 				.then(function (repos) {
