@@ -1,7 +1,7 @@
 const linebot = require('linebot')
 const express = require('express')
 const rp = require('request-promise')
-const _ = require('lodash')
+import _ from './lodash'
 
 const bot = linebot({
 	channelId: process.env.CHANNEL_ID,
@@ -94,7 +94,7 @@ bot.on('message', function (event) {
 				});
 				break;
 		default:
-				event.reply('請輸入正確訊息唷');
+				event.reply('請輸入正確訊息唷')
 				break;
 	
 		}
@@ -148,7 +148,7 @@ rp(reqOpt)
 					var jsonObject = JSON.parse(repos)
 					
 					_.forEach(jsonObject.msgArray , function(vo) { 
-						let info = _.find(stockList, function(o) { return o.stockId == vo.ch.replace(".tw",""); })
+						let info = _.find(stockList, function(o) { return o.stockId == vo.ch.replace(".tw","") })
 						info.startPrice = vo.y
 						info.lowPrice = vo.l
 						info.hightPrice = vo.h
