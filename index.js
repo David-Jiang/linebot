@@ -45,44 +45,43 @@ bot.on('message', function (event) {
 		switch (event.message.type) {
 			case 'text':
 				if (_.startsWith(event.message.text,'-a')) {
-					let stockId = event.message.text.replace('-a','').trim()
+					let stockIdArrBySplit = event.message.text.replace('-a','').trim().split("-")
 					let index = _.findIndex(userInfoArr, function(o) { return o.userId === profile.userId })
 					let userStockIdArr = userInfoArr[index].stockIdArr
 					
-					if (stockId.length == 4) {
-						if (_.includes(userStockIdArr, stockId)) {
-							event.reply('您好' + profile.displayName + '，股票代號:' + stockId + "\n已經存在推播清單囉")
-						} else {
-							userInfoArr[index].subscr = true
-							if (!_.find(stockList, function(o) { return o.stockId == stockId; })) {
-								let stock = Object.assign({}, stockInfo)
-								stock.stockId = stockId
-								stockList.push(stock)
+					_.forEach(stockIdArrBySplit , function(stockId) { 
+						if (stockId.length == 4) {
+							if (_.includes(userStockIdArr, stockId)) {
+								event.reply('您好' + profile.displayName + '，股票代號:' + stockId + "\n已經存在推播清單囉")
+							} else {
+								userInfoArr[index].subscr = true
+								addToStockList(stockId)
+								event.reply('您好' + profile.displayName + '，已成功開啟推播\n股票代號:' + stockId)
+								userStockIdArr.push(stockId)
 							}
-							event.reply('您好' + profile.displayName + '，已成功開啟推播\n股票代號:' + stockId)
-							userStockIdArr.push(stockId)
 						}
-					} else {
-						event.reply('您好' + profile.displayName + '，請輸入正確股票代號格式唷')
-					}
+					})
+
 				} else if (_.startsWith(event.message.text,'-r')) {
 					let userInfo = _.find(userInfoArr, function(o) { return o.userId === profile.userId; })
 					userInfo.subscr = false
 					event.reply('您好' + profile.displayName + '，已取消推播')
 				} else if (_.startsWith(event.message.text,'-c')) {
-					let stockId = event.message.text.replace('-c','').trim()
-					if (stockId.length == 4) {
-						let showMessage = ''
-						let obj = _.find(stockList, function(o) { return o.stockId == stockId && o.currPrice > 0 })
-						if (obj) {
-							showMessage += "股票:" + obj.stockName + "(" + obj.stockId + ")" + "\n目前價:" + obj.currPrice + "(" + 
-								(obj.currPrice - obj.startPrice > 0 ? "+" : "") + returnFloat(obj.currPrice - obj.startPrice) + ")\n" +
-								"最高價:" + obj.hightPrice + "\n最低價:" + obj.lowPrice + "\n"
+					let stockIdArrBySplit = event.message.text.replace('-c','').trim().split("-")
+					_.forEach(stockIdArrBySplit , function(stockId) { 
+						if (stockId.length == 4) {
+							addToStockList(stockId)
+							let showMessage = ''
+							let obj = _.find(stockList, function(o) { return o.stockId == stockId && o.currPrice > 0 })
+							if (obj) {
+								showMessage += "股票:" + obj.stockName + "(" + obj.stockId + ")" + "\n目前價:" + obj.currPrice + "(" + 
+									(obj.currPrice - obj.startPrice > 0 ? "+" : "") + returnFloat(obj.currPrice - obj.startPrice) + ")\n" +
+									"最高價:" + obj.hightPrice + "\n最低價:" + obj.lowPrice + "\n"
+									event.reply(showMessage)
+							}
 						}
-						event.reply(showMessage)
-					} else {
-						event.reply('您好' + profile.displayName + '，請輸入正確股票代號格式唷')
-					}
+					})
+
 				} else {
 					event.reply('您好' + profile.displayName + '，能否為您效勞？')
 				}
@@ -182,4 +181,12 @@ rp(reqOpt)
 		return value;
 		}
 	 }
+
+	function addToStockList(stockId) {
+		if (!_.find(stockList, function(o) { return o.stockId == stockId; })) {
+			let stock = Object.assign({}, stockInfo)
+			stock.stockId = stockId
+			stockList.push(stock)
+		}
+	}
 
