@@ -85,8 +85,12 @@ bot.on('message', function (event) {
 				break;
 	
 		}
-	});
-});
+	})
+	event.source.member().then(function (member) {
+		console.log(member.memberIds);
+		console.log(member);
+	})
+})
 
 setInterval(function() {
 	_.forEach(userInfoArr, function(vo) {
