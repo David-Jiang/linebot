@@ -34,7 +34,7 @@ const stockInfo = {
 	lowPrice: 0.0,
 	hightPrice: 0.0
 };
-let stockList = ['2327','2408','2317','2330','3008']
+let stockList = []
 
 bot.on('message', function (event) {
 	event.source.profile().then(function (profile) {
