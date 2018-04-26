@@ -90,7 +90,7 @@ bot.on('message', function (event) {
 
 bot.on('join', function (event) {
 	console.log(event)
-}
+})
 
 setInterval(function() {
 	_.forEach(userInfoArr, function(vo) {
