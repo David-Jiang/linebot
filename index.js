@@ -15,6 +15,10 @@ const linebotParser = bot.parser()
 
 app.post('/linewebhook', linebotParser)
 
+app.listen(process.env.PORT || 80, function () {
+	console.log('LineBot is running.')
+})
+
 const userInfo = {
 	userId: '',
 	stockIdArr: [],
@@ -24,6 +28,7 @@ let userInfoArr = []
 
 const stockInfo = {
 	stockId: '',
+	stockName: '',
 	startPrice: 0.0,
 	currPrice: 0.0,
 	lowPrice: 0.0,
@@ -83,20 +88,16 @@ bot.on('message', function (event) {
 	});
 });
 
-app.listen(process.env.PORT || 80, function () {
-	console.log('LineBot is running.')
-});
-
-/* setInterval(function() {
+setInterval(function() {
 	_.forEach(userInfoArr, function(vo) {
 		if (vo.subscr && vo.stockIdArr.length > 0) {
 			let showMessage = ''
 			_.forEach(vo.stockIdArr , function(stockId) {
 				let obj = _.find(stockList, function(o) { return o.stockId == stockId && o.currPrice > 0 })
 				if (obj) {
-					showMessage += "股票代號:" + obj.stockId + "\n目前股價:" + obj.currPrice + "(" + 
+					showMessage += "股票:" + obj.stockName + "(" + obj.stockId + ")" + "\n目前股價:" + obj.currPrice + "(" + 
 						(obj.currPrice - obj.startPrice > 0 ? "+" : "") + (obj.currPrice - obj.startPrice) + ")\n" +
-						"最高價:" + obj.hightPrice + "\n最高價:" + obj.lowPrice + "\n"
+						"最高價:" + obj.hightPrice + "\n最低價:" + obj.lowPrice + "\n"
 				}
 			})
 
@@ -108,7 +109,7 @@ app.listen(process.env.PORT || 80, function () {
 			}
 		}
 	});
-} ,60000) */
+} ,60000)
 
 
 const jar = rp.jar()
@@ -120,7 +121,7 @@ const reqOpt = {
     	'content-type': 'application/json'
     }
 }
-/* rp(reqOpt)
+rp(reqOpt)
 	.then(function (repos) {
 		setInterval(function() {
 			let temp = ''
@@ -139,6 +140,7 @@ const reqOpt = {
 						info.lowPrice = vo.l
 						info.hightPrice = vo.h
 						info.currPrice = vo.z
+						info.stockName = vo.n
 					})
 				})
 				.catch(function (err) {
@@ -149,5 +151,5 @@ const reqOpt = {
 	})
 	.catch(function (err) {
 		console.log("前導網頁get cookie發生錯誤:" + err)
-	}) */
+	})
 
