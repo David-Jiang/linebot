@@ -5,6 +5,16 @@
   "engines": {
     "node": ">=8.9.1"
   },
+  "scripts": {
+    "start": "babel-node index.js"
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "react",
+      "@babel/preset-stage-0"
+    ]
+  },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
@@ -17,6 +27,7 @@
     "request-promise": "^4.2.2"
   },
   "devDependencies": {
-    "@babel/preset-stage-0": "^7.0.0-beta.46"
+    "@babel/preset-stage-0": "^7.0.0-beta.46",
+    "babel-cli": "^6.26.0"
   }
 }
