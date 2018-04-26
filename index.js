@@ -2,7 +2,7 @@ const linebot = require('linebot')
 const express = require('express')
 //const rp = require('request-promise')
 const _ = require('lodash')
-import * as rp from 'request-promise'
+import * as rp from "request-promise"
 
 const bot = linebot({
 	channelId: process.env.CHANNEL_ID,

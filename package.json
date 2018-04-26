@@ -6,8 +6,9 @@
     "node": ">=8.9.1"
   },
   "dependencies": {
-    "babel-preset-react": "^6.24.1",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
     "ejs": "^2.5.7",
     "express": "^4.15.2",
     "linebot": "^1.3.0",
@@ -18,7 +19,11 @@
   "babel": {
     "presets": [
       "es2015",
-      "react"
+      "react",
+      "@babel/preset-stage-0"
     ]
+  },
+  "devDependencies": {
+    "@babel/preset-stage-0": "^7.0.0-beta.46"
   }
 }
