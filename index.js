@@ -4,7 +4,7 @@ const rp = require('request-promise')
 const _ = require('lodash')
 import {aObject} from './text'
 
-console.log("有成功嗎?")
+console.log("有成功嗎?" + aObject.a + "-" + aObject)
 
 const bot = linebot({
 	channelId: process.env.CHANNEL_ID,
