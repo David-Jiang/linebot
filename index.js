@@ -37,7 +37,6 @@ const stockInfo = {
 let stockList = []
 
 bot.on('message', function (event) {
-	console.log(event.source)
 	event.source.profile().then(function (profile) {
 		if (!_.find(userInfoArr, function(o) { return o.userId == profile.userId })) {
 			userInfo.userId = profile.userId
@@ -87,6 +86,9 @@ bot.on('message', function (event) {
 	
 		}
 	})
+	event.source.member().then(function (member) {
+		console.log(member);
+	});
 })
 
 setInterval(function() {
