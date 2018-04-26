@@ -38,7 +38,6 @@ let stockList = []
 
 bot.on('message', function (event) {
 	event.source.profile().then(function (profile) {
-		console.log(profile)
 		if (!_.find(userInfoArr, function(o) { return o.userId == profile.userId })) {
 			userInfo.userId = profile.userId
 			userInfoArr.push(userInfo)
@@ -69,6 +68,21 @@ bot.on('message', function (event) {
 				} else if (_.startsWith(event.message.text,'-r')) {
 					let userInfo = _.find(userInfoArr, function(o) { return o.userId === profile.userId; })
 					userInfo.subscr = false
+					event.reply('您好' + profile.displayName + '，已取消推播')
+				} else if (_.startsWith(event.message.text,'-c')) {
+					let stockId = event.message.text.replace('-a','').trim()
+					if (stockId.length == 4) {
+						let showMessage = ''
+						let obj = _.find(stockList, function(o) { return o.stockId == stockId && o.currPrice > 0 })
+						if (obj) {
+							showMessage += "股票:" + obj.stockName + "(" + obj.stockId + ")" + "\n目前價:" + obj.currPrice + "(" + 
+								(obj.currPrice - obj.startPrice > 0 ? "+" : "") + returnFloat(obj.currPrice - obj.startPrice) + ")\n" +
+								"最高價:" + obj.hightPrice + "\n最低價:" + obj.lowPrice + "\n"
+						}
+						event.reply(showMessage)
+					} else {
+						event.reply('您好' + profile.displayName + '，請輸入正確股票代號格式唷')
+					}
 					event.reply('您好' + profile.displayName + '，已取消推播')
 				} else {
 					event.reply('您好' + profile.displayName + '，能否為您效勞？')
