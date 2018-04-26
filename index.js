@@ -147,7 +147,7 @@ rp(reqOpt)
 				rp(reqOpt)
 				.then(function (repos) {
 					var jsonObject = JSON.parse(repos)
-		
+					console.log(jsonObject.msgArray)
 					_.forEach(jsonObject.msgArray , function(vo) { 
 						let info = _.find(stockList, function(o) { return o.stockId == vo.ch.replace(".tw",""); })
 						info.startPrice = vo.y
