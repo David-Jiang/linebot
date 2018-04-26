@@ -51,7 +51,7 @@ bot.on('message', function (event) {
 					
 					if (stockId.length == 4) {
 						if (_.includes(userStockIdArr, stockId)) {
-							event.reply('您好' + profile.displayName + '，股票代號:' + stockId + "已經存在推播清單囉")
+							event.reply('您好' + profile.displayName + '，股票代號:' + stockId + "\n已經存在推播清單囉")
 						} else {
 							userInfoArr[index].subscr = true
 							if (!_.find(stockList, function(o) { return o.stockId == stockId; })) {
@@ -59,7 +59,7 @@ bot.on('message', function (event) {
 								stock.stockId = stockId
 								stockList.push(stock)
 							}
-							event.reply('您好' + profile.displayName + '，已成功開啟推播股票代號:' + stockId)
+							event.reply('您好' + profile.displayName + '，已成功開啟推播\n股票代號:' + stockId)
 							userStockIdArr.push(stockId)
 						}
 					} else {
@@ -96,7 +96,7 @@ setInterval(function() {
 				let obj = _.find(stockList, function(o) { return o.stockId == stockId && o.currPrice > 0 })
 				if (obj) {
 					showMessage += "股票:" + obj.stockName + "(" + obj.stockId + ")" + "\n目前股價:" + obj.currPrice + "(" + 
-						(obj.currPrice - obj.startPrice > 0 ? "+" : "") + (obj.currPrice - obj.startPrice) + ")\n" +
+						(obj.currPrice - obj.startPrice > 0 ? "+" : "") + returnFloat(obj.currPrice - obj.startPrice) + ")\n" +
 						"最高價:" + obj.hightPrice + "\n最低價:" + obj.lowPrice + "\n"
 				}
 			})
@@ -152,4 +152,19 @@ rp(reqOpt)
 	.catch(function (err) {
 		console.log("前導網頁get cookie發生錯誤:" + err)
 	})
+
+	function returnFloat(value) {
+		let value = Math.round(parseFloat(value)*100) / 100
+		let xsd = value.toString().split(".")
+		if (xsd.length == 1) {
+			value=value.toString()+".00"
+			return value
+		}
+		if (xsd.length>1) {
+			if (xsd[1].length<2) {
+				value=value.toString() + "0"
+			}
+		return value;
+		}
+	 }
 
