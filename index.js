@@ -83,7 +83,6 @@ bot.on('message', function (event) {
 					} else {
 						event.reply('您好' + profile.displayName + '，請輸入正確股票代號格式唷')
 					}
-					event.reply('您好' + profile.displayName + '，已取消推播')
 				} else {
 					event.reply('您好' + profile.displayName + '，能否為您效勞？')
 				}
