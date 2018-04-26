@@ -2,9 +2,7 @@ const linebot = require('linebot')
 const express = require('express')
 const rp = require('request-promise')
 const _ = require('lodash')
-import {aObject} from './text'
-
-console.log("有成功嗎?" + aObject.a + "-" + aObject)
+//import {aObject} from './text'
 
 const bot = linebot({
 	channelId: process.env.CHANNEL_ID,
@@ -52,23 +50,36 @@ bot.on('message', function (event) {
 					let index = _.findIndex(userInfoArr, function(o) { return o.userId === profile.userId })
 					let userStockIdArr = userInfoArr[index].stockIdArr
 					
+					let responseSuccessId = [];
 					_.forEach(stockIdArrBySplit , function(stockId) { 
 						if (stockId.length == 4) {
-							if (_.includes(userStockIdArr, stockId)) {
-								event.reply('您好' + profile.displayName + '，股票代號:' + stockId + "\n已經存在推播清單囉")
-							} else {
+							if (!_.includes(userStockIdArr, stockId)) {
 								userInfoArr[index].subscr = true
 								addToStockList(stockId)
-								event.reply('您好' + profile.displayName + '，已成功開啟推播\n股票代號:' + stockId)
 								userStockIdArr.push(stockId)
+								responseSuccessId.push(stockId)
 							}
 						}
 					})
+					if (responseSuccessId.length > 0) {
+						event.reply('您好' + profile.displayName + '，已成功開啟推播\n股票代號:' + responseSuccessId.join('-'))
+					}
 
 				} else if (_.startsWith(event.message.text,'-r')) {
+					let stockIdArrBySplit = event.message.text.replace('-r','').trim().split("-")
 					let userInfo = _.find(userInfoArr, function(o) { return o.userId === profile.userId; })
-					userInfo.subscr = false
-					event.reply('您好' + profile.displayName + '，已取消推播')
+
+					if (stockIdArrBySplit.length > 0) {
+						_.forEach(stockIdArrBySplit , function(stockIdneedDel) { 
+							_.forEach(userInfo.stockIdArr, function(stockIdown) {
+								_.remove(userInfo.stockIdArr, function(n) {return stockIdneedDel == stockIdown})
+							})
+						})
+						event.reply('您好' + profile.displayName + stockIdArrBySplit.join('-') + '，已移除推播清單')
+					} else {
+						userInfo.subscr = false
+						event.reply('您好' + profile.displayName + '，已暫停推播')
+					}
 				} else if (_.startsWith(event.message.text,'-c')) {
 					let stockIdArrBySplit = event.message.text.replace('-c','').trim().split("-")
 					_.forEach(stockIdArrBySplit , function(stockId) { 
