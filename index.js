@@ -86,7 +86,11 @@ bot.on('message', function (event) {
 	
 		}
 	})
-	event.source.member().then(function (member) {
+	event.source.room().then(function (member) {
+		console.log(member.memberIds);
+		console.log(member);
+	})
+	event.source.group().then(function (member) {
 		console.log(member.memberIds);
 		console.log(member);
 	})
