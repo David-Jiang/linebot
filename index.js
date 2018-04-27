@@ -3,7 +3,7 @@ const express = require('express')
 const rp = require('request-promise')
 const _ = require('lodash')
 import {returnFloat} from './util'
-import {UserInfo} from './model'
+import {UserInfo, StockInfo} from './model'
 
 const bot = linebot({
 	channelId: process.env.CHANNEL_ID,
@@ -23,20 +23,20 @@ app.listen(process.env.PORT || 80, function () {
 
 let userInfoArr = []
 
-const stockInfo = {
+/* const stockInfo = {
 	stockId: '',
 	stockName: '',
 	startPrice: 0.0,
 	currPrice: 0.0,
 	lowPrice: 0.0,
 	hightPrice: 0.0
-};
+}; */
 let stockList = []
 
 bot.on('message', function (event) {
 	event.source.profile().then(function (profile) {
 		if (!_.find(userInfoArr, function(o) { return o.userId == profile.userId })) {
-			userInfoArr.push(new UserInfo(profile.userId,[],false))
+			userInfoArr.push(new UserInfo(profile.userId))
 		}
 		switch (event.message.type) {
 			case 'text':
@@ -195,9 +195,7 @@ rp(reqOpt)
 	
 const addToStockList = (stockId: string) => {
 	if (!_.find(stockList, function(o) { return o.stockId == stockId; })) {
-		let stock = Object.assign({}, stockInfo)
-		stock.stockId = stockId
-		stockList.push(stock)
+		stockList.push(new StockInfo(stockId))
 	}
 }
 
