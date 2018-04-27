@@ -1,3 +1,5 @@
+const _ = require('lodash')
+
 export const returnFloat = (num: string) => {
 	let value = Math.round(parseFloat(num)*100) / 100
 	let xsd = value.toString().split(".")
