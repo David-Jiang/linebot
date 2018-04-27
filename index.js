@@ -62,7 +62,7 @@ bot.on('message', function (event) {
 						}
 					})
 					if (responseSuccessId.length > 0) {
-						event.reply('您好' + profile.displayName + '，已成功開啟推播\n股票代號:' + responseSuccessId.join('-'))
+						event.reply('您好' + profile.displayName + '，已成功開啟推播\n股票代號:' + responseSuccessId.join(','))
 					}
 
 				} else if (_.startsWith(event.message.text,'-r')) {
@@ -75,7 +75,7 @@ bot.on('message', function (event) {
 								_.remove(userInfo.stockIdArr, function(n) {return stockIdneedDel == stockIdown})
 							})
 						})
-						event.reply('您好' + profile.displayName + stockIdArrBySplit.join('-') + '，已移除推播清單')
+						event.reply('您好' + profile.displayName + stockIdArrBySplit.join(',') + '，已移除推播清單')
 					} else {
 						userInfo.subscr = false
 						event.reply('您好' + profile.displayName + '，已暫停推播')
@@ -98,14 +98,14 @@ bot.on('message', function (event) {
 
 				} else if (_.startsWith(event.message.text,'-v')) {
 					let showMessage = "";
-					showMessage += "輸入-a 股票代號 可定時推播該股票資訊(例如: -a 2353)，如要多筆後面加-，(例如: -a 2353-2330)\n"
-					showMessage += "輸入-c 股票代號 可回應該股票資訊(例如: -c 2353)，如要多筆後面加-，(例如: -c 2353-2330)\n"
-					showMessage += "輸入-r 可暫停推播"
-					showMessage += "輸入-r 股票代號 可移除該股票資訊推播(例如: -r 2353)，如要多筆後面加-，(例如: -r 2353-2330)\n"
+					showMessage += "輸入-a 股票代號 可定時推播該股票資訊(例如: -a 2353-2330)\n"
+					showMessage += "輸入-c 股票代號 可回應該股票資訊(例如: -c 2353-2330)\n"
+					showMessage += "輸入-r 可暫停推播\n"
+					showMessage += "輸入-r 股票代號 可移除該股票資訊推播(例如: -r 2353-2330)\n"
 					showMessage += ""
 					event.reply(showMessage)
 				} else {
-					event.reply('您好' + profile.displayName + '，能否為您效勞？\n輸入-v 可以查看功能列表')
+					event.reply('您好' + profile.displayName + '，歡迎使用\n輸入-v 可以查看功能列表')
 				}
 				break;
 			case 'sticker':
@@ -164,6 +164,7 @@ rp(reqOpt)
   			temp += 'tse_' + stockVO.stockId + '.tw' + '%7c'
 			});
 			reqOpt.uri = "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?_=" + Date.now() + "&ex_ch=" + temp.substring(0, temp.length - 3)
+			console.log(reqOpt.uri)
 			if (stockList.length > 0) {
 				rp(reqOpt)
 				.then(function (repos) {
