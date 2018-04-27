@@ -3,6 +3,7 @@ const express = require('express')
 const rp = require('request-promise')
 const _ = require('lodash')
 import {returnFloat} from './util'
+import * from './model'
 
 const bot = linebot({
 	channelId: process.env.CHANNEL_ID,
@@ -20,11 +21,11 @@ app.listen(process.env.PORT || 80, function () {
 	console.log('LineBot is running.')
 })
 
-const userInfo = {
+/* const userInfo = {
 	userId: '',
 	stockIdArr: [],
 	subscr: false
-};
+}; */
 let userInfoArr = []
 
 const stockInfo = {
@@ -40,23 +41,21 @@ let stockList = []
 bot.on('message', function (event) {
 	event.source.profile().then(function (profile) {
 		if (!_.find(userInfoArr, function(o) { return o.userId == profile.userId })) {
-			userInfo.userId = profile.userId
-			userInfoArr.push(userInfo)
+			userInfoArr.push(new UserInfo(profile.userId,[],false))
 		}
 		switch (event.message.type) {
 			case 'text':
 				if (_.startsWith(event.message.text,'-a')) {
 					let stockIdArrBySplit = event.message.text.replace('-a','').trim().split("-")
-					let index = _.findIndex(userInfoArr, function(o) { return o.userId === profile.userId })
-					let userStockIdArr = userInfoArr[index].stockIdArr
+					let userInfo = _.find(userInfoArr, function(o) { return o.userId === profile.userId })
 					
 					let responseSuccessId = [];
 					_.forEach(stockIdArrBySplit , function(stockId) { 
 						if (stockId.length == 4) {
-							if (!_.includes(userStockIdArr, stockId)) {
-								userInfoArr[index].subscr = true
+							if (!_.includes(userInfo.stockIdArr, stockId)) {
+								userInfo.subscr = true
+								userInfo.stockIdArr.push(stockId)
 								addToStockList(stockId)
-								userStockIdArr.push(stockId)
 								responseSuccessId.push(stockId)
 							}
 						}
@@ -156,44 +155,42 @@ const reqOpt = {
     	'content-type': 'application/json'
     }
 }
-setInterval(function(){
-	rp(reqOpt)
-	.then(function (repos) {
-		setInterval(function() {
-			let count = 1
-			let temp = ''
-			_.forEach(stockList , function(stockVO) { 
-  			temp += 'tse_' + stockVO.stockId + '.tw' + '%7c'
-			});
-			reqOpt.uri = "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?_=" + Date.now() + "&ex_ch=" + temp.substring(0, temp.length - 3)
-			if (stockList.length > 0) {
-				rp(reqOpt)
-				.then(function (repos) {
-					var jsonObject = JSON.parse(repos)
-					if (!!jsonObject.msgArray) {
-						console.log("第" + (count++) + "次成功")
-					} else {
-						console.log("第" + (count++) + "次失敗")
-					}
-					_.forEach(jsonObject.msgArray , function(vo) { 
-						let info = _.find(stockList, function(o) { return o.stockId == vo.ch.replace(".tw","") })
-						info.startPrice = vo.y
-						info.lowPrice = vo.l
-						info.hightPrice = vo.h
-						info.currPrice = vo.z
-						info.stockName = vo.n
-					})
+let count = 1
+rp(reqOpt)
+.then(function (repos) {
+	setInterval(function() {
+		let temp = ''
+		_.forEach(stockList , function(stockVO) { 
+			temp += 'tse_' + stockVO.stockId + '.tw' + '%7c'
+		});
+		reqOpt.uri = "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?_=" + Date.now() + "&ex_ch=" + temp.substring(0, temp.length - 3)
+		if (stockList.length > 0) {
+			rp(reqOpt)
+			.then(function (repos) {
+				var jsonObject = JSON.parse(repos)
+				if (!!jsonObject.msgArray) {
+					console.log("第" + (count++) + "次成功")
+				} else {
+					console.log("第" + (count++) + "次失敗")
+				}
+				_.forEach(jsonObject.msgArray , function(vo) { 
+					let info = _.find(stockList, function(o) { return o.stockId == vo.ch.replace(".tw","") })
+					info.startPrice = vo.y
+					info.lowPrice = vo.l
+					info.hightPrice = vo.h
+					info.currPrice = vo.z
+					info.stockName = vo.n
 				})
-				.catch(function (err) {
-					console.log("getStockInfo發生錯誤:" + err)
-				})
-			}
-		} ,30000)
-	})
-	.catch(function (err) {
-		console.log("前導網頁get cookie發生錯誤:" + err)
-	})
-},120000)
+			})
+			.catch(function (err) {
+				console.log("getStockInfo發生錯誤:" + err)
+			})
+		}
+	} ,30000)
+})
+.catch(function (err) {
+	console.log("前導網頁get cookie發生錯誤:" + err)
+})
 
 	
 const addToStockList = (stockId: string) => {
