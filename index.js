@@ -188,12 +188,12 @@ setInterval(function(){
 					console.log("getStockInfo發生錯誤:" + err)
 				})
 			}
-		} ,30000)
+		} ,10000)
 	})
 	.catch(function (err) {
 		console.log("前導網頁get cookie發生錯誤:" + err)
 	})
-},120000)
+},60000)
 
 	/* function returnFloat(num) {
 		let value = Math.round(parseFloat(num)*100) / 100
