@@ -3,7 +3,7 @@ const express = require('express')
 const rp = require('request-promise')
 const _ = require('lodash')
 import {returnFloat} from './util'
-import './model'
+import {UserInfo} from './model'
 
 const bot = linebot({
 	channelId: process.env.CHANNEL_ID,
