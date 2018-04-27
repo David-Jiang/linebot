@@ -3,7 +3,7 @@ const express = require('express')
 const rp = require('request-promise')
 const _ = require('lodash')
 import {returnFloat} from './util'
-import * from './model'
+import './model'
 
 const bot = linebot({
 	channelId: process.env.CHANNEL_ID,
@@ -155,7 +155,7 @@ const reqOpt = {
     	'content-type': 'application/json'
     }
 }
-let count = 1;
+let count = 1
 rp(reqOpt)
 .then(function (repos) {
 	setInterval(function() {
