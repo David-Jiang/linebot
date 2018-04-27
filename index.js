@@ -156,11 +156,11 @@ const reqOpt = {
     	'content-type': 'application/json'
     }
 }
-let count = 1
 setInterval(function(){
 	rp(reqOpt)
 	.then(function (repos) {
 		setInterval(function() {
+			let count = 1
 			let temp = ''
 			_.forEach(stockList , function(stockVO) { 
   			temp += 'tse_' + stockVO.stockId + '.tw' + '%7c'
@@ -188,7 +188,7 @@ setInterval(function(){
 					console.log("getStockInfo發生錯誤:" + err)
 				})
 			}
-		} ,10000)
+		} ,20000)
 	})
 	.catch(function (err) {
 		console.log("前導網頁get cookie發生錯誤:" + err)
