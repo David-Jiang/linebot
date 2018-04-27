@@ -75,7 +75,7 @@ bot.on('message', function (event) {
 								_.remove(userInfo.stockIdArr, function(n) {return stockIdneedDel == stockIdown})
 							})
 						})
-						event.reply('您好' + profile.displayName + stockIdArrBySplit.join(',') + '，已移除推播清單')
+						event.reply('您好' + profile.displayName + "，股票代號:" +stockIdArrBySplit.join(',') + '，已移除推播清單')
 					} else {
 						userInfo.subscr = false
 						event.reply('您好' + profile.displayName + '，已暫停推播')
@@ -167,8 +167,8 @@ rp(reqOpt)
 			if (stockList.length > 0) {
 				rp(reqOpt)
 				.then(function (repos) {
-					console.log(repos)
 					var jsonObject = JSON.parse(repos)
+					console.log(jsonObject.msgArray)
 					_.forEach(jsonObject.msgArray , function(vo) { 
 						let info = _.find(stockList, function(o) { return o.stockId == vo.ch.replace(".tw","") })
 						info.startPrice = vo.y
