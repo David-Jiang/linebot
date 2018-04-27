@@ -2,7 +2,7 @@ const linebot = require('linebot')
 const express = require('express')
 const rp = require('request-promise')
 const _ = require('lodash')
-//import {aObject} from './text'
+import {returnFloat,addToStockList} from './util'
 
 const bot = linebot({
 	channelId: process.env.CHANNEL_ID,
@@ -195,7 +195,7 @@ setInterval(function(){
 	})
 },120000)
 
-	function returnFloat(num) {
+	/* function returnFloat(num) {
 		let value = Math.round(parseFloat(num)*100) / 100
 		let xsd = value.toString().split(".")
 		if (xsd.length == 1) {
@@ -216,5 +216,5 @@ setInterval(function(){
 			stock.stockId = stockId
 			stockList.push(stock)
 		}
-	}
+	} */
 
