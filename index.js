@@ -156,6 +156,7 @@ const reqOpt = {
     	'content-type': 'application/json'
     }
 }
+let count = 1
 rp(reqOpt)
 	.then(function (repos) {
 		setInterval(function() {
@@ -168,7 +169,9 @@ rp(reqOpt)
 				rp(reqOpt)
 				.then(function (repos) {
 					var jsonObject = JSON.parse(repos)
-					console.log(jsonObject.msgArray)
+					if (!!jsonObject.msgArray) {
+						console.log(count++ + "次")
+					}
 					_.forEach(jsonObject.msgArray , function(vo) { 
 						let info = _.find(stockList, function(o) { return o.stockId == vo.ch.replace(".tw","") })
 						info.startPrice = vo.y
