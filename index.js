@@ -22,21 +22,15 @@ app.listen(process.env.PORT || 80, function () {
 })
 
 let userInfoArr = []
-
-/* const stockInfo = {
-	stockId: '',
-	stockName: '',
-	startPrice: 0.0,
-	currPrice: 0.0,
-	lowPrice: 0.0,
-	hightPrice: 0.0
-}; */
 let stockList = []
 
 bot.on('message', function (event) {
 	event.source.profile().then(function (profile) {
 		if (!_.find(userInfoArr, function(o) { return o.userId == profile.userId })) {
-			userInfoArr.push(new UserInfo(profile.userId,[],false))
+			let userInfo = new UserInfo()
+			userInfo.userId = profile.userId
+			userInfoArr.push(userInfo)
+			console.log(userInfo)
 		}
 		switch (event.message.type) {
 			case 'text':
@@ -195,7 +189,9 @@ rp(reqOpt)
 	
 const addToStockList = (stockId: string) => {
 	if (!_.find(stockList, function(o) { return o.stockId == stockId; })) {
-		stockList.push(new StockInfo(stockId, '', 0.0, 0.0, 0.0, 0.0))
+		let stockInfo = new StockInfo()
+		stockInfo.stockId = stockId
+		stockList.push(stockInfo)
 	}
 }
 
