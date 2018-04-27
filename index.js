@@ -67,7 +67,7 @@ bot.on('message', function (event) {
 				} else if (_.startsWith(event.message.text,'-r')) {
 					let stockIdArrBySplit = event.message.text.replace('-r','').trim().split("-")
 					let userInfo = _.find(userInfoArr, function(o) { return o.userId === profile.userId; })
-
+					console.log("測試用" + stockIdArrBySplit)
 					if (stockIdArrBySplit.length > 0) {
 						_.forEach(stockIdArrBySplit , function(stockIdneedDel) { 
 							_.forEach(userInfo.stockIdArr, function(stockIdown) {
@@ -186,7 +186,7 @@ rp(reqOpt)
 				console.log("getStockInfo發生錯誤:" + err)
 			})
 		}
-	} ,30000)
+	} ,60000)
 })
 .catch(function (err) {
 	console.log("前導網頁get cookie發生錯誤:" + err)
