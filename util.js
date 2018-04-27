@@ -1,5 +1,3 @@
-const _ = require('lodash')
-
 export const returnFloat = (num: string) => {
 	let value = Math.round(parseFloat(num)*100) / 100
 	let xsd = value.toString().split(".")
@@ -13,12 +11,4 @@ export const returnFloat = (num: string) => {
 		}
 	return value;
 	}
-}
-
-export const addToStockList = (stockId: string) => {
-  if (!_.find(stockList, function(o) { return o.stockId == stockId; })) {
-    let stock = Object.assign({}, stockInfo)
-    stock.stockId = stockId
-    stockList.push(stock)
-  }
 }

@@ -2,7 +2,7 @@ const linebot = require('linebot')
 const express = require('express')
 const rp = require('request-promise')
 const _ = require('lodash')
-import {returnFloat,addToStockList} from './util'
+import {addToStockList} from './util'
 
 const bot = linebot({
 	channelId: process.env.CHANNEL_ID,
@@ -208,9 +208,15 @@ setInterval(function(){
 			}
 		return value;
 		}
-	 }
-
-	function addToStockList(stockId) {
+	 } */
+	 const addToStockList = (stockId: string) => {
+		if (!_.find(stockList, function(o) { return o.stockId == stockId; })) {
+			let stock = Object.assign({}, stockInfo)
+			stock.stockId = stockId
+			stockList.push(stock)
+		}
+	}
+	/* function addToStockList(stockId) {
 		if (!_.find(stockList, function(o) { return o.stockId == stockId; })) {
 			let stock = Object.assign({}, stockInfo)
 			stock.stockId = stockId
