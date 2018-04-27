@@ -188,39 +188,19 @@ setInterval(function(){
 					console.log("getStockInfo發生錯誤:" + err)
 				})
 			}
-		} ,20000)
+		} ,30000)
 	})
 	.catch(function (err) {
 		console.log("前導網頁get cookie發生錯誤:" + err)
 	})
-},60000)
+},120000)
 
-	/* function returnFloat(num) {
-		let value = Math.round(parseFloat(num)*100) / 100
-		let xsd = value.toString().split(".")
-		if (xsd.length == 1) {
-			value=value.toString()+".00"
-			return value
-		}
-		if (xsd.length>1) {
-			if (xsd[1].length<2) {
-				value=value.toString() + "0"
-			}
-		return value;
-		}
-	 } */
-	 const addToStockList = (stockId: string) => {
-		if (!_.find(stockList, function(o) { return o.stockId == stockId; })) {
-			let stock = Object.assign({}, stockInfo)
-			stock.stockId = stockId
-			stockList.push(stock)
-		}
+	
+const addToStockList = (stockId: string) => {
+	if (!_.find(stockList, function(o) { return o.stockId == stockId; })) {
+		let stock = Object.assign({}, stockInfo)
+		stock.stockId = stockId
+		stockList.push(stock)
 	}
-	/* function addToStockList(stockId) {
-		if (!_.find(stockList, function(o) { return o.stockId == stockId; })) {
-			let stock = Object.assign({}, stockInfo)
-			stock.stockId = stockId
-			stockList.push(stock)
-		}
-	} */
+}
 
