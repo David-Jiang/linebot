@@ -98,10 +98,10 @@ bot.on('message', function (event) {
 
 				} else if (_.startsWith(event.message.text,'-v')) {
 					let showMessage = "";
-					showMessage += "輸入-a 股票代號 可定時推播該股票資訊(例如: -a 2353-2330)\n"
-					showMessage += "輸入-c 股票代號 可回應該股票資訊(例如: -c 2353-2330)\n"
+					showMessage += "輸入-a 股票代號 可定時推播該股票資訊\n\t(例如: -a 2353-2330)\n"
+					showMessage += "輸入-c 股票代號 可回應該股票資訊\n\t(例如: -c 2353-2330)\n"
 					showMessage += "輸入-r 可暫停推播\n"
-					showMessage += "輸入-r 股票代號 可移除該股票資訊推播(例如: -r 2353-2330)\n"
+					showMessage += "輸入-r 股票代號 可移除該股票資訊推播\n\t(例如: -r 2353-2330)\n"
 					showMessage += ""
 					event.reply(showMessage)
 				} else {
@@ -164,10 +164,10 @@ rp(reqOpt)
   			temp += 'tse_' + stockVO.stockId + '.tw' + '%7c'
 			});
 			reqOpt.uri = "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?_=" + Date.now() + "&ex_ch=" + temp.substring(0, temp.length - 3)
-			console.log(reqOpt.uri)
 			if (stockList.length > 0) {
 				rp(reqOpt)
 				.then(function (repos) {
+					console.log(repos)
 					var jsonObject = JSON.parse(repos)
 					_.forEach(jsonObject.msgArray , function(vo) { 
 						let info = _.find(stockList, function(o) { return o.stockId == vo.ch.replace(".tw","") })
