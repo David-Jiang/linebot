@@ -96,8 +96,16 @@ bot.on('message', function (event) {
 						}
 					})
 
+				} else if (_.startsWith(event.message.text,'-v')) {
+					let showMessage = "";
+					showMessage += "輸入-a 股票代號 可定時推播該股票資訊(例如: -a 2353)，如要多筆後面加-，(例如: -a 2353-2330)\n"
+					showMessage += "輸入-c 股票代號 可回應該股票資訊(例如: -c 2353)，如要多筆後面加-，(例如: -c 2353-2330)\n"
+					showMessage += "輸入-r 可暫停推播"
+					showMessage += "輸入-r 股票代號 可移除該股票資訊推播(例如: -r 2353)，如要多筆後面加-，(例如: -r 2353-2330)\n"
+					showMessage += ""
+					event.reply(showMessage)
 				} else {
-					event.reply('您好' + profile.displayName + '，能否為您效勞？')
+					event.reply('您好' + profile.displayName + '，能否為您效勞？\n輸入-v 可以查看功能列表')
 				}
 				break;
 			case 'sticker':
