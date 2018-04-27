@@ -30,7 +30,6 @@ bot.on('message', function (event) {
 			let userInfo = new UserInfo()
 			userInfo.userId = profile.userId
 			userInfoArr.push(userInfo)
-			console.log(userInfo)
 		}
 		switch (event.message.type) {
 			case 'text':
