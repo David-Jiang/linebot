@@ -67,8 +67,7 @@ bot.on('message', function (event) {
 				} else if (_.startsWith(event.message.text,'-r')) {
 					let stockIdArrBySplit = event.message.text.replace('-r','').trim().split("-")
 					let userInfo = _.find(userInfoArr, function(o) { return o.userId === profile.userId; })
-					console.log("測試用" + stockIdArrBySplit)
-					if (stockIdArrBySplit.length > 0) {
+					if (!!stockIdArrBySplit) {
 						_.forEach(stockIdArrBySplit , function(stockIdneedDel) { 
 							_.forEach(userInfo.stockIdArr, function(stockIdown) {
 								_.remove(userInfo.stockIdArr, function(n) {return stockIdneedDel == stockIdown})
@@ -163,7 +162,7 @@ rp(reqOpt)
 		_.forEach(stockList , function(stockVO) { 
 			temp += 'tse_' + stockVO.stockId + '.tw' + '%7c'
 		});
-		reqOpt.uri = "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?_=" + Date.now() + "&ex_ch=" + temp.substring(0, temp.length - 3)
+		reqOpt.uri = "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?delay=0&_=" + Date.now() + "&ex_ch=" + temp.substring(0, temp.length - 3)
 		if (stockList.length > 0) {
 			rp(reqOpt)
 			.then(function (repos) {
