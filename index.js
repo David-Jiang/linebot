@@ -157,7 +157,8 @@ const reqOpt = {
     }
 }
 let count = 1
-rp(reqOpt)
+setInterval(function(){
+	rp(reqOpt)
 	.then(function (repos) {
 		setInterval(function() {
 			let temp = ''
@@ -187,11 +188,12 @@ rp(reqOpt)
 					console.log("getStockInfo發生錯誤:" + err)
 				})
 			}
-		} ,20000)
+		} ,30000)
 	})
 	.catch(function (err) {
 		console.log("前導網頁get cookie發生錯誤:" + err)
 	})
+},120000)
 
 	function returnFloat(num) {
 		let value = Math.round(parseFloat(num)*100) / 100
