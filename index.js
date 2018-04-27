@@ -36,7 +36,7 @@ let stockList = []
 bot.on('message', function (event) {
 	event.source.profile().then(function (profile) {
 		if (!_.find(userInfoArr, function(o) { return o.userId == profile.userId })) {
-			userInfoArr.push(new UserInfo(profile.userId))
+			userInfoArr.push(new UserInfo(profile.userId,[],false))
 		}
 		switch (event.message.type) {
 			case 'text':
@@ -195,7 +195,7 @@ rp(reqOpt)
 	
 const addToStockList = (stockId: string) => {
 	if (!_.find(stockList, function(o) { return o.stockId == stockId; })) {
-		stockList.push(new StockInfo(stockId))
+		stockList.push(new StockInfo(stockId, '', 0.0, 0.0, 0.0, 0.0))
 	}
 }
 
