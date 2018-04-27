@@ -155,7 +155,7 @@ const reqOpt = {
     	'content-type': 'application/json'
     }
 }
-let count = 1
+let count = 1;
 rp(reqOpt)
 .then(function (repos) {
 	setInterval(function() {
