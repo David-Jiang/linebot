@@ -170,7 +170,9 @@ rp(reqOpt)
 				.then(function (repos) {
 					var jsonObject = JSON.parse(repos)
 					if (!!jsonObject.msgArray) {
-						console.log(count++ + "次")
+						console.log("第" + (count++) + "次成功")
+					} else {
+						console.log("第" + (count++) + "次失敗")
 					}
 					_.forEach(jsonObject.msgArray , function(vo) { 
 						let info = _.find(stockList, function(o) { return o.stockId == vo.ch.replace(".tw","") })
