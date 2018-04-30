@@ -142,7 +142,6 @@ const reqOpt = {
 rp(reqOpt)
 .then((repost) => {
 	setInterval(() => {
-		let count = 1
 		let temp = ''
 		_.forEach(stockList, (stockVO) => { 
 			temp += `tse_${stockVO.stockId}.tw%7c`
@@ -153,9 +152,9 @@ rp(reqOpt)
 			.then((repos) => {
 				let jsonObject = JSON.parse(repos)
 				if (!!jsonObject.msgArray) {
-					console.log(`第${(count++)}次成功`)
+					console.log('取值成功')
 				} else {
-					console.log(`第${(count++)}次失敗`)
+					console.log('取值失敗')
 				}
 				_.forEach(jsonObject.msgArray, (vo) => { 
 					let info = _.find(stockList, (o) => { return o.stockId === vo.ch.replace('.tw', '') })
