@@ -163,7 +163,7 @@ rp(reqOpt)
 				}
 				_.forEach(jsonObject.msgArray, (vo) => { 
 					let info = _.find(stockList, (o) => { 
-						(o.stockId === vo.ch.replace('.tw', ''))
+						o.stockId === vo.ch.replace('.tw', '')
 					})
 					info.startPrice = vo.y
 					info.lowPrice = vo.l
