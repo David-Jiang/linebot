@@ -1,11 +1,14 @@
 import linebot from 'linebot'
+import express from 'express'
+import rp from 'request-promise'
+import _ from 'lodash'
 import { returnFloat } from './util'
 import { UserInfo, StockInfo } from './model'
 
 //const linebot = require('linebot')
-const express = require('express')
-const rp = require('request-promise')
-const _ = require('lodash')
+//const express = require('express')
+//const rp = require('request-promise')
+//const _ = require('lodash')
 
 const bot = linebot({
 	channelId: process.env.CHANNEL_ID,
