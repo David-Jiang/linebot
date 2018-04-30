@@ -1,4 +1,4 @@
-import * as linebot from 'linebot'
+import linebot from 'linebot'
 import { returnFloat } from './util'
 import { UserInfo, StockInfo } from './model'
 
