@@ -23,8 +23,8 @@ app.listen(process.env.PORT || 80, () => {
 	console.log('LineBot is running.')
 })
 
-const userInfoArr = []
-const stockList = []
+let userInfoArr = []
+let stockList = []
 
 bot.on('message', (event) => {
 	event.source.profile().then((profile) => {
@@ -33,6 +33,7 @@ bot.on('message', (event) => {
 			userInfo.userId = profile.userId
 			userInfoArr.push(userInfo)
 		}
+		console.log(userInfoArr)
 		switch (event.message.type) {
 			case 'text':
 				if (_.startsWith(event.message.text, '-a')) {
