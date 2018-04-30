@@ -162,9 +162,7 @@ rp(reqOpt)
 					console.log(`第${(count++)}次失敗`)
 				}
 				_.forEach(jsonObject.msgArray, (vo) => { 
-					let info = _.find(stockList, (o) => { 
-						o.stockId === vo.ch.replace('.tw', '')
-					})
+					let info = _.find(stockList, (o) => { return o.stockId === vo.ch.replace('.tw', '')})
 					info.startPrice = vo.y
 					info.lowPrice = vo.l
 					info.hightPrice = vo.h
@@ -176,7 +174,7 @@ rp(reqOpt)
 				console.log(`getStockInfo發生錯誤:${err}`)
 			})
 		}
-	}, 10000)
+	}, 60000)
 })
 .catch((err) => {
 	console.log(`前導網頁get cookie發生錯誤:${err}`)
