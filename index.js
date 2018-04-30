@@ -33,12 +33,11 @@ bot.on('message', (event) => {
 			userInfo.userId = profile.userId
 			userInfoArr.push(userInfo)
 		}
-		console.log(userInfoArr)
 		switch (event.message.type) {
 			case 'text':
 				if (_.startsWith(event.message.text, '-a')) {
 					let stockIdArrBySplit = event.message.text.replace('-a', '').trim().split('-')
-					let userInfo = _.find(userInfoArr, (o) => { o.userId === profile.userId })
+					let userInfo = _.find(userInfoArr, (o) => { return o.userId === profile.userId })
 					let responseSuccessId = []
 					_.forEach(stockIdArrBySplit, (stockId) => { 
 						if (stockId.length === 4) {
