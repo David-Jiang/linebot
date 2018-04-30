@@ -28,7 +28,7 @@ let stockList = []
 
 bot.on('message', (event) => {
 	event.source.profile().then((profile) => {
-		if (!_.find(userInfoArr, (o) => { o.userId === profile.userId })) {
+		if (!_.find(userInfoArr, (o) => { return o.userId === profile.userId })) {
 			let userInfo = new UserInfo()
 			userInfo.userId = profile.userId
 			userInfoArr.push(userInfo)
@@ -53,10 +53,10 @@ bot.on('message', (event) => {
 						event.reply(`您好${profile.displayName}，已成功開啟推播\n股票代號:${responseSuccessId.join(',')}`)
 					}
 				} else if (_.startsWith(event.message.text, '-r')) {
-					let userInfo = _.find(userInfoArr, (o) => { o.userId === profile.userId })
+					let userInfo = _.find(userInfoArr, (o) => { return o.userId === profile.userId })
 					let stockIdArrBySplit = event.message.text.replace('-r', '').trim().split('-')
 						_.forEach(stockIdArrBySplit, (stockIdneedDel) => { 
-							_.remove(userInfo.stockIdArr, (stockIdown) => { stockIdneedDel === stockIdown })
+							_.remove(userInfo.stockIdArr, (stockIdown) => { return stockIdneedDel === stockIdown })
 						})
 					event.reply(`您好${profile.displayName}股票代號:${stockIdArrBySplit.join(',')}，已移除推播清單`)
 				} else if (_.startsWith(event.message.text, '-i')) {
@@ -65,7 +65,7 @@ bot.on('message', (event) => {
 						if (stockId.length === 4) {
 							addToStockList(stockId)
 							let showMessage = ''
-							let obj = _.find(stockList, (o) => { o.stockId === stockId && o.currPrice > 0 })
+							let obj = _.find(stockList, (o) => { return o.stockId === stockId && o.currPrice > 0 })
 							if (obj) {
 								showMessage += `股票${obj.stockName}(${obj.stockId})\n
 														目前價:${obj.currPrice}(${(obj.currPrice - obj.startPrice > 0 ? '+' : '')} ${returnFloat(obj.currPrice - obj.startPrice)} )\n
@@ -77,7 +77,7 @@ bot.on('message', (event) => {
 					})
 				} else if (_.startsWith(event.message.text, '-s') || _.startsWith(event.message.text, '-c')) {
 					let type = event.message.text.trim()
-					let userInfo = _.find(userInfoArr, (o) => { o.userId === profile.userId })
+					let userInfo = _.find(userInfoArr, (o) => { return o.userId === profile.userId })
 					if (type === '-s') {
 						userInfo.subscr = true
 						event.reply(`您好${profile.displayName}，已開啟推播`)
@@ -86,12 +86,12 @@ bot.on('message', (event) => {
 						event.reply(`您好${profile.displayName}，已暫停推播`)
 					}
 				} else if (_.startsWith(event.message.text, '-v')) {
-					let showMessage = `
-					  輸入-a 股票代號 可定時推播該股票資訊\n\t(例如: -a 2353-2330)\n
-					 	輸入-i 股票代號 可回應該股票資訊\n\t(例如: -c 2353-2330)\n
-						輸入-s 可開啟推播\n
-						輸入-c 可暫停推播\n
-						輸入-r 股票代號 可移除該股票資訊推播\n\t(例如: -r 2353-2330)\n`
+					let showMessage = '輸入-a 股票代號 可定時推播該股票資訊\n\t(例如: -a 2353-2330)\n'
+					showMessage += '輸入-a 股票代號 可定時推播該股票資訊\n\t(例如: -a 2353-2330)\n'
+					showMessage += '輸入-i 股票代號 可回應該股票資訊\n\t(例如: -c 2353-2330)\n'
+					showMessage += '輸入-s 可開啟推播\n'
+					showMessage += '輸入-c 可暫停推播\n'
+					showMessage += '輸入-r 股票代號 可移除該股票資訊推播\n\t(例如: -r 2353-2330)\n'
 					event.reply(showMessage)
 				} else {
 					event.reply(`您好${profile.displayName}，歡迎使用\n輸入-v 可以查看功能列表`)
@@ -116,12 +116,12 @@ setInterval(() => {
 		if (vo.subscr && vo.stockIdArr.length > 0) {
 			let showMessage = ''
 			_.forEach(vo.stockIdArr, (stockId) => {
-				let obj = _.find(stockList, (o) => { o.stockId === stockId && o.currPrice > 0 })
+				let obj = _.find(stockList, (o) => { return o.stockId === stockId && o.currPrice > 0 })
 				if (obj) {
-					showMessage += `股票:${obj.stockName}(${obj.stockId})\n
-												目前價:${obj.currPrice}${(obj.currPrice - obj.startPrice > 0 ? '+' : '')}${returnFloat(obj.currPrice - obj.startPrice)}\n
-												最高價:${obj.hightPrice}\n
-												最低價:${obj.lowPrice}\n`
+					showMessage += `股票:${obj.stockName}(${obj.stockId})
+					目前價:${obj.currPrice}${(obj.currPrice - obj.startPrice > 0 ? '+' : '')}${returnFloat(obj.currPrice - obj.startPrice)}
+					最高價:${obj.hightPrice}
+					最低價:${obj.lowPrice}`
 				}
 			})
 
@@ -163,7 +163,7 @@ rp(reqOpt)
 					console.log(`第${(count++)}次失敗`)
 				}
 				_.forEach(jsonObject.msgArray, (vo) => { 
-					let info = _.find(stockList, (o) => { o.stockId === vo.ch.replace('.tw', '') })
+					let info = _.find(stockList, (o) => { return o.stockId === vo.ch.replace('.tw', '') })
 					info.startPrice = vo.y
 					info.lowPrice = vo.l
 					info.hightPrice = vo.h
@@ -183,7 +183,7 @@ rp(reqOpt)
 
 	
 const addToStockList = (stockId: string) => {
-	if (!_.find(stockList, (o) => { o.stockId === stockId })) {
+	if (!_.find(stockList, (o) => { return o.stockId === stockId })) {
 		let stockInfo = new StockInfo()
 		stockInfo.stockId = stockId
 		stockList.push(stockInfo)
