@@ -12,7 +12,8 @@
       "max-len": 0,
       "no-plusplus": 0,
       "no-extra-boolean-cast": 0,
-      "no-console": 0
+      "no-console": 0,
+      "arrow-body-style": 0
     },
     "ecmaFeatures": {
       "jsx": true,

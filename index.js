@@ -1,24 +1,20 @@
+import * as linebot from 'linebot'
 import { returnFloat } from './util'
 import { UserInfo, StockInfo } from './model'
 
-const linebot = require('linebot')
+//const linebot = require('linebot')
 const express = require('express')
 const rp = require('request-promise')
 const _ = require('lodash')
-
 
 const bot = linebot({
 	channelId: process.env.CHANNEL_ID,
 	channelSecret: process.env.CHANNEL_SECRET,
 	channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
 })
-
 const app = express()
-
 const linebotParser = bot.parser()
-
 app.post('/linewebhook', linebotParser)
-
 app.listen(process.env.PORT || 80, () => {
 	console.log('LineBot is running.')
 })
@@ -120,7 +116,7 @@ setInterval(() => {
 					showMessage += `股票:${obj.stockName}(${obj.stockId})
 目前價:${obj.currPrice}(${(obj.currPrice - obj.startPrice > 0 ? '+' : '')}${returnFloat(obj.currPrice - obj.startPrice)})
 最高價:${obj.hightPrice}
-最低價:${obj.lowPrice}`
+最低價:${obj.lowPrice}\n\n`
 				}
 			})
 
@@ -162,7 +158,7 @@ rp(reqOpt)
 					console.log(`第${(count++)}次失敗`)
 				}
 				_.forEach(jsonObject.msgArray, (vo) => { 
-					let info = _.find(stockList, (o) => { return o.stockId === vo.ch.replace('.tw', '')})
+					let info = _.find(stockList, (o) => { return o.stockId === vo.ch.replace('.tw', '') })
 					info.startPrice = vo.y
 					info.lowPrice = vo.l
 					info.hightPrice = vo.h
@@ -174,7 +170,7 @@ rp(reqOpt)
 				console.log(`getStockInfo發生錯誤:${err}`)
 			})
 		}
-	}, 60000)
+	}, 30000)
 })
 .catch((err) => {
 	console.log(`前導網頁get cookie發生錯誤:${err}`)
