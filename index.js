@@ -176,7 +176,7 @@ rp(reqOpt)
 				console.log(`getStockInfo發生錯誤:${err}`)
 			})
 		}
-	}, 60000)
+	}, 10000)
 })
 .catch((err) => {
 	console.log(`前導網頁get cookie發生錯誤:${err}`)
