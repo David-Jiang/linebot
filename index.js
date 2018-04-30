@@ -27,10 +27,12 @@ bot.on('message', (event) => {
 			userInfo.userId = profile.userId
 			userInfoArr.push(userInfo)
 		}
+		let messageText = event.message.text
+		messageText = `-${messageText.substring(1, 2).toLowerCase()}${messageText.substring(2)}`
 		switch (event.message.type) {
 			case 'text':
-				if (_.startsWith(event.message.text, '-a')) {
-					let stockIdArrBySplit = event.message.text.replace('-a', '').trim().split('-')
+				if (_.startsWith(messageText, '-a')) {
+					let stockIdArrBySplit = messageText.replace('-a', '').trim().split('-')
 					let userInfo = _.find(userInfoArr, (o) => { return o.userId === profile.userId })
 					let responseSuccessId = []
 					_.forEach(stockIdArrBySplit, (stockId) => { 
@@ -46,15 +48,15 @@ bot.on('message', (event) => {
 					if (responseSuccessId.length > 0) {
 						event.reply(`您好${profile.displayName}，已成功開啟推播\n股票代號:${responseSuccessId.join(',')}`)
 					}
-				} else if (_.startsWith(event.message.text, '-r')) {
+				} else if (_.startsWith(messageText, '-r')) {
 					let userInfo = _.find(userInfoArr, (o) => { return o.userId === profile.userId })
-					let stockIdArrBySplit = event.message.text.replace('-r', '').trim().split('-')
+					let stockIdArrBySplit = messageText.replace('-r', '').trim().split('-')
 						_.forEach(stockIdArrBySplit, (stockIdneedDel) => { 
 							_.remove(userInfo.stockIdArr, (stockIdown) => { return stockIdneedDel === stockIdown })
 						})
 					event.reply(`您好${profile.displayName}股票代號:${stockIdArrBySplit.join(',')}，已移除推播清單`)
-				} else if (_.startsWith(event.message.text, '-i')) {
-					let stockIdArrBySplit = event.message.text.replace('-i', '').trim().split('-')
+				} else if (_.startsWith(messageText, '-i')) {
+					let stockIdArrBySplit = messageText.replace('-i', '').trim().split('-')
 					_.forEach(stockIdArrBySplit, (stockId) => { 
 						if (stockId.length === 4) {
 							addToStockList(stockId)
@@ -69,8 +71,8 @@ bot.on('message', (event) => {
 							}
 						}
 					})
-				} else if (_.startsWith(event.message.text, '-s') || _.startsWith(event.message.text, '-c')) {
-					let type = event.message.text.trim()
+				} else if (_.startsWith(messageText, '-s') || _.startsWith(messageText, '-c')) {
+					let type = messageText.trim()
 					let userInfo = _.find(userInfoArr, (o) => { return o.userId === profile.userId })
 					if (type === '-s') {
 						userInfo.subscr = true
@@ -79,7 +81,7 @@ bot.on('message', (event) => {
 						userInfo.subscr = false
 						event.reply(`您好${profile.displayName}，已暫停推播`)
 					}
-				} else if (_.startsWith(event.message.text, '-v')) {
+				} else if (_.startsWith(messageText, '-v')) {
 					let showMessage = '輸入-a 股票代號 可定時推播該股票資訊\n\t(例如: -a 2353-2330)\n'
 					showMessage += '輸入-i 股票代號 可回應該股票資訊\n\t(例如: -c 2353-2330)\n'
 					showMessage += '輸入-s 可開啟推播\n'
@@ -137,9 +139,7 @@ const reqOpt = {
     'content-type': 'application/json',
   },
 }
-
-setInterval(() => {
-	rp(reqOpt)
+rp(reqOpt)
 .then((repost) => {
 	setInterval(() => {
 		let count = 1
@@ -175,43 +175,6 @@ setInterval(() => {
 .catch((err) => {
 	console.log(`前導網頁get cookie發生錯誤:${err}`)
 })
-}, 240000)
-/* rp(reqOpt)
-.then((repost) => {
-	setInterval(() => {
-		let count = 1
-		let temp = ''
-		_.forEach(stockList, (stockVO) => { 
-			temp += `tse_${stockVO.stockId}.tw%7c`
-		})
-		reqOpt.uri = `http://mis.twse.com.tw/stock/api/getStockInfo.jsp?cp=0&json=1&delay=0&_=${Date.now()}&ex_ch=${temp.substring(0, temp.length - 3)}`
-		if (stockList.length > 0) {
-			rp(reqOpt)
-			.then((repos) => {
-				let jsonObject = JSON.parse(repos)
-				if (!!jsonObject.msgArray) {
-					console.log(`第${(count++)}次成功`)
-				} else {
-					console.log(`第${(count++)}次失敗`)
-				}
-				_.forEach(jsonObject.msgArray, (vo) => { 
-					let info = _.find(stockList, (o) => { return o.stockId === vo.ch.replace('.tw', '') })
-					info.startPrice = vo.y
-					info.lowPrice = vo.l
-					info.hightPrice = vo.h
-					info.currPrice = vo.z
-					info.stockName = vo.n
-				})
-			})
-			.catch((err) => {
-				console.log(`getStockInfo發生錯誤:${err}`)
-			})
-		}
-	}, 60000)
-})
-.catch((err) => {
-	console.log(`前導網頁get cookie發生錯誤:${err}`)
-}) */
 
 	
 const addToStockList = (stockId: string) => {
