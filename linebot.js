@@ -21,14 +21,12 @@ app.post('/linewebhook', line.middleware(config), (req, res) => {
     })
 })
 
-//const client = new line.Client(config)
+const client = new line.Client(config)
 function handleEvent(event) {
-  throw new Error(`Unknown event: ${JSON.stringify(event)}`)
-  
-  /* return client.replyMessage(event.replyToken, {
+  return client.replyMessage(event.replyToken, {
     type: 'text',
     text: event.message.text,
-  }) */
+  })
 }
 
 app.listen(process.env.PORT || 80, () => {
