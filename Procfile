@@ -1,1 +1,1 @@
-web: babel-node index.js
+web: babel-node linebot.js

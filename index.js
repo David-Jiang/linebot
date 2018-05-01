@@ -20,6 +20,14 @@ app.listen(process.env.PORT || 80, () => {
 let userInfoArr = []
 let stockList = []
 
+const addToStockList = (stockId: string) => {
+	if (!_.find(stockList, (o) => { return o.stockId === stockId })) {
+		let stockInfo = new StockInfo()
+		stockInfo.stockId = stockId
+		stockList.push(stockInfo)
+	}
+}
+
 bot.on('message', (event) => {
 	event.source.profile().then((profile) => {
 		if (!_.find(userInfoArr, (o) => { return o.userId === profile.userId })) {
@@ -174,13 +182,3 @@ rp(reqOpt)
 .catch((err) => {
 	console.log(`前導網頁get cookie發生錯誤:${err}`)
 })
-
-	
-const addToStockList = (stockId: string) => {
-	if (!_.find(stockList, (o) => { return o.stockId === stockId })) {
-		let stockInfo = new StockInfo()
-		stockInfo.stockId = stockId
-		stockList.push(stockInfo)
-	}
-}
-
