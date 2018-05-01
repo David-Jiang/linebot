@@ -11,17 +11,22 @@ const config = {
 }
 
 const app = express()
-app.post('/webhook', line.middleware(config), (req, res) => {
+app.post('/callback', line.middleware(config), (req, res) => {
   Promise
     .all(req.body.events.map(handleEvent))
-    .then((result) => { console.log(res.json(result)) })
+    .then(() => { res.end() })
+    .catch((err) => {
+      console.error(err)
+      res.status(500).end()
+    })
 })
 
 const client = new line.Client(config)
 function handleEvent(event) {
-  if (event.type !== 'message' || event.message.type !== 'text') {
+  console.log(event)
+  /* if (event.type !== 'message' || event.message.type !== 'text') {
     return Promise.resolve(null)
-  }
+  } */
 
   return client.replyMessage(event.replyToken, {
     type: 'text',
