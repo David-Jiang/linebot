@@ -11,7 +11,7 @@ const config = {
 }
 
 const app = express()
-app.post('/callback', line.middleware(config), (req, res) => {
+app.post('/linewebhook', line.middleware(config), (req, res) => {
   Promise
     .all(req.body.events.map(handleEvent))
     .then(() => { res.end() })
