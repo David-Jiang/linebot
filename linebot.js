@@ -35,5 +35,5 @@ function handleEvent(event) {
 }
 
 app.listen(process.env.PORT || 80, () => {
-	console.log('LineBot is running.')
+	console.log('LineBot2 is running')
 })
