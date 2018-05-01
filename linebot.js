@@ -11,7 +11,7 @@ const config = {
 }
 
 const app = express()
-app.post('/webhook', line.middleware(config), (req, res) => {
+app.post('/callback', line.middleware(config), (req, res) => {
   Promise
     .all(req.body.events.map(handleEvent))
     .then(() => { res.end() })
@@ -21,17 +21,14 @@ app.post('/webhook', line.middleware(config), (req, res) => {
     })
 })
 
-const client = new line.Client(config)
+//const client = new line.Client(config)
 function handleEvent(event) {
-  console.log(event)
-  /* if (event.type !== 'message' || event.message.type !== 'text') {
-    return Promise.resolve(null)
-  } */
-
-  return client.replyMessage(event.replyToken, {
+  throw new Error(`Unknown event: ${JSON.stringify(event)}`)
+  
+  /* return client.replyMessage(event.replyToken, {
     type: 'text',
     text: event.message.text,
-  })
+  }) */
 }
 
 app.listen(process.env.PORT || 80, () => {
