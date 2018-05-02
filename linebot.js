@@ -7,6 +7,7 @@ const config = {
   channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
   channelSecret: process.env.CHANNEL_SECRET,
 }
+const client = new line.Client(config)
 
 const app = express()
 app.listen(process.env.PORT || 80, () => {
@@ -24,9 +25,12 @@ app.post('/linewebhook', line.middleware(config), (req, res) => {
       console.error(`處理事件發生error, reason is : ${err}`)
       res.status(500).end()
     })
-})
 
-const client = new line.Client(config)
+  client.createRichMenu({ size: { width: 2500, height: 1686 }, selected: true })
+    .then((richMenuId) => {
+      console.log(richMenuId)
+    })
+})
 
 const handleEvent = (event: any) => {
   switch (event.type) {
@@ -66,26 +70,6 @@ const handleText = (message, replyToken, source) => {
       } else {
         return replyText(replyToken, 'Bot can\'t use profile API without user ID')
       }
-    case 'buttons':
-      return client.replyMessage(
-        replyToken,
-        {
-          type: 'template',
-          altText: 'Buttons alt text',
-          template: {
-            type: 'buttons',
-            thumbnailImageUrl: buttonsImageURL,
-            title: 'My button sample',
-            text: 'Hello, my button',
-            actions: [
-              { label: 'Go to line.me', type: 'uri', uri: 'https://line.me' },
-              { label: 'Say hello1', type: 'postback', data: 'hello こんにちは' },
-              { label: '言 hello2', type: 'postback', data: 'hello こんにちは', text: 'hello こんにちは' },
-              { label: 'Say message', type: 'message', text: 'Rice=米' },
-            ],
-          },
-        }
-      )
     case 'confirm':
       return client.replyMessage(
         replyToken,
@@ -129,57 +113,6 @@ const handleText = (message, replyToken, source) => {
                   { label: 'Say message', type: 'message', text: 'Rice=米' },
                 ],
               },
-            ],
-          },
-        }
-      )
-    case 'image carousel':
-      return client.replyMessage(
-        replyToken,
-        {
-          type: 'template',
-          altText: 'Image carousel alt text',
-          template: {
-            type: 'image_carousel',
-            columns: [
-              {
-                imageUrl: buttonsImageURL,
-                action: { label: 'Go to LINE', type: 'uri', uri: 'https://line.me' },
-              },
-              {
-                imageUrl: buttonsImageURL,
-                action: { label: 'Say hello1', type: 'postback', data: 'hello こんにちは' },
-              },
-              {
-                imageUrl: buttonsImageURL,
-                action: { label: 'Say message', type: 'message', text: 'Rice=米' },
-              },
-              {
-                imageUrl: buttonsImageURL,
-                action: {
-                  label: 'datetime',
-                  type: 'datetimepicker',
-                  data: 'DATETIME',
-                  mode: 'datetime',
-                },
-              },
-            ]
-          },
-        }
-      )
-    case 'datetime':
-      return client.replyMessage(
-        replyToken,
-        {
-          type: 'template',
-          altText: 'Datetime pickers alt text',
-          template: {
-            type: 'buttons',
-            text: 'Select date / time !',
-            actions: [
-              { type: 'datetimepicker', label: 'date', data: 'DATE', mode: 'date' },
-              { type: 'datetimepicker', label: 'time', data: 'TIME', mode: 'time' },
-              { type: 'datetimepicker', label: 'datetime', data: 'DATETIME', mode: 'datetime' },
             ],
           },
         }
