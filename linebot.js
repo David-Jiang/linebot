@@ -58,7 +58,7 @@ const handleText = (message, replyToken, source) => {
     userInfo.userId = source.userId
     userInfoArr.push(userInfo)
   }
-  console.log(userInfoArr)
+
   switch (message) {
     case 'carousel':
       return client.replyMessage(
@@ -70,11 +70,10 @@ const handleText = (message, replyToken, source) => {
   }
 }
 
-const replyText = (token, texts) => {
-  let message = Array.isArray(texts) ? texts : [texts]
+const replyText = (token, message) => {
   return client.replyMessage(
-    token,
-    message.map((text: string) => ({ type: 'text', text }))
+    token, 
+    { type: 'text', message }
   )
 }
 
