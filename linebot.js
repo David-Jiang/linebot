@@ -31,7 +31,7 @@ const obj = {
   method: 'POST',
   url: 'https://api.line.me/v2/bot/richmenu',
   headers: {
-    Authorization: process.env.CHANNEL_ACCESS_TOKEN,
+    Authorization: `Bearer <${process.env.CHANNEL_ACCESS_TOKEN}>`,
     'Content-Type': 'application/json'
   },
   body: {
@@ -61,9 +61,9 @@ const obj = {
 }
 rp(obj)
 .then((repost) => {
-  console.log(repost)
+  console.log('測試成功' + repost)
 }).catch((err) => {
-	console.log(err)
+	console.log('測試error:' + err)
 })
 
 const handleEvent = (event: any) => {
