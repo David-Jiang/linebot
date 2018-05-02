@@ -18,7 +18,8 @@
       "no-use-before-define": 0,
       "no-else-return": 0,
       "comma-dangle": 0,
-      "prefer-destructuring": 0
+      "prefer-destructuring": 0,
+      "no-case-declarations": 0
     },
     "env": {
       "browser": true,

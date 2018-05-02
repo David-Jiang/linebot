@@ -38,16 +38,13 @@ const handleEvent = (event: any) => {
           throw new Error(`Unknown message: ${JSON.stringify(event.message)}`)
       }
     case 'postback':
-      () => {
-        const data = event.postback.data
-        let message = ''
-        /* if (data === 'DATE' || data === 'TIME' || data === 'DATETIME') {
-          message += `(${JSON.stringify(event.postback.params)})`
-        } */
+      const data = event.postback.data
+      let message = ''
+      /* if (data === 'DATE' || data === 'TIME' || data === 'DATETIME') {
         message += `(${JSON.stringify(event.postback.params)})`
-        return replyText(event.replyToken, `Got postback: ${message}`)
-      }
-      break
+      } */
+      message += `(${JSON.stringify(event.postback.params)})`
+      return replyText(event.replyToken, `Got postback: ${message}`)
     default:
       throw new Error(`Unknown event: ${JSON.stringify(event)}`)
   }
