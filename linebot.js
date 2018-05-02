@@ -77,7 +77,7 @@ const handleText = (message, replyToken, source) => {
             ],
           },
         }
-      );
+      )
     case 'confirm':
       return client.replyMessage(
         replyToken,
@@ -124,7 +124,7 @@ const handleText = (message, replyToken, source) => {
             ],
           },
         }
-      );
+      )
     case 'image carousel':
       return client.replyMessage(
         replyToken,
@@ -158,7 +158,7 @@ const handleText = (message, replyToken, source) => {
             ]
           },
         }
-      );
+      )
     case 'datetime':
       return client.replyMessage(
         replyToken,
@@ -175,7 +175,7 @@ const handleText = (message, replyToken, source) => {
             ],
           },
         }
-      );
+      )
     case 'imagemap':
       return client.replyMessage(
         replyToken,
@@ -196,4 +196,12 @@ const handleText = (message, replyToken, source) => {
       console.log(`Echo message to ${replyToken}: ${message.text}`)
       return replyText(replyToken, message.text)
   }
+}
+
+const replyText = (token, texts) => {
+  let message = Array.isArray(texts) ? texts : [texts]
+  return client.replyMessage(
+    token,
+    message.map((text: string) => ({ type: 'text', text }))
+  )
 }
