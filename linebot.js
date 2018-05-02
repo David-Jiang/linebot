@@ -12,10 +12,6 @@ const client = new line.Client(config)
 const app = express()
 app.listen(process.env.PORT || 80, () => {
   console.log('LineBot is running')
-  client.createRichMenu({ size: { width: 2500, height: 1686 }, selected: true })
-    .then((richMenuId) => {
-      console.log(richMenuId)
-    })
 })
 app.post('/linewebhook', line.middleware(config), (req, res) => {
   if (!Array.isArray(req.body.events)) {
@@ -29,6 +25,41 @@ app.post('/linewebhook', line.middleware(config), (req, res) => {
       console.error(`處理事件發生error, reason is : ${err}`)
       res.status(500).end()
     })
+})
+const obj = {
+    url: 'https://api.line.me/v2/bot/richmenu',
+    headers: {
+        Authorization: process.env.CHANNEL_ACCESS_TOKEN,
+        'Content-Type': 'application/json'
+    }
+  }
+const obj1 = {
+  size: {
+    width: 2500,
+    height: 1686
+  },
+  selected: false,
+  name: 'Nice richmenu',
+  chatBarText: 'Tap here',
+  areas: [
+    {
+      bounds: {
+        x: 0,
+        y: 0,
+        width: 2500,
+        height: 1686
+      },
+      action: {
+        type: 'postback',
+        data: 'action=buy&itemid=123'
+      }
+    }
+ ]
+}
+
+app.post(obj, (req, res) => {
+  res.write(obj1)
+  res.end()
 })
 
 const handleEvent = (event: any) => {
