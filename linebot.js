@@ -29,7 +29,7 @@ app.post('/linewebhook', line.middleware(config), (req, res) => {
 })
 const obj = {
   method: 'GET',
-  url: 'https://api.line.me/v2/bot/richmenu/list',
+  url: 'https://api.line.me/v2/bot/richmenu/richmenu-aa31c1583e439f3fd3c420f2b205a591',
   headers: {
     Authorization: `Bearer <${process.env.CHANNEL_ACCESS_TOKEN}>`,
   },
@@ -37,9 +37,16 @@ const obj = {
 }
 rp(obj)
 .then((repost) => {
-  console.log(`測試成功${JSON.stringify(repost)}`)
+  console.log(`測試1成功${JSON.stringify(repost)}`)
+  obj.url = 'https://api.line.me/v2/bot/richmenu/richmenu-27fc00a971f1a383950bc9dfb9d3be64'
+  rp(obj)
+    .then((repost1) => {
+      console.log(`測試2成功${JSON.stringify(repost1)}`)
+    }).catch((err) => {
+	    console.log('測試2error:' + err)
+    })
 }).catch((err) => {
-	console.log('測試error:' + err)
+	console.log('測試1error:' + err)
 })
 
 const handleEvent = (event: any) => {
