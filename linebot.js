@@ -11,7 +11,11 @@ const client = new line.Client(config)
 
 const app = express()
 app.listen(process.env.PORT || 80, () => {
-	console.log('LineBot is running')
+  console.log('LineBot is running')
+  client.createRichMenu({ size: { width: 2500, height: 1686 }, selected: true })
+    .then((richMenuId) => {
+      console.log(richMenuId)
+    })
 })
 app.post('/linewebhook', line.middleware(config), (req, res) => {
   if (!Array.isArray(req.body.events)) {
@@ -26,10 +30,6 @@ app.post('/linewebhook', line.middleware(config), (req, res) => {
       res.status(500).end()
     })
 })
-client.createRichMenu({ size: { width: 2500, height: 1686 }, selected: true })
-    .then((richMenuId) => {
-      console.log(richMenuId)
-    })
 
 const handleEvent = (event: any) => {
   switch (event.type) {
