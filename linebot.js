@@ -56,13 +56,14 @@ const obj = {
         }
       }
    ]
-  }
+  },
+  json: true
 }
 rp(obj)
 .then((repost) => {
   console.log(repost)
 }).catch((err) => {
-	console.log(`測試:${err}`)
+	console.log(err)
 })
 
 const handleEvent = (event: any) => {
