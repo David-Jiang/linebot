@@ -28,7 +28,7 @@ app.post('/linewebhook', line.middleware(config), (req, res) => {
     })
 })
 const obj = {
-  method: 'POST',
+  method: 'GET',
   url: 'https://api.line.me/v2/bot/richmenu/list',
   headers: {
     Authorization: `Bearer <${process.env.CHANNEL_ACCESS_TOKEN}>`,
