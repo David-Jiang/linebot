@@ -16,3 +16,22 @@ export class StockInfo {
 			this.hightPrice = hightPrice
 	}
 }
+
+export const CarouselTemplate = {
+	type: 'template',
+	altText: 'Carousel alt text',
+	template: {
+		type: 'carousel',
+		columns: [],
+	},
+}
+
+export const CarouselModel = {
+	thumbnailImageUrl: '',
+	title: '',
+	text: '',
+	actions: [],
+}
+/* { label: 'Go to line.me', type: 'uri', uri: 'https://line.me' },
+{ label: 'Say hello1', type: 'postback', data: 'hello こんにちは' },
+{ label: 'Say message', type: 'message', text: 'Rice=米' }, */

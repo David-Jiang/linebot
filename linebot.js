@@ -1,8 +1,8 @@
 import * as line from '@line/bot-sdk'
 import express from 'express'
-import rp from 'request-promise'
-/* import { returnFloat } from './util'
-import { UserInfo, StockInfo } from './model' */
+import _ from 'lodash'
+import { returnFloat } from './util'
+import { UserInfo, StockInfo } from './model'
 
 const config = {
   channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
@@ -27,45 +27,21 @@ app.post('/linewebhook', line.middleware(config), (req, res) => {
       res.status(500).end()
     })
 })
-const obj = {
-  method: 'DELETE',
-  url: 'https://api.line.me/v2/bot/richmenu/richmenu-aa31c1583e439f3fd3c420f2b205a591',
-  headers: {
-    Authorization: `Bearer <${process.env.CHANNEL_ACCESS_TOKEN}>`,
-  },
-  json: true
-}
-rp(obj)
-.then((repost) => {
-  console.log(`測試1成功${JSON.stringify(repost)}`)
-  obj.url = 'https://api.line.me/v2/bot/richmenu/richmenu-27fc00a971f1a383950bc9dfb9d3be64'
-  rp(obj)
-    .then((repost1) => {
-      console.log(`測試2成功${JSON.stringify(repost1)}`)
-    }).catch((err) => {
-	    console.log('測試2error:' + err)
-    })
-}).catch((err) => {
-	console.log('測試1error:' + err)
-})
+
+let userInfoArr = []
+let stockList = []
 
 const handleEvent = (event: any) => {
   switch (event.type) {
     case 'message':
       switch (event.message.type) {
         case 'text':
-          return handleText(event.message, event.replyToken, event.source)
+          return handleText(event.message.text, event.replyToken, event.source)
         default:
-          throw new Error(`Unknown message: ${JSON.stringify(event.message)}`)
+          return replyText(event.replyToken, '請輸入正確訊息唷')
       }
     case 'postback':
-      const data = event.postback.data
-      let message = ''
-      /* if (data === 'DATE' || data === 'TIME' || data === 'DATETIME') {
-        message += `(${JSON.stringify(event.postback.params)})`
-      } */
-      message += `(${JSON.stringify(event.postback.params)})`
-      return replyText(event.replyToken, `Got postback: ${message}`)
+      return handlePostback(event.postback.data, event.replyToken, event.source)
     default:
       throw new Error(`Unknown event: ${JSON.stringify(event)}`)
   }
@@ -73,67 +49,22 @@ const handleEvent = (event: any) => {
 
 const handleText = (message, replyToken, source) => {
   const buttonsImageURL = 'https://cfshopeetw-a.akamaihd.net/file/3685534c240f2f87221dac2be92e7f84_tn'
+  let userName = ''
+  client.getProfile(source.userId)
+        .then((profile) => { userName = profile.displayName })
 
-  switch (message.text) {
-    case 'profile':
-      if (source.userId) {
-        return client.getProfile(source.userId)
-          .then((profile) => {
-            replyText(replyToken, [
-              `Display name: ${profile.displayName}`,
-              `Status message: ${profile.statusMessage}`,
-            ])
-        })
-      } else {
-        return replyText(replyToken, 'Bot can\'t use profile API without user ID')
-      }
-    case 'confirm':
-      return client.replyMessage(
-        replyToken,
-        {
-          type: 'template',
-          altText: 'Confirm alt text',
-          template: {
-            type: 'confirm',
-            text: 'Do it?',
-            actions: [
-              { label: 'Yes', type: 'message', text: 'Yes!' },
-              { label: 'No', type: 'message', text: 'No!' },
-            ],
-          },
-        }
-      )
+  if (!userInfoArr.find((o) => { return o.userId === source.userId })) {
+    let userInfo = new UserInfo()
+    userInfo.userId = source.userId
+    userInfoArr.push(userInfo)
+  }
+  console.log(userInfoArr)
+  switch (message) {
     case 'carousel':
       return client.replyMessage(
-        replyToken,
-        {
-          type: 'template',
-          altText: 'Carousel alt text',
-          template: {
-            type: 'carousel',
-            columns: [
-              {
-                thumbnailImageUrl: buttonsImageURL,
-                title: 'hoge',
-                text: 'fuga',
-                actions: [
-                  { label: 'Go to line.me', type: 'uri', uri: 'https://line.me' },
-                  { label: 'Say hello1', type: 'postback', data: 'hello こんにちは' },
-                ],
-              },
-              {
-                thumbnailImageUrl: buttonsImageURL,
-                title: 'hoge',
-                text: 'fuga',
-                actions: [
-                  { label: '言 hello2', type: 'postback', data: 'hello こんにちは', text: 'hello こんにちは' },
-                  { label: 'Say message', type: 'message', text: 'Rice=米' },
-                ],
-              },
-            ],
-          },
-        }
-      )
+        replyToken, {
+
+        })
     default:
       return replyText(replyToken, message.text)
   }
@@ -145,4 +76,22 @@ const replyText = (token, texts) => {
     token,
     message.map((text: string) => ({ type: 'text', text }))
   )
+}
+
+const handlePostback = (data, replyToken, source) => {
+  let userName = ''
+  client.getProfile(source.userId)
+        .then((profile) => { userName = profile.displayName })
+  switch (data) {
+    default:
+      return replyText(replyToken, `${userName}傳入參數success:${data}\n`)
+  }
+}
+
+const addToStockList = (stockId: string) => {
+	if (!stockList.find((o) => { return o.stockId === stockId })) {
+		let stockInfo = new StockInfo()
+		stockInfo.stockId = stockId
+		stockList.push(stockInfo)
+	}
 }
