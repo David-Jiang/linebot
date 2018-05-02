@@ -1,5 +1,6 @@
 import * as line from '@line/bot-sdk'
 import express from 'express'
+import rp from 'request-promise'
 /* import { returnFloat } from './util'
 import { UserInfo, StockInfo } from './model' */
 
@@ -27,39 +28,41 @@ app.post('/linewebhook', line.middleware(config), (req, res) => {
     })
 })
 const obj = {
-    url: 'https://api.line.me/v2/bot/richmenu',
-    headers: {
-        Authorization: process.env.CHANNEL_ACCESS_TOKEN,
-        'Content-Type': 'application/json'
-    }
-  }
-const obj1 = {
-  size: {
-    width: 2500,
-    height: 1686
+  method: 'POST',
+  url: 'https://api.line.me/v2/bot/richmenu',
+  headers: {
+    Authorization: process.env.CHANNEL_ACCESS_TOKEN,
+    'Content-Type': 'application/json'
   },
-  selected: false,
-  name: 'Nice richmenu',
-  chatBarText: 'Tap here',
-  areas: [
-    {
-      bounds: {
-        x: 0,
-        y: 0,
-        width: 2500,
-        height: 1686
-      },
-      action: {
-        type: 'postback',
-        data: 'action=buy&itemid=123'
+  body: {
+    size: {
+      width: 2500,
+      height: 1686
+    },
+    selected: false,
+    name: 'Nice richmenu',
+    chatBarText: 'Tap here',
+    areas: [
+      {
+        bounds: {
+          x: 0,
+          y: 0,
+          width: 2500,
+          height: 1686
+        },
+        action: {
+          type: 'postback',
+          data: 'action=buy&itemid=123'
+        }
       }
-    }
- ]
+   ]
+  }
 }
-
-app.post(obj, (req, res) => {
-  res.write(obj1)
-  res.end()
+rp(obj)
+.then((repost) => {
+  console.log(repost)
+}).catch((err) => {
+	console.log(`測試:${err}`)
 })
 
 const handleEvent = (event: any) => {
