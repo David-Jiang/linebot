@@ -8,7 +8,11 @@ const config = {
   channelSecret: process.env.CHANNEL_SECRET,
 }
 const client = new line.Client(config)
-
+client.createRichMenu({ size: { width: 2500, height: 1686 }, selected: true })
+    .then((richMenuId) => {
+      console.log(richMenuId)
+    })
+    
 const app = express()
 app.listen(process.env.PORT || 80, () => {
 	console.log('LineBot is running')
@@ -24,11 +28,6 @@ app.post('/linewebhook', line.middleware(config), (req, res) => {
     .catch((err) => {
       console.error(`處理事件發生error, reason is : ${err}`)
       res.status(500).end()
-    })
-
-  client.createRichMenu({ size: { width: 2500, height: 1686 }, selected: true })
-    .then((richMenuId) => {
-      console.log(richMenuId)
     })
 })
 
