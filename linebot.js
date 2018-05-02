@@ -34,9 +34,20 @@ const handleEvent = (event: any) => {
       switch (event.message.type) {
         case 'text':
           return handleText(event.message, event.replyToken, event.source)
+        case 'postback':
+          () => {
+            const data = event.postback.data
+            let message = ''
+            if (data === 'DATE' || data === 'TIME' || data === 'DATETIME') {
+              message += `(${JSON.stringify(event.postback.params)})`
+            }
+            return replyText(event.replyToken, `Got postback: ${message}`)
+          }
+          break
         default:
           throw new Error(`Unknown message: ${JSON.stringify(event.message)}`)
-    }
+      }
+      break
     default:
       throw new Error(`Unknown event: ${JSON.stringify(event)}`)
   }
@@ -176,24 +187,7 @@ const handleText = (message, replyToken, source) => {
           },
         }
       )
-    case 'imagemap':
-      return client.replyMessage(
-        replyToken,
-        {
-          type: 'imagemap',
-          baseUrl: buttonsImageURL,
-          altText: 'Imagemap alt text',
-          baseSize: { width: 1040, height: 1040 },
-          actions: [
-            { area: { x: 0, y: 0, width: 520, height: 520 }, type: 'uri', linkUri: 'https://store.line.me/family/manga/en' },
-            { area: { x: 520, y: 0, width: 520, height: 520 }, type: 'uri', linkUri: 'https://store.line.me/family/music/en' },
-            { area: { x: 0, y: 520, width: 520, height: 520 }, type: 'uri', linkUri: 'https://store.line.me/family/play/en' },
-            { area: { x: 520, y: 520, width: 520, height: 520 }, type: 'message', text: 'URANAI!' },
-          ],
-        }
-      )
     default:
-      console.log(`Echo message to ${replyToken}: ${message.text}`)
       return replyText(replyToken, message.text)
   }
 }
