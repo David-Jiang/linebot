@@ -61,7 +61,7 @@ const obj = {
 }
 rp(obj)
 .then((repost) => {
-  console.log('測試成功' + repost)
+  console.log(`測試成功${JSON.stringify(repost)}`)
 }).catch((err) => {
 	console.log('測試error:' + err)
 })
