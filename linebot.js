@@ -15,6 +15,7 @@ app.listen(process.env.PORT || 80, () => {
   console.log('LineBot is running')
 })
 app.post('/linewebhook', line.middleware(config), (req, res) => {
+  console.log(req.body.events)
   if (!Array.isArray(req.body.events)) {
     return res.status(500).end()
   }
