@@ -41,9 +41,10 @@ const handleEvent = (event: any) => {
       () => {
         const data = event.postback.data
         let message = ''
-        if (data === 'DATE' || data === 'TIME' || data === 'DATETIME') {
+        /* if (data === 'DATE' || data === 'TIME' || data === 'DATETIME') {
           message += `(${JSON.stringify(event.postback.params)})`
-        }
+        } */
+        message += `(${JSON.stringify(event.postback.params)})`
         return replyText(event.replyToken, `Got postback: ${message}`)
       }
       break
