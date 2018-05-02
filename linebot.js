@@ -34,18 +34,17 @@ const handleEvent = (event: any) => {
       switch (event.message.type) {
         case 'text':
           return handleText(event.message, event.replyToken, event.source)
-        case 'postback':
-          () => {
-            const data = event.postback.data
-            let message = ''
-            if (data === 'DATE' || data === 'TIME' || data === 'DATETIME') {
-              message += `(${JSON.stringify(event.postback.params)})`
-            }
-            return replyText(event.replyToken, `Got postback: ${message}`)
-          }
-          break
         default:
           throw new Error(`Unknown message: ${JSON.stringify(event.message)}`)
+      }
+    case 'postback':
+      () => {
+        const data = event.postback.data
+        let message = ''
+        if (data === 'DATE' || data === 'TIME' || data === 'DATETIME') {
+          message += `(${JSON.stringify(event.postback.params)})`
+        }
+        return replyText(event.replyToken, `Got postback: ${message}`)
       }
       break
     default:
