@@ -135,7 +135,7 @@ const handlePostback = (postback: any, replyToken: any, source: any) => {
     .then((userName) => {
       switch (postback.data) {
         case 'DATE':
-          return replyText(replyToken, `${userName}表示有空的時間是：${postback.params.data}`);
+          return replyText(replyToken, `${userName}表示有空的時間是：${postback.params.date}`);
         default:
           return replyText(replyToken, `${userName}表示想跟你去${postback.data}玩`);
       }
@@ -152,13 +152,23 @@ const replyText = (token: any, message: string) => {
 const replyTemplate = (token: any) => {
   let carouselTemplate = new CarouselTemplate();
   let carouselArr = carouselTemplate.template.columns;
+  let carouselModel = null;
 
-  let carouselModel = new CarouselModel();
+  carouselModel = new CarouselModel();
   carouselModel.thumbnailImageUrl = 'https://www.taiwan.net.tw/att/1/big_scenic_spots/pic_290_7.jpg';
   carouselModel.title = '九份老街';
   carouselModel.text = '邊喝茶邊看夕陽好去處';
   carouselModel.actions.push({ label: '介紹連結', type: 'uri', uri: 'https://www.taiwan.net.tw/m1.aspx?sNo=0001091&id=290' });
   carouselModel.actions.push({ label: '我想去這邊', type: 'postback', data: '九份', text: '只要是跟你去，哪裡我都願意' });
+  carouselModel.actions.push({ label: '點選出遊時間', type: 'datetimepicker', data: 'DATE', mode: 'date' });
+  carouselArr.push(carouselModel);
+
+  carouselModel = new CarouselModel();
+  carouselModel.thumbnailImageUrl = 'https://pic.pimg.tw/eeooa0314/1381924583-3686791643.jpg';
+  carouselModel.title = '松山文創園區';
+  carouselModel.text = '文藝復興夜景生活';
+  carouselModel.actions.push({ label: '介紹連結', type: 'uri', uri: 'http://eeooa0314.pixnet.net/blog/post/274880483-%E3%80%90%E5%8F%B0%E5%8C%97%E3%80%91%E5%8F%B0%E5%8C%97%E9%80%9B%E8%A1%97%2C%E6%95%A3%E6%AD%A5%E5%A5%BD%E5%8E%BB%E8%99%95%E2%99%A5%E6%9D%BE%E5%B1%B1%E6%96%87%E5%89%B5%E5%9C%92' });
+  carouselModel.actions.push({ label: '我想去這邊', type: 'postback', data: '松山文創', text: '只要是跟你去，哪裡我都願意' });
   carouselModel.actions.push({ label: '點選出遊時間', type: 'datetimepicker', data: 'DATE', mode: 'date' });
   carouselArr.push(carouselModel);
 
