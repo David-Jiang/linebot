@@ -167,6 +167,8 @@ const replyTemplate = (token: any) => {
   carouselModel.actions.push({ label: '點選出遊時間', type: 'datetimepicker', data: 'DATE', mode: 'date' });
   carouselArr.push(carouselModel);
 
+  console.log(CarouselTemplate);
+
   return client.replyMessage(
     token,
     CarouselTemplate
