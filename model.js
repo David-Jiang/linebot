@@ -17,21 +17,14 @@ export class StockInfo {
 	}
 }
 
-export const CarouselTemplate = {
-	type: 'template',
-	altText: 'Carousel alt text',
-	template: {
-		type: 'carousel',
-		columns: [],
-	},
-};
+export class CarouselTemplate {
+	constructor(type = 'template', altText = 'Carousel alt text', template = { type: 'carousel', columns: [] }) {
+		this.type = type;
+		this.altText = altText;
+		this.template = template;
+	}
+}
 
-/* export const CarouselModel = {
-	thumbnailImageUrl: '',
-	title: '',
-	text: '',
-	actions: [],
-}; */
 export class CarouselModel {
 	constructor(thumbnailImageUrl = '', title = '', text = '', actions: []) {
 		this.thumbnailImageUrl = thumbnailImageUrl;
