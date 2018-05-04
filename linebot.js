@@ -140,6 +140,7 @@ const handlePostback = (postback: any, replyToken: any, source: any) => {
 };
 
 const replyText = (token: any, message: string) => {
+  console.log(token);
   return client.replyMessage(
     token,
     { type: 'text', message }
