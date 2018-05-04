@@ -31,10 +31,6 @@ let userInfoArr = [];
 let stockList = [];
 
 const handleEvent = (event: any) => {
-  return client.replyMessage(
-    event.replyToken,
-    { type: 'text', '15616' }
-  );
   switch (event.type) {
     case 'message':
       switch (event.message.type) {
@@ -143,10 +139,10 @@ const handlePostback = (postback: any, replyToken: any, source: any) => {
   }
 };
 
-const replyText = (token: any, message: string) => {
+const replyText = (token: any, texts: string) => {
   return client.replyMessage(
     token,
-    { type: 'text', message }
+    texts.map((text) => ({ type: 'text', text }))
   );
 };
 
