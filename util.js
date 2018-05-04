@@ -1,4 +1,4 @@
-const returnFloat = (num: number) => {
+export const returnFloat = (num: number) => {
 	let value = Math.round(parseFloat(num) * 100) / 100;
 	let xsd = value.toString().split('.');
 	if (xsd.length === 1) {
@@ -12,5 +12,3 @@ const returnFloat = (num: number) => {
 		return value;
 	}
 };
-
-export default returnFloat;
