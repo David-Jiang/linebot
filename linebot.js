@@ -31,6 +31,7 @@ let userInfoArr = [];
 let stockList = [];
 
 const handleEvent = (event: any) => {
+  console.log(event.replyToken);
   switch (event.type) {
     case 'message':
       switch (event.message.type) {
@@ -47,7 +48,6 @@ const handleEvent = (event: any) => {
 };
 
 const handleText = (text: string, replyToken: any, source: any) => {
-  console.log('test');
   let messageText = text;
 
   let userName = '';
