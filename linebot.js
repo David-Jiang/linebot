@@ -118,6 +118,8 @@ const handleText = (text: string, replyToken: any, source: any) => {
         showMessage += '輸入-c 可暫停推播\n';
         showMessage += '輸入-r 股票代號 可移除該股票資訊推播\n\t(例如: -r 2353-2330)\n';
         replyText(replyToken, showMessage);
+      } else if (messageText.startsWith('-q')) {
+        new Error('pass');
       } else if (messageText === 'kiwi') {
         replyTemplate(replyToken);
       } else {
@@ -133,9 +135,9 @@ const handlePostback = (postback: any, replyToken: any, source: any) => {
     .then((userName) => {
       switch (postback.data) {
         case 'DATE':
-          return replyText(replyToken, `${userName}傳入參數success:${JSON.stringify(postback.params)}\n`);
+          return replyText(replyToken, `${userName}表示有空的時間是：${JSON.stringify(postback.params.data)}\n`);
         default:
-          return replyText(replyToken, `${userName}傳入參數success:${postback.data}\n`);
+          return replyText(replyToken, `${userName}表示想跟你去${postback.data}玩\n`);
       }
     });
 };
@@ -156,7 +158,7 @@ const replyTemplate = (token: any) => {
   carouselModel.title = '九份老街';
   carouselModel.text = '邊喝茶邊看夕陽好去處';
   carouselModel.actions.push({ label: '介紹連結', type: 'uri', uri: 'https://www.taiwan.net.tw/m1.aspx?sNo=0001091&id=290' });
-  carouselModel.actions.push({ label: '我想去這邊', type: 'postback', data: '九份', text: '只要是跟你去，哪裡我都願意' });
+  carouselModel.actions.push({ label: '我想去這邊', type: 'postback', data: '九份', text: '-q只要是跟你去，哪裡我都願意' });
   carouselModel.actions.push({ label: '點選出遊時間', type: 'datetimepicker', data: 'DATE', mode: 'date' });
   carouselArr.push(carouselModel);
 
@@ -165,7 +167,7 @@ const replyTemplate = (token: any) => {
   carouselModel.title = '淡水老街';
   carouselModel.text = '邊遊玩邊看夕陽好去處';
   carouselModel.actions.push({ label: '介紹連結', type: 'uri', uri: 'https://www.taiwan.net.tw/m1.aspx?sNo=0001016&id=19' });
-  carouselModel.actions.push({ label: '我想去這邊', type: 'postback', data: '淡水', text: '只要是跟你去，哪裡我都願意' });
+  carouselModel.actions.push({ label: '我想去這邊', type: 'postback', data: '淡水', text: '-q只要是跟你去，哪裡我都願意' });
   carouselModel.actions.push({ label: '點選出遊時間', type: 'datetimepicker', data: 'DATE', mode: 'date' });
   carouselArr.push(carouselModel);
 
