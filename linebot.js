@@ -156,7 +156,7 @@ const replyTemplate = (token: any) => {
   carouselModel.actions.push({ label: '介紹連結', type: 'uri', uri: 'https://www.taiwan.net.tw/m1.aspx?sNo=0001091&id=290' });
   carouselModel.actions.push({ label: '我想去這邊', type: 'postback', data: '九份' });
   carouselModel.actions.push({ label: '點選出遊時間', type: 'datetimepicker', data: 'DATE', mode: 'date' });
-  carouselArr.push(carouselModel);
+  carouselArr.push(JSON.stringify(carouselModel));
 
   carouselModel = Object.assign({}, CarouselModel);
   carouselModel.thumbnailImageUrl = 'https://www.taiwan.net.tw/att/1/big_scenic_spots/pic_19_10.jpg';
@@ -165,7 +165,7 @@ const replyTemplate = (token: any) => {
   carouselModel.actions.push({ label: '介紹連結', type: 'uri', uri: 'https://www.taiwan.net.tw/m1.aspx?sNo=0001016&id=19' });
   carouselModel.actions.push({ label: '我想去這邊', type: 'postback', data: '淡水' });
   carouselModel.actions.push({ label: '點選出遊時間', type: 'datetimepicker', data: 'DATE', mode: 'date' });
-  carouselArr.push(carouselModel);
+  carouselArr.push(JSON.stringify(carouselModel));
 
   console.log(CarouselTemplate);
 
