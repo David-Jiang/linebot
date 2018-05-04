@@ -148,23 +148,24 @@ const replyText = (token: any, message: string) => {
 
 const replyTemplate = (token: any) => {
   let carouselArr = CarouselTemplate.template.columns;
-  console.log(new CarouselModel('https://www.taiwan.net.tw/att/1/big_scenic_spots/pic_290_7.jpg', '九份老街', '邊喝茶邊看夕陽好去處', []));
-  CarouselModel.thumbnailImageUrl = 'https://www.taiwan.net.tw/att/1/big_scenic_spots/pic_290_7.jpg';
+  let model = new CarouselModel('https://www.taiwan.net.tw/att/1/big_scenic_spots/pic_290_7.jpg', '九份老街', '邊喝茶邊看夕陽好去處', []);
+  /* CarouselModel.thumbnailImageUrl = 'https://www.taiwan.net.tw/att/1/big_scenic_spots/pic_290_7.jpg';
   CarouselModel.title = '九份老街';
-  CarouselModel.text = '邊喝茶邊看夕陽好去處';
-  CarouselModel.actions.push({ label: '介紹連結', type: 'uri', uri: 'https://www.taiwan.net.tw/m1.aspx?sNo=0001091&id=290' });
-  CarouselModel.actions.push({ label: '我想去這邊', type: 'postback', data: '九份' });
-  CarouselModel.actions.push({ label: '點選出遊時間', type: 'datetimepicker', data: 'DATE', mode: 'date' });
-  carouselArr.push(CarouselModel);
+  CarouselModel.text = '邊喝茶邊看夕陽好去處'; */
+  model.actions.push({ label: '介紹連結', type: 'uri', uri: 'https://www.taiwan.net.tw/m1.aspx?sNo=0001091&id=290' });
+  model.actions.push({ label: '我想去這邊', type: 'postback', data: '九份' });
+  model.actions.push({ label: '點選出遊時間', type: 'datetimepicker', data: 'DATE', mode: 'date' });
+  carouselArr.push(model);
 
-  CarouselModel.thumbnailImageUrl = 'https://www.taiwan.net.tw/att/1/big_scenic_spots/pic_19_10.jpg';
+  /* CarouselModel.thumbnailImageUrl = 'https://www.taiwan.net.tw/att/1/big_scenic_spots/pic_19_10.jpg';
   CarouselModel.title = '淡水老街';
   CarouselModel.text = '邊遊玩邊看夕陽好去處';
   CarouselModel.actions.push({ label: '介紹連結', type: 'uri', uri: 'https://www.taiwan.net.tw/m1.aspx?sNo=0001016&id=19' });
   CarouselModel.actions.push({ label: '我想去這邊', type: 'postback', data: '淡水' });
   CarouselModel.actions.push({ label: '點選出遊時間', type: 'datetimepicker', data: 'DATE', mode: 'date' });
-  carouselArr.push(CarouselModel);
+  carouselArr.push(CarouselModel); */
 
+  console.log(model);
   console.log(CarouselTemplate);
 
   return client.replyMessage(
