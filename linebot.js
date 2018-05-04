@@ -32,7 +32,7 @@ let stockList = [];
 
 const handleEvent = (event: any) => {
   return client.replyMessage(
-    token,
+    event.replyToken,
     { type: 'text', message }
   );
   switch (event.type) {
