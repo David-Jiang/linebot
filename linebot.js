@@ -194,3 +194,73 @@ const addToStockList = (stockId: string) => {
     stockList.push(stockInfo);
   }
 };
+
+
+const jar = rp.jar();
+const reqOpt = {
+  uri: 'http://mis.twse.com.tw/stock/fibest.jsp?lang=zh_tw',
+  jar,
+  headers: {
+    'content-type': 'application/json',
+  },
+};
+rp(reqOpt)
+  .then((repost) => {
+    setInterval(() => {
+      let temp = '';
+      _.forEach(stockList, (stockVO) => {
+        temp += `tse_${stockVO.stockId}.tw%7c`;
+      });
+      reqOpt.uri = `http://mis.twse.com.tw/stock/api/getStockInfo.jsp?cp=0&json=1&delay=0&_=${Date.now()}&ex_ch=${temp.substring(0, temp.length - 3)}`;
+      if (stockList.length > 0) {
+        rp(reqOpt)
+          .then((repos) => {
+            let jsonObject = JSON.parse(repos);
+            if (jsonObject.msgArray) {
+              console.log('取值成功');
+            } else {
+              console.log('取值失敗');
+            }
+            _.forEach(jsonObject.msgArray, (vo) => {
+              let info = stockList.find((o) => { return o.stockId === vo.ch.replace('.tw', ''); });
+              info.startPrice = vo.y;
+              info.lowPrice = vo.l;
+              info.hightPrice = vo.h;
+              info.currPrice = vo.z;
+              info.stockName = vo.n;
+            });
+          })
+          .catch((err) => {
+            console.log(`getStockInfo發生錯誤:${err}`);
+          });
+      }
+    }, 30000);
+  })
+  .catch((err) => {
+    console.log(`前導網頁get cookie發生錯誤:${err}`);
+  });
+
+
+setInterval(() => {
+  userInfoArr.forEach((vo) => {
+    if (vo.subscr && vo.stockIdArr.length > 0) {
+      let showMessage = '';
+      vo.stockIdArr.forEach((stockId) => {
+        let obj = _.find(stockList, (o) => { return o.stockId === stockId && o.currPrice > 0; });
+        if (obj) {
+          showMessage += `股票:${obj.stockName}(${obj.stockId})
+目前價:${obj.currPrice}(${(obj.currPrice - obj.startPrice > 0 ? '+' : '')}${returnFloat(obj.currPrice - obj.startPrice)})${(obj.currPrice - obj.startPrice > 0 ? '漲' : '跌')}
+最高價:${obj.hightPrice}
+最低價:${obj.lowPrice}\n\n`;
+        }
+      });
+
+      if (showMessage) {
+        client.pushMessage(vo.userId, {
+          type: 'text',
+          text: showMessage,
+        });
+      }
+    }
+  });
+}, 20000);
