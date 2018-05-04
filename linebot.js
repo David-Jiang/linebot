@@ -47,8 +47,8 @@ const handleEvent = (event: any) => {
 };
 
 const handleText = (text: string, replyToken: any, source: any) => {
+  console.log(source);
   let messageText = text;
-
   let userName = '';
   client.getProfile(source.userId)
     .then((profile) => { userName = profile.displayName; });
