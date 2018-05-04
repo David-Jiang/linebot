@@ -22,7 +22,7 @@ app.post('/linewebhook', line.middleware(config), (req, res) => {
     .all(req.body.events.map(handleEvent))
     .then(() => { res.end(); })
     .catch((err) => {
-      console.error(`處理事件發生error, reason is : ${err}`);
+      console.error('處理事件發生error, reason is :');
       res.status(500).end();
     });
 });
@@ -141,6 +141,7 @@ const handlePostback = (postback: any, replyToken: any, source: any) => {
 
 const replyText = (token: any, message: string) => {
   return client.replyMessage(
+    token,
     { type: 'text', message }
   );
 };
