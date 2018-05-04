@@ -150,6 +150,8 @@ const replyTemplate = (token: any) => {
   let carouselTemplate = new CarouselTemplate();
   let carouselArr = carouselTemplate.template.columns;
 
+  console.log(carouselArr);
+
   let carouselModel = new CarouselModel();
   carouselModel.thumbnailImageUrl = 'https://www.taiwan.net.tw/att/1/big_scenic_spots/pic_290_7.jpg';
   carouselModel.title = '九份老街';
