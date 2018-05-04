@@ -12,6 +12,8 @@ const config = {
 const client = new line.Client(config);
 const app = express();
 app.listen(process.env.PORT || 80, () => {
+  let price = returnFloat(100 - 90);
+  console.log(price);
   console.log('LineBot is running');
 });
 app.post('/linewebhook', line.middleware(config), (req, res) => {
