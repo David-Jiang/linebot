@@ -139,10 +139,10 @@ const handlePostback = (postback: any, replyToken: any, source: any) => {
   }
 };
 
-const replyText = (token: any, texts: string) => {
+const replyText = (token: any, message: string) => {
   return client.replyMessage(
     token,
-    texts.map((text) => ({ type: 'text', text }))
+    { type: 'text', text: message }
   );
 };
 
