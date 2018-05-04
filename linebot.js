@@ -156,7 +156,7 @@ const replyTemplate = (token: any) => {
   carouselModel.title = '九份老街';
   carouselModel.text = '邊喝茶邊看夕陽好去處';
   carouselModel.actions.push({ label: '介紹連結', type: 'uri', uri: 'https://www.taiwan.net.tw/m1.aspx?sNo=0001091&id=290' });
-  carouselModel.actions.push({ label: '我想去這邊', type: 'postback', data: '九份' });
+  carouselModel.actions.push({ label: '我想去這邊', type: 'postback', data: '九份', text: '只要是跟你去，哪裡我都願意' });
   carouselModel.actions.push({ label: '點選出遊時間', type: 'datetimepicker', data: 'DATE', mode: 'date' });
   carouselArr.push(carouselModel);
 
@@ -165,7 +165,7 @@ const replyTemplate = (token: any) => {
   carouselModel.title = '淡水老街';
   carouselModel.text = '邊遊玩邊看夕陽好去處';
   carouselModel.actions.push({ label: '介紹連結', type: 'uri', uri: 'https://www.taiwan.net.tw/m1.aspx?sNo=0001016&id=19' });
-  carouselModel.actions.push({ label: '我想去這邊', type: 'postback', data: '淡水' });
+  carouselModel.actions.push({ label: '我想去這邊', type: 'postback', data: '淡水', text: '只要是跟你去，哪裡我都願意' });
   carouselModel.actions.push({ label: '點選出遊時間', type: 'datetimepicker', data: 'DATE', mode: 'date' });
   carouselArr.push(carouselModel);
 
