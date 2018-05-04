@@ -247,7 +247,7 @@ setInterval(() => {
     if (vo.subscr && vo.stockIdArr.length > 0) {
       let showMessage = '';
       vo.stockIdArr.forEach((stockId) => {
-        let obj = _.find(stockList, (o) => { return o.stockId === stockId && o.currPrice > 0; });
+        let obj = stockList.find((o) => { return o.stockId === stockId && o.currPrice > 0; });
         if (obj) {
           showMessage += `股票:${obj.stockName}(${obj.stockId})
 目前價:${obj.currPrice}(${(obj.currPrice - obj.startPrice > 0 ? '+' : '')}${returnFloat(obj.currPrice - obj.startPrice)})${(obj.currPrice - obj.startPrice > 0 ? '漲' : '跌')}
