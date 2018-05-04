@@ -26,7 +26,7 @@ export class CarouselTemplate {
 }
 
 export class CarouselModel {
-	constructor(thumbnailImageUrl = '', title = '', text = '', actions: []) {
+	constructor(thumbnailImageUrl = '', title = '', text = '', actions = []) {
 		this.thumbnailImageUrl = thumbnailImageUrl;
 		this.title = title;
 		this.text = text;
