@@ -33,13 +33,13 @@ let stockList = [];
 const handleEvent = (event: any) => {
   switch (event.type) {
     case 'message':
-      switch (event.message.type) {
+      /* switch (event.message.type) {
         case 'text':
           return handleText(event.message.text, event.replyToken, event.source);
         default:
-          replyText(event.replyToken, '請輸入正確訊息唷');
-          break;
-      }
+          return replyText(event.replyToken, '請輸入正確訊息唷');
+      } */
+      return replyText(event.replyToken, '請輸入正確訊息唷');
     case 'postback':
       return handlePostback(event.postback, event.replyToken, event.source);
     default:
