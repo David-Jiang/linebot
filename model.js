@@ -26,12 +26,20 @@ export const CarouselTemplate = {
 	},
 };
 
-export const CarouselModel = {
+/* export const CarouselModel = {
 	thumbnailImageUrl: '',
 	title: '',
 	text: '',
 	actions: [],
-};
+}; */
+export class CarouselModel {
+	constructor(thumbnailImageUrl = '', title = '', text = '', actions: []) {
+		this.thumbnailImageUrl = thumbnailImageUrl;
+		this.title = title;
+		this.text = text;
+		this.actions = actions;
+	}
+}
 /* { label: 'Go to line.me', type: 'uri', uri: 'https://line.me' },
 { label: 'Say hello1', type: 'postback', data: 'hello こんにちは' },
 { label: 'Say message', type: 'message', text: 'Rice=米' }, */

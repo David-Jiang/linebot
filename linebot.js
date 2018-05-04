@@ -148,24 +148,22 @@ const replyText = (token: any, message: string) => {
 
 const replyTemplate = (token: any) => {
   let carouselArr = CarouselTemplate.template.columns;
-  let carouselModel = Object.assign({}, CarouselModel);
+  console.log(new CarouselModel('https://www.taiwan.net.tw/att/1/big_scenic_spots/pic_290_7.jpg', '九份老街', '邊喝茶邊看夕陽好去處', []));
+  CarouselModel.thumbnailImageUrl = 'https://www.taiwan.net.tw/att/1/big_scenic_spots/pic_290_7.jpg';
+  CarouselModel.title = '九份老街';
+  CarouselModel.text = '邊喝茶邊看夕陽好去處';
+  CarouselModel.actions.push({ label: '介紹連結', type: 'uri', uri: 'https://www.taiwan.net.tw/m1.aspx?sNo=0001091&id=290' });
+  CarouselModel.actions.push({ label: '我想去這邊', type: 'postback', data: '九份' });
+  CarouselModel.actions.push({ label: '點選出遊時間', type: 'datetimepicker', data: 'DATE', mode: 'date' });
+  carouselArr.push(CarouselModel);
 
-  carouselModel.thumbnailImageUrl = 'https://www.taiwan.net.tw/att/1/big_scenic_spots/pic_290_7.jpg';
-  carouselModel.title = '九份老街';
-  carouselModel.text = '邊喝茶邊看夕陽好去處';
-  carouselModel.actions.push({ label: '介紹連結', type: 'uri', uri: 'https://www.taiwan.net.tw/m1.aspx?sNo=0001091&id=290' });
-  carouselModel.actions.push({ label: '我想去這邊', type: 'postback', data: '九份' });
-  carouselModel.actions.push({ label: '點選出遊時間', type: 'datetimepicker', data: 'DATE', mode: 'date' });
-  carouselArr.push(JSON.stringify(carouselModel));
-
-  carouselModel = Object.assign({}, CarouselModel);
-  carouselModel.thumbnailImageUrl = 'https://www.taiwan.net.tw/att/1/big_scenic_spots/pic_19_10.jpg';
-  carouselModel.title = '淡水老街';
-  carouselModel.text = '邊遊玩邊看夕陽好去處';
-  carouselModel.actions.push({ label: '介紹連結', type: 'uri', uri: 'https://www.taiwan.net.tw/m1.aspx?sNo=0001016&id=19' });
-  carouselModel.actions.push({ label: '我想去這邊', type: 'postback', data: '淡水' });
-  carouselModel.actions.push({ label: '點選出遊時間', type: 'datetimepicker', data: 'DATE', mode: 'date' });
-  carouselArr.push(JSON.stringify(carouselModel));
+  CarouselModel.thumbnailImageUrl = 'https://www.taiwan.net.tw/att/1/big_scenic_spots/pic_19_10.jpg';
+  CarouselModel.title = '淡水老街';
+  CarouselModel.text = '邊遊玩邊看夕陽好去處';
+  CarouselModel.actions.push({ label: '介紹連結', type: 'uri', uri: 'https://www.taiwan.net.tw/m1.aspx?sNo=0001016&id=19' });
+  CarouselModel.actions.push({ label: '我想去這邊', type: 'postback', data: '淡水' });
+  CarouselModel.actions.push({ label: '點選出遊時間', type: 'datetimepicker', data: 'DATE', mode: 'date' });
+  carouselArr.push(CarouselModel);
 
   console.log(CarouselTemplate);
 
