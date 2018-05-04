@@ -22,7 +22,7 @@ app.post('/linewebhook', line.middleware(config), (req, res) => {
     .all(req.body.events.map(handleEvent))
     .then(() => { res.end(); })
     .catch((err) => {
-      console.error('處理事件發生error, reason is :');
+      console.error(`處理事件發生error, reason is :${err}`);
       res.status(500).end();
     });
 });
@@ -31,6 +31,7 @@ let userInfoArr = [];
 let stockList = [];
 
 const handleEvent = (event: any) => {
+  return replyText(event.replyToken, '請輸入正確訊息唷');
   switch (event.type) {
     case 'message':
       /* switch (event.message.type) {
@@ -141,7 +142,6 @@ const handlePostback = (postback: any, replyToken: any, source: any) => {
 };
 
 const replyText = (token: any, message: string) => {
-  console.log(token);
   return client.replyMessage(
     token,
     { type: 'text', message }
