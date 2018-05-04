@@ -37,7 +37,8 @@ const handleEvent = (event: any) => {
         case 'text':
           return handleText(event.message.text, event.replyToken, event.source);
         default:
-          return replyText(event.replyToken, '請輸入正確訊息唷');
+          replyText(event.replyToken, '請輸入正確訊息唷');
+          break;
       }
     case 'postback':
       return handlePostback(event.postback, event.replyToken, event.source);
