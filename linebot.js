@@ -235,7 +235,7 @@ rp(reqOpt)
             console.log(`getStockInfo發生錯誤:${err}`);
           });
       }
-    }, 30000);
+    }, 60000);
   })
   .catch((err) => {
     console.log(`前導網頁get cookie發生錯誤:${err}`);
@@ -264,4 +264,4 @@ setInterval(() => {
       }
     }
   });
-}, 20000);
+}, 30000);
