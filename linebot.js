@@ -48,94 +48,96 @@ const handleEvent = (event: any) => {
 
 const handleText = (text: string, replyToken: any, source: any) => {
   let messageText = text;
-  let userName = '';
-  userName = client.getProfile(source.userId)
-    .then((profile) => { return profile.displayName; });
-
-  if (!userInfoArr.find((o) => { return o.userId === source.userId; })) {
-    let userInfo = new UserInfo();
-    userInfo.userId = source.userId;
-    userInfoArr.push(userInfo);
-  }
-
-  if (messageText.startsWith('-a')) {
-    let stockIdArrBySplit = messageText.replace('-a', '').trim().split('-');
-    let userInfo = userInfoArr.find((o) => { return o.userId === source.userId; });
-    let responseSuccessId = [];
-
-    stockIdArrBySplit.forEach((stockId) => {
-      if (stockId.length === 4 && !userInfo.stockIdArr.includes(stockId)) {
-        userInfo.subscr = true;
-        userInfo.stockIdArr.push(stockId);
-        addToStockList(stockId);
-        responseSuccessId.push(stockId);
+  client.getProfile(source.userId)
+    .then((profile) => { return profile.displayName; })
+    .then((userName) => {
+      if (!userInfoArr.find((o) => { return o.userId === source.userId; })) {
+        let userInfo = new UserInfo();
+        userInfo.userId = source.userId;
+        userInfoArr.push(userInfo);
       }
-    });
-    if (responseSuccessId.length > 0) {
-      replyText(replyToken, `您好${userName}，已成功開啟推播\n股票代號:${responseSuccessId.join(',')}`);
-    }
-  } else if (messageText.startsWith('-r')) {
-    let stockIdArrBySplit = messageText.replace('-r', '').trim().split('-');
-    let userInfo = userInfoArr.find((o) => { return o.userId === source.userId; });
 
-    stockIdArrBySplit.forEach((stockIdneedDel) => {
-      _.remove(userInfo.stockIdArr, (stockIdown) => { return stockIdneedDel === stockIdown; });
-    });
-    replyText(replyToken, `您好${userName}，股票代號:${stockIdArrBySplit.join(',')}，已移除推播清單`);
-  } else if (messageText.startsWith('-i')) {
-    let stockIdArrBySplit = messageText.replace('-i', '').trim().split('-');
-    let showMessage = '';
+      if (messageText.startsWith('-a')) {
+        let stockIdArrBySplit = messageText.replace('-a', '').trim().split('-');
+        let userInfo = userInfoArr.find((o) => { return o.userId === source.userId; });
+        let responseSuccessId = [];
 
-    stockIdArrBySplit.forEach((stockId) => {
-      if (stockId.length === 4) {
-        addToStockList(stockId);
-        let obj = stockList.find((o) => { return o.stockId === stockId && o.currPrice > 0; });
-        if (obj) {
-          showMessage += `股票${obj.stockName}(${obj.stockId})\n
-目前價:${obj.currPrice}(${(obj.currPrice - obj.startPrice > 0 ? '+' : '')} ${returnFloat(obj.currPrice - obj.startPrice)} )\n
-最高價:${obj.hightPrice}\n
-最低價:${obj.lowPrice}\n`;
+        stockIdArrBySplit.forEach((stockId) => {
+          if (stockId.length === 4 && !userInfo.stockIdArr.includes(stockId)) {
+            userInfo.subscr = true;
+            userInfo.stockIdArr.push(stockId);
+            addToStockList(stockId);
+            responseSuccessId.push(stockId);
+          }
+        });
+        if (responseSuccessId.length > 0) {
+          replyText(replyToken, `您好${userName}，已成功開啟推播\n股票代號:${responseSuccessId.join(',')}`);
         }
+      } else if (messageText.startsWith('-r')) {
+        let stockIdArrBySplit = messageText.replace('-r', '').trim().split('-');
+        let userInfo = userInfoArr.find((o) => { return o.userId === source.userId; });
+
+        stockIdArrBySplit.forEach((stockIdneedDel) => {
+          _.remove(userInfo.stockIdArr, (stockIdown) => { return stockIdneedDel === stockIdown; });
+        });
+        replyText(replyToken, `您好${userName}，股票代號:${stockIdArrBySplit.join(',')}，已移除推播清單`);
+      } else if (messageText.startsWith('-i')) {
+        let stockIdArrBySplit = messageText.replace('-i', '').trim().split('-');
+        let showMessage = '';
+
+        stockIdArrBySplit.forEach((stockId) => {
+          if (stockId.length === 4) {
+            addToStockList(stockId);
+            let obj = stockList.find((o) => { return o.stockId === stockId && o.currPrice > 0; });
+            if (obj) {
+              showMessage += `股票${obj.stockName}(${obj.stockId})\n
+    目前價:${obj.currPrice}(${(obj.currPrice - obj.startPrice > 0 ? '+' : '')} ${returnFloat(obj.currPrice - obj.startPrice)} )\n
+    最高價:${obj.hightPrice}\n
+    最低價:${obj.lowPrice}\n`;
+            }
+          }
+        });
+
+        if (showMessage) {
+          replyText(replyToken, showMessage);
+        }
+      } else if (messageText.startsWith('-s') || messageText.startsWith('-c')) {
+        let type = messageText.trim();
+        let userInfo = userInfoArr.find((o) => { return o.userId === source.userId; });
+        if (type === '-s') {
+          userInfo.subscr = true;
+          replyText(replyToken, `您好${userName}，已開啟推播`);
+        } else {
+          userInfo.subscr = false;
+          replyText(replyToken, `您好${userName}，已暫停推播`);
+        }
+      } else if (messageText.startsWith('-v')) {
+        let showMessage = '輸入-a 股票代號 可定時推播該股票資訊\n\t(例如: -a 2353-2330)\n';
+        showMessage += '輸入-i 股票代號 可回應該股票資訊\n\t(例如: -c 2353-2330)\n';
+        showMessage += '輸入-s 可開啟推播\n';
+        showMessage += '輸入-c 可暫停推播\n';
+        showMessage += '輸入-r 股票代號 可移除該股票資訊推播\n\t(例如: -r 2353-2330)\n';
+        replyText(replyToken, showMessage);
+      } else if (messageText === 'kiwi') {
+        replyTemplate(replyToken);
+      } else {
+        replyText(replyToken, `您好${userName}，歡迎使用\n輸入-v 可以查看功能列表`);
       }
     });
 
-    if (showMessage) {
-      replyText(replyToken, showMessage);
-    }
-  } else if (messageText.startsWith('-s') || messageText.startsWith('-c')) {
-    let type = messageText.trim();
-    let userInfo = userInfoArr.find((o) => { return o.userId === source.userId; });
-    if (type === '-s') {
-      userInfo.subscr = true;
-      replyText(replyToken, `您好${userName}，已開啟推播`);
-    } else {
-      userInfo.subscr = false;
-      replyText(replyToken, `您好${userName}，已暫停推播`);
-    }
-  } else if (messageText.startsWith('-v')) {
-    let showMessage = '輸入-a 股票代號 可定時推播該股票資訊\n\t(例如: -a 2353-2330)\n';
-    showMessage += '輸入-i 股票代號 可回應該股票資訊\n\t(例如: -c 2353-2330)\n';
-    showMessage += '輸入-s 可開啟推播\n';
-    showMessage += '輸入-c 可暫停推播\n';
-    showMessage += '輸入-r 股票代號 可移除該股票資訊推播\n\t(例如: -r 2353-2330)\n';
-    replyText(replyToken, showMessage);
-  } else if (messageText === 'kiwi') {
-    replyTemplate(replyToken);
-  } else {
-    replyText(replyToken, `您好${userName}，歡迎使用\n輸入-v 可以查看功能列表`);
-  }
 };
 
 const handlePostback = (postback: any, replyToken: any, source: any) => {
-  let userName = '';
   client.getProfile(source.userId)
-    .then((profile) => { userName = profile.displayName; });
-  switch (postback.data) {
-    case 'DATE':
-      return replyText(replyToken, `${userName}傳入參數success:${JSON.stringify(postback.params)}\n`);
-    default:
-      return replyText(replyToken, `${userName}傳入參數success:${postback.data}\n`);
-  }
+    .then((profile) => { return profile.displayName; })
+    .then((userName) => {
+      switch (postback.data) {
+        case 'DATE':
+          return replyText(replyToken, `${userName}傳入參數success:${JSON.stringify(postback.params)}\n`);
+        default:
+          return replyText(replyToken, `${userName}傳入參數success:${postback.data}\n`);
+      }
+    });
 };
 
 const replyText = (token: any, message: string) => {
