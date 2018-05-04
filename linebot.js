@@ -92,9 +92,9 @@ const handleText = (text: string, replyToken: any, source: any) => {
             let obj = stockList.find((o) => { return o.stockId === stockId && o.currPrice > 0; });
             if (obj) {
               showMessage += `股票${obj.stockName}(${obj.stockId})\n
-    目前價:${obj.currPrice}(${(obj.currPrice - obj.startPrice > 0 ? '+' : '')} ${returnFloat(obj.currPrice - obj.startPrice)} )\n
-    最高價:${obj.hightPrice}\n
-    最低價:${obj.lowPrice}\n`;
+目前價:${obj.currPrice}(${(obj.currPrice - obj.startPrice > 0 ? '+' : '')} ${returnFloat(obj.currPrice - obj.startPrice)} )\n
+最高價:${obj.hightPrice}\n
+最低價:${obj.lowPrice}\n`;
             }
           }
         });
