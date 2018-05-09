@@ -14,7 +14,7 @@ const app = express();
 app.listen(process.env.PORT || 80, () => {
   console.log('LineBot is running');
 });
-app.use(express.static(__dirname + '/'));
+//app.use(express.static(__dirname + '/'));
 app.get('/', function (req, res) {
   res.sendFile('/index.html');
 });
