@@ -12,7 +12,7 @@ const config = {
 const client = new line.Client(config);
 const app = express();
 app.listen(process.env.PORT || 80, () => {
-  console.log('LineBot is running');
+  console.log('LineBot is running' + process.env.PORT);
 });
 //app.use(express.static(__dirname + '/'));
 app.get('/', function (req, res) {
