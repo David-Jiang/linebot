@@ -14,6 +14,10 @@ const app = express();
 app.listen(process.env.PORT || 80, () => {
   console.log('LineBot is running');
 });
+app.use(express.static(__dirname + '/'));
+app.get('/', function (req, res) {
+  res.sendFile('/index.html');
+});
 app.post('/linewebhook', line.middleware(config), (req, res) => {
   if (!Array.isArray(req.body.events)) {
     return res.status(500).end();
@@ -119,9 +123,7 @@ const handleText = (text: string, replyToken: any, source: any) => {
         showMessage += '輸入-c 可暫停推播\n';
         showMessage += '輸入-r 股票代號 可移除該股票資訊推播\n\t(例如: -r 2327-2330)\n';
         replyText(replyToken, showMessage);
-      } else if (messageText.startsWith('只要')) {
-        new Error('pass');
-      } else if (messageText === 'kiwi') {
+      } else if (messageText === 'image') {
         replyTemplate(replyToken);
       } else {
         replyText(replyToken, `您好${userName}，歡迎使用\n輸入-v 可以查看功能列表`);
@@ -138,7 +140,7 @@ const handlePostback = (postback: any, replyToken: any, source: any) => {
         case 'DATE':
           return replyText(replyToken, `${userName}表示有空的時間是：${postback.params.date}`);
         default:
-          return replyText(replyToken, `${userName}表示想跟你去${postback.data}玩`);
+          return replyText(replyToken, `${userName}表示想去${postback.data}玩`);
       }
     });
 };
@@ -160,7 +162,7 @@ const replyTemplate = (token: any) => {
   carouselModel.title = '九份老街';
   carouselModel.text = '邊喝茶邊看夕陽好去處';
   carouselModel.actions.push({ label: '介紹連結', type: 'uri', uri: 'https://www.taiwan.net.tw/m1.aspx?sNo=0001091&id=290' });
-  carouselModel.actions.push({ label: '我想去這邊', type: 'postback', data: '九份', text: '只要是跟你去，哪裡我都願意' });
+  carouselModel.actions.push({ label: '我想去這邊', type: 'postback', data: '九份' });
   carouselModel.actions.push({ label: '點選出遊時間', type: 'datetimepicker', data: 'DATE', mode: 'date' });
   carouselArr.push(carouselModel);
 
@@ -169,7 +171,7 @@ const replyTemplate = (token: any) => {
   carouselModel.title = '松山文創園區';
   carouselModel.text = '文藝復興夜景生活';
   carouselModel.actions.push({ label: '介紹連結', type: 'uri', uri: 'http://eeooa0314.pixnet.net/blog/post/274880483-%E3%80%90%E5%8F%B0%E5%8C%97%E3%80%91%E5%8F%B0%E5%8C%97%E9%80%9B%E8%A1%97%2C%E6%95%A3%E6%AD%A5%E5%A5%BD%E5%8E%BB%E8%99%95%E2%99%A5%E6%9D%BE%E5%B1%B1%E6%96%87%E5%89%B5%E5%9C%92' });
-  carouselModel.actions.push({ label: '我想去這邊', type: 'postback', data: '松山文創', text: '只要是跟你去，哪裡我都願意' });
+  carouselModel.actions.push({ label: '我想去這邊', type: 'postback', data: '松山文創' });
   carouselModel.actions.push({ label: '點選出遊時間', type: 'datetimepicker', data: 'DATE', mode: 'date' });
   carouselArr.push(carouselModel);
 
@@ -178,7 +180,7 @@ const replyTemplate = (token: any) => {
   carouselModel.title = '淡水老街';
   carouselModel.text = '邊遊玩邊看夕陽好去處';
   carouselModel.actions.push({ label: '介紹連結', type: 'uri', uri: 'https://www.taiwan.net.tw/m1.aspx?sNo=0001016&id=19' });
-  carouselModel.actions.push({ label: '我想去這邊', type: 'postback', data: '淡水', text: '只要是跟你去，哪裡我都願意' });
+  carouselModel.actions.push({ label: '我想去這邊', type: 'postback', data: '淡水' });
   carouselModel.actions.push({ label: '點選出遊時間', type: 'datetimepicker', data: 'DATE', mode: 'date' });
   carouselArr.push(carouselModel);
 
@@ -235,7 +237,7 @@ rp(reqOpt)
             console.log(`getStockInfo發生錯誤:${err}`);
           });
       }
-    }, 60001);
+    }, 60000);
   })
   .catch((err) => {
     console.log(`前導網頁get cookie發生錯誤:${err}`);
