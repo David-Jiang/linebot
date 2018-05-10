@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { routerReducer } from 'react-router-redux';
 
 const items = (state = [], action) => {
   switch (action.type) {
@@ -14,14 +15,24 @@ const items = (state = [], action) => {
       {
         return state.filter(item => item.id !== action.id);
       }
-
+    case 'INCREASE':
+      {
+        state = isNaN(state) ? 0 : state;
+        return state = (parseInt(state) + parseInt(action.amount));
+      }
+    case 'DECREASE':
+      {
+        state = isNaN(state) ? 0 : state;
+        return state = (parseInt(state) - parseInt(action.amount));
+      }
     default:
       return state;
   }
 };
 
-const itemApp = combineReducers({
+const reducer = combineReducers({
   items,
+  routing: routerReducer
 });
 
-export default itemApp;
+export default reducer;
