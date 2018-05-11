@@ -2,8 +2,8 @@ import * as line from '@line/bot-sdk';
 import express from 'express';
 import rp from 'request-promise';
 import _ from 'lodash';
-import { returnFloat } from './util/Util';
-import { UserInfo, StockInfo, CarouselTemplate, CarouselModel } from './model/LineBotModel';
+import { returnFloat } from './src/util/Util';
+import { UserInfo, StockInfo, CarouselTemplate, CarouselModel } from './src/model/LineBotModel';
 
 const config = {
   channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
