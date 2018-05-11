@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "scripts": {
     "start": "webpack-dev-server --config webpack.config.js --progress --inline --colors --open",
-    "build": "webpack --config webpack.config.js --progress --colors"
+    "build": "webpack --config webpack-production.config.js --progress --colors"
   },
   "babel": {
     "presets": [
