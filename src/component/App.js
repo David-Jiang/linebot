@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, browserHistory } from 'react-router';
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 
-import style from '../css/style.css';
+import '../css/style.css';
 
 const App = ({ children }) => {
   return (

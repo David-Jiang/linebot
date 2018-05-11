@@ -3,6 +3,8 @@ var webpack = require('webpack');
 var glob = require('glob');
 const buildPath = path.resolve(__dirname, 'build');
 const nodeModulesPath = path.resolve(__dirname, 'node_modules');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const getEntry = () => {
     let paths = glob.sync('src/**/*.js');
@@ -47,7 +49,7 @@ module.exports = {
             }
         }, {
             test: /\.css$/,
-            loader: 'style-loader!css-loader'
+            loader: 'style-loader!css-loader!'
         }, {
             test: /\.(png|woff|woff2|eot|ttf|svg|jpg|gif)$/,
             loader: 'url-loader?limit=100000'
@@ -57,7 +59,8 @@ module.exports = {
         // Enables Hot Modules Replacement
         new webpack.HotModuleReplacementPlugin(),
         // Avoid publishing files when compilation fails
-        new webpack.NoErrorsPlugin()
+        new webpack.NoErrorsPlugin(),
+        new CleanWebpackPlugin(['build'])
     ],
     stats: {
         // Nice colored output
