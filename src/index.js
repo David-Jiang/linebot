@@ -7,11 +7,11 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 
 import reducer from './reducer';
-import App from './component/App';
-import State from './component/State';
-import Foo from './component/Foo';
-import Bar from './component/Bar';
-import MyComponent from './component/MyComponent';
+import Layout from './component/Layout';
+import Home from './component/Home';
+import First from './component/First';
+import Second from './component/Second';
+import Third from './component/Third';
 
 const store = createStore(reducer);
 const history = syncHistoryWithStore(browserHistory, store);
@@ -19,11 +19,11 @@ const history = syncHistoryWithStore(browserHistory, store);
 ReactDOM.render(
 	<Provider store={store}>
 		<Router history={history}>
-			<Route path="/" component={App}>
-				<IndexRoute component={Foo} />
-				<Route path="state" component={State} />
-				<Route path="bar" component={Bar} />
-				<Route path="myComponent" component={MyComponent} />
+			<Route path="/" component={Layout}>
+				<IndexRoute component={Home} />
+				<Route path="first" component={First} />
+				<Route path="second" component={Second} />
+				<Route path="third" component={Third} />
 			</Route>
 		</Router>
 	</Provider>,
