@@ -1,29 +1,51 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 
-const items = (state = [], action) => {
+const items = (state = { arr: [], loading: false, sumStockPrice: '', selectedDiscount: 0.65, inputStockPrice: '', inputStockAmount: '' }, action) => {
   switch (action.type) {
+    case 'SHOW_SPINNER':
+      {
+        return { ...state, loading: true };
+      }
+    case 'HIDE_SPINNER':
+      {
+        return { ...state, loading: false };
+      }
+    case 'GET_GITHUB_SUCCESS':
+      {
+        return { ...state, data: action.payload.data };
+      }
+    case 'CHAGE_USER_ID':
+      {
+        return { ...state, userId: action.payload.userId };
+      }
+    case 'CHAGE_TEXT':
+      {
+        return { ...state, text: action.payload.text };
+      }
     case 'ADD_ITEM':
       {
-        return [{
-          id: action.payload.id,
-          text: action.payload.text,
-        }, ...state];
+        return { ...state, arr: [...state.arr, action.payload] };
       }
-
     case 'DEL_ITEM':
       {
-        return state.filter(item => item.id !== action.id);
+        return { ...state, arr: state.arr.filter(item => item.id !== action.id) };
       }
-    case 'INCREASE':
+    case 'CHAGE_STOCK_PRICE':
       {
-        state = isNaN(state) ? 0 : state;
-        return state = (parseInt(state) + parseInt(action.amount));
+        return { ...state, inputStockPrice: action.payload.price };
       }
-    case 'DECREASE':
+    case 'CAL_RESULT':
       {
-        state = isNaN(state) ? 0 : state;
-        return state = (parseInt(state) - parseInt(action.amount));
+        return { ...state, sumStockPrice: action.payload.result };
+      }
+    case 'CHAGE_DISCOUNT':
+      {
+        return { ...state, selectedDiscount: action.payload.discount };
+      }
+    case 'CHAGE_AMOUNT':
+      {
+        return { ...state, inputStockAmount: action.payload.amount };
       }
     default:
       return state;

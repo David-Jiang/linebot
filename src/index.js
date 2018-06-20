@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 
@@ -10,10 +11,10 @@ import reducer from './reducer';
 import Layout from './component/Layout';
 import Home from './component/Home';
 import First from './component/First';
-import Second from './component/Second';
-import Third from './component/Third';
+import Page1 from './component/Page1';
+import StockPrice from './component/StockPrice';
 
-const store = createStore(reducer);
+const store = createStore(reducer, applyMiddleware(thunk));
 const history = syncHistoryWithStore(browserHistory, store);
 
 ReactDOM.render(
@@ -22,8 +23,8 @@ ReactDOM.render(
 			<Route path="/" component={Layout}>
 				<IndexRoute component={Home} />
 				<Route path="first" component={First} />
-				<Route path="second" component={Second} />
-				<Route path="third" component={Third} />
+				<Route path="page1" component={Page1} />
+				<Route path="stockPrice" component={StockPrice} />
 			</Route>
 		</Router>
 	</Provider>,

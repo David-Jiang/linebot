@@ -32,6 +32,7 @@ module.exports = {
         inline: true,
         port: 3000, // Port Number
         host: 'localhost', // Change to '0.0.0.0' for external facing server
+        historyApiFallback: true,
     },
     entry: getEntry(),
     output: {
@@ -65,8 +66,7 @@ module.exports = {
     stats: {
         // Nice colored output
         colors: true
-    },
-
+    }
 };
 
 //module.exports = config;

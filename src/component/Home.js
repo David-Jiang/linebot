@@ -1,51 +1,37 @@
 import React from 'react';
-import { Alert, Button } from 'react-bootstrap';
-import Highcharts from 'highcharts/highstock';
-import HighchartsReact from 'highcharts-react-official';
-import PropTypes from 'prop-types';
-
-import testData from './data';
+import { connect } from 'react-redux';
+import * as actionCreators from '../action';
+import { BeatLoader } from 'react-spinners';
 
 class Home extends React.Component {
-  static defaultProps = {
-    options: {
-      title: {
-        text: 'My stock chart'
-      },
-      series: [{
-        data: testData
-      }]
-    }
-  };
-
-  static propTypes = {
-    options: PropTypes.object
-  };
-
   constructor(props) {
     super(props);
-    this.state = {
-      show: true
-    };
   }
-
-  handleDismiss = () => {
-    this.setState({ show: false });
-  }
-
-  handleShow = () => {
-    this.setState({ show: true });
-  }
-
   render() {
+    let { userId, loading, getGithub, changeUserId } = this.props;
     return (
-      <HighchartsReact
-        highcharts={Highcharts}
-        constructorType={'stockChart'}
-        options={this.props.options}
-      />
+      <div>
+        <input type="text" className="form-control" onChange={changeUserId} placeholder="Please Key in your Github User Id." />
+        <button type="button" className="btn btn-info" onClick={() => getGithub(userId)}>Submit</button>
+
+        <div className='sweet-loading center-block' style={{ marginLeft: '40%' }}>
+          <BeatLoader
+            color={'rgb(54, 215, 183)'}
+            loading={loading}
+            size={100}
+            margin={'10px'}
+          />
+        </div>
+      </div>
     );
   }
 }
 
-export default Home;
+const mapStateToProps = state => (
+  {
+    userId: state.items.userId,
+    loading: state.items.loading
+  }
+);
+
+export default connect(mapStateToProps, actionCreators)(Home);
