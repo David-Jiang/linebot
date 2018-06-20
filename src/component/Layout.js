@@ -2,8 +2,6 @@ import React from 'react';
 import { Link, browserHistory } from 'react-router';
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 
-import '../css/style.css';
-
 const Layout = ({ children }) => {
   return (
     <div>
@@ -11,19 +9,20 @@ const Layout = ({ children }) => {
         <Navbar inverse collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
-              <Link to="/">Robot visualization</Link>
+              <Link to="/">理財機器人</Link>
             </Navbar.Brand>
+            <Navbar.Toggle />
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav>
-              <NavItem eventKey={1} componentClass="span">
-                <Link to="/">Home</Link>
+              <NavItem eventKey={1} onClick={() => browserHistory.push('/')}>
+                Home
               </NavItem>
-              <NavItem eventKey={2} componentClass="span">
-                <Link to="/page1">Page1</Link>
+              <NavItem eventKey={2} onClick={() => browserHistory.push('/page1')}>
+                Page1
               </NavItem>
-              <NavItem eventKey={3} componentClass="span">
-                <Link to="/stockPrice">股票手續費計算</Link>
+              <NavItem eventKey={3} onClick={() => browserHistory.push('/stockPrice')}>
+                股票手續費計算
               </NavItem>
             </Nav>
           </Navbar.Collapse>

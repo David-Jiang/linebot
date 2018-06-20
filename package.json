@@ -16,6 +16,7 @@
     "@line/bot-sdk": "^6.0.1",
     "express": "^4.15.2",
     "lodash": "^4.17.10",
+    "numeral": "^2.0.6",
     "react": "^16.3.2",
     "react-bootstrap": "^0.32.1",
     "react-dom": "^16.3.2",
