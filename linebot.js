@@ -15,10 +15,7 @@ app.listen(process.env.PORT || 80, () => {
   console.log('LineBot is running and Port is ' + process.env.PORT);
 });
 app.use(express.static(__dirname + '/'));
-app.get('/stockPrice', function (req, res) {
-  res.sendFile('/index.html');
-  console.log('hello evebe');
-});
+app.use(express.static(__dirname + '/stockPrice'));
 app.post('/linewebhook', line.middleware(config), (req, res) => {
   if (!Array.isArray(req.body.events)) {
     return res.status(500).end();
