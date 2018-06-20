@@ -205,7 +205,7 @@ const reqOpt = {
     'content-type': 'application/json',
   },
 };
-fetch(reqOpt.uri, reqOpt)
+window.fetch(reqOpt.uri, reqOpt)
   .then((repost) => {
     setInterval(() => {
       let temp = '';
@@ -214,7 +214,7 @@ fetch(reqOpt.uri, reqOpt)
       });
       reqOpt.uri = `http://mis.twse.com.tw/stock/api/getStockInfo.jsp?cp=0&json=1&delay=0&_=${Date.now()}&ex_ch=${temp.substring(0, temp.length - 3)}`;
       if (stockList.length > 0) {
-        fetch(reqOpt.uri, reqOpt)
+        window.fetch(reqOpt.uri, reqOpt)
           .then((repos) => {
             let jsonObject = JSON.parse(repos);
             if (jsonObject.msgArray) {
