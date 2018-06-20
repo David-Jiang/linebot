@@ -204,6 +204,7 @@ const reqOpt = {
   headers: {
     'content-type': 'application/json',
   },
+  jar: rp.jar()
 };
 rp(reqOpt)
   .then((repost) => {
