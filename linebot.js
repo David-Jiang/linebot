@@ -1,6 +1,6 @@
 import * as line from '@line/bot-sdk';
 import express from 'express';
-import 'whatwg-fetch';
+import rp from 'request-promise';
 import _ from 'lodash';
 import { returnFloat } from './src/util/Util';
 import { UserInfo, StockInfo, CarouselTemplate, CarouselModel } from './src/model/LineBotModel';
@@ -205,7 +205,7 @@ const reqOpt = {
     'content-type': 'application/json',
   },
 };
-window.fetch(reqOpt.uri, reqOpt)
+rp(reqOpt)
   .then((repost) => {
     setInterval(() => {
       let temp = '';
@@ -214,7 +214,7 @@ window.fetch(reqOpt.uri, reqOpt)
       });
       reqOpt.uri = `http://mis.twse.com.tw/stock/api/getStockInfo.jsp?cp=0&json=1&delay=0&_=${Date.now()}&ex_ch=${temp.substring(0, temp.length - 3)}`;
       if (stockList.length > 0) {
-        window.fetch(reqOpt.uri, reqOpt)
+        rp(reqOpt)
           .then((repos) => {
             let jsonObject = JSON.parse(repos);
             if (jsonObject.msgArray) {
