@@ -18,9 +18,7 @@ app.listen(process.env.PORT || 80, () => {
 });
 app.use(express.static(__dirname + '/'));
 app.get('/*', function (req, res) {
-  console.log(req.originalUrl);
-
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.resolve(__dirname, 'index.html'));
 });
 app.post('/linewebhook', line.middleware(config), (req, res) => {
   if (!Array.isArray(req.body.events)) {
