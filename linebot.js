@@ -5,6 +5,8 @@ import _ from 'lodash';
 import { returnFloat } from './src/util/Util';
 import { UserInfo, StockInfo, CarouselTemplate, CarouselModel } from './src/model/LineBotModel';
 
+var path = require('path');
+
 const config = {
   channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
   channelSecret: process.env.CHANNEL_SECRET,
