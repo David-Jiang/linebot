@@ -18,8 +18,8 @@ const Layout = ({ children }) => {
               <NavItem eventKey={1} onClick={() => browserHistory.push('/')}>
                 Home
               </NavItem>
-              <NavItem eventKey={2} onClick={() => browserHistory.push('/page1')}>
-                Page1
+              <NavItem eventKey={2} onClick={() => browserHistory.push('/stockList')}>
+                股票清單
               </NavItem>
               <NavItem eventKey={3} onClick={() => browserHistory.push('/stockPrice')}>
                 股票手續費計算

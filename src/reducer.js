@@ -1,7 +1,15 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 
-const items = (state = { arr: [], loading: false, sumStockPrice: '', selectedDiscount: 0.65, inputStockPrice: '', inputStockAmount: '' }, action) => {
+const stockInfo = [
+  { stockId: '2456', stockName: '奇力新', news: 'https://www.cmoney.tw/follow/channel/stock-2456?chart=d' },
+  { stockId: '5317', stockName: '凱美', news: 'https://www.cmoney.tw/follow/channel/stock-5317?chart=d' },
+  { stockId: '2375', stockName: '智寶', news: 'https://www.cmoney.tw/follow/channel/stock-2375?chart=d' },
+  { stockId: '2478', stockName: '大毅', news: 'https://www.cmoney.tw/follow/channel/stock-2478?chart=d' },
+  { stockId: '2327', stockName: '國巨', news: 'https://www.cmoney.tw/follow/channel/stock-2327?chart=d' }
+];
+
+const items = (state = { arr: [], loading: false, sumStockPrice: '', selectedDiscount: 0.65, inputStockPrice: '', inputStockAmount: '', inputStockId: '', stockList: stockInfo }, action) => {
   switch (action.type) {
     case 'SHOW_SPINNER':
       {
@@ -15,21 +23,19 @@ const items = (state = { arr: [], loading: false, sumStockPrice: '', selectedDis
       {
         return { ...state, data: action.payload.data };
       }
-    case 'CHAGE_USER_ID':
+    case 'INSERT_STOCK_ID_LIST':
       {
-        return { ...state, userId: action.payload.userId };
+        let stockId = action.payload.stockId;
+        let arr = [];
+        Object.assign(arr, state.stockList);
+        if (!arr.find(stockVO => { return stockVO.stockId == stockId; })) {
+          arr.push({ stockId, stockName: '', news: 'https://www.cmoney.tw/follow/channel/stock-' + stockId + '?chart=d' });
+        }
+        return { ...state, stockList: arr };
       }
-    case 'CHAGE_TEXT':
+    case 'CHAGE_STOCK_ID':
       {
-        return { ...state, text: action.payload.text };
-      }
-    case 'ADD_ITEM':
-      {
-        return { ...state, arr: [...state.arr, action.payload] };
-      }
-    case 'DEL_ITEM':
-      {
-        return { ...state, arr: state.arr.filter(item => item.id !== action.id) };
+        return { ...state, inputStockId: action.payload.stockId };
       }
     case 'CHAGE_STOCK_PRICE':
       {

@@ -11,7 +11,7 @@ import reducer from './reducer';
 import Layout from './component/Layout';
 import Home from './component/Home';
 import First from './component/First';
-import Page1 from './component/Page1';
+import StockList from './component/StockList';
 import StockPrice from './component/StockPrice';
 
 const store = createStore(reducer, applyMiddleware(thunk));
@@ -23,7 +23,7 @@ ReactDOM.render(
 			<Route path="/" component={Layout}>
 				<IndexRoute component={Home} />
 				<Route path="first" component={First} />
-				<Route path="page1" component={Page1} />
+				<Route path="stockList" component={StockList} />
 				<Route path="stockPrice" component={StockPrice} />
 			</Route>
 		</Router>

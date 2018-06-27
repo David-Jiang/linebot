@@ -20,7 +20,7 @@ class StockPrice extends React.Component {
         <div className="form-group col-md-4 col-md-offset-4 col-sm-10 col-sm-offset-1">
           <label>個股成交價:</label>
           <input type="text" className="form-control"
-            onChange={changeStockPrice}
+            onChange={(e) => changeStockPrice(e)}
             value={inputStockPrice}
             ref={(ref) => (inputStockPriceRef = ref)}
             placeholder="請輸入個股成交價" />
@@ -28,14 +28,14 @@ class StockPrice extends React.Component {
         <div className="form-group col-md-4 col-md-offset-4 col-sm-10 col-sm-offset-1">
           <label>個股張數(1張為1000股):</label>
           <input type="text" className="form-control"
-            onChange={changeStockAmount}
+            onChange={(e) => changeStockAmount(e)}
             value={inputStockAmount}
             ref={(ref) => (inputStockAmountRef = ref)}
             placeholder="請輸入個股張數" />
         </div>
         <div className="form-group col-md-4 col-md-offset-4 col-sm-10 col-sm-offset-1" style={{ marginTop: '5px' }}>
           <label>手續費折扣:</label>
-          <Select onChange={changeDiscount} options={selectedList} value={selectedDiscount}
+          <Select onChange={(e) => changeDiscount(e)} options={selectedList} value={selectedDiscount}
             placeholder="請選擇手續費折扣" />
         </div>
 

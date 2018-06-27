@@ -19,21 +19,27 @@ export const getGithub = (userId = '大同') => {
   };
 };
 
-export const changeUserId = (event) => ({ type: 'CHAGE_USER_ID', payload: { userId: event.target.value } });
-
-export const handleTextChange = (event) => ({ type: 'CHAGE_TEXT', payload: { text: event.target.value } });
-
-export const handleItemAdd = (text) => {
-  let obj = {
-    id: new Date(),
-    text
+export const insertToList = (stockId, inputStockIdRef) => {
+  return (dispatch) => {
+    if (isNaN(stockId) || !stockId || stockId.length != 4) {
+      alert('輸入之股票代號格式有誤，請重新輸入');
+      inputStockIdRef.focus();
+      dispatch({ type: 'CHAGE_STOCK_ID', payload: { stockId: '' } });
+      return;
+    }
+    dispatch({ type: 'INSERT_STOCK_ID_LIST', payload: { stockId } });
   };
-  return (
-    { type: 'ADD_ITEM', payload: obj }
-  );
 };
 
-export const handleItemDel = (id) => ({ type: 'DEL_ITEM', id });
+export const changeStockId = (event) => ({ type: 'CHAGE_STOCK_ID', payload: { stockId: event.target.value } });
+
+
+
+
+
+
+
+
 
 export const changeStockPrice = (event) => ({ type: 'CHAGE_STOCK_PRICE', payload: { price: event.target.value } });
 
