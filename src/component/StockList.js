@@ -42,11 +42,23 @@ class StockList extends React.Component {
               <tbody>
                 {stockList.map(stockVO => (
                   <tr key={stockVO.stockId}>
-                    <td style={{ width: '30%' }}>
+                    <td>
                       {stockVO.stockName + '  (' + stockVO.stockId + ')'}
                     </td>
                     <td>
-                      {stockVO.securitiesTradeList[0].transactionDate}
+                      {'買賣日期：' + stockVO.securitiesTradeList[0].transactionDate}
+                    </td>
+                    <td>
+                      {'外資：' + stockVO.securitiesTradeList[0].foreignAmount}
+                    </td>
+                    <td>
+                      {'投信：' + stockVO.securitiesTradeList[0].investAmount}
+                    </td>
+                    <td>
+                      {'自營商：' + stockVO.securitiesTradeList[0].nativeAmount}
+                    </td>
+                    <td>
+                      {'三大法人：' + stockVO.securitiesTradeList[0].totalAmount}
                     </td>
                     <td>
                       <a href="#" onClick={(e) => this.connectURL(e, stockVO.stockId)}>連結點此</a>

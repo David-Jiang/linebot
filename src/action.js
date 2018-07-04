@@ -5,20 +5,6 @@ export const showSpinner = () => ({ type: 'SHOW_SPINNER' });
 
 export const hideSpinner = () => ({ type: 'HIDE_SPINNER' });
 
-export const getGithub = (userId = '大同') => {
-  return (dispatch) => {
-    dispatch(showSpinner());
-    fetch('http://125.227.131.127/caseSearch/list/QueryCsmmCaseList/queryCsmmCaseList.do?lineBot=Y&regUnitCode=31&queryData=' + userId)
-      .then(function (response) { return response.json(); })
-      .then(function (json) {
-        dispatch({ type: 'GET_GITHUB_SUCCESS', payload: { data: json } });
-        dispatch(hideSpinner());
-        browserHistory.push('/first');
-      })
-      .catch(function (response) { dispatch({ type: 'GET_GITHUB_FAIL' }); });
-  };
-};
-
 export const insertToList = (stockId, inputStockIdRef) => {
   return (dispatch) => {
     if (isNaN(stockId) || !stockId || stockId.length != 4) {
@@ -27,7 +13,19 @@ export const insertToList = (stockId, inputStockIdRef) => {
       dispatch({ type: 'CHAGE_STOCK_ID', payload: { stockId: '' } });
       return;
     }
-    dispatch({ type: 'INSERT_STOCK_ID_LIST', payload: { stockId } });
+    fetch('https://stock-backend.herokuapp.com/updateStockInfo', {
+      body: stockId
+    })
+      .then(function (response) {
+        if (response.resMessage) {
+          return Promise.reject();
+        } else {
+          alert('新增成功');
+        }
+      })
+      .catch((response = '新增股票清單發生錯誤') => {
+        alert(response);
+      });
   };
 };
 
@@ -36,12 +34,19 @@ export const changeStockId = (event) => ({ type: 'CHAGE_STOCK_ID', payload: { st
 export const getStockInfo = () => {
   return (dispatch) => {
     fetch('https://stock-backend.herokuapp.com/getStockInfo')
-      .then(function (response) { return response.json(); })
-      .then(function (json) {
-        console.log(json);
+      .then((response) => {
+        if (response.resMessage) {
+          return Promise.reject(new Error(response.resMessage));
+        } else {
+          return response.json();
+        }
+      })
+      .then(json => {
         dispatch({ type: 'INIT_STOCK_LIST', payload: { stockList: json } });
       })
-      .catch(function (response) { alert('系統錯誤'); });
+      .catch((response = '查詢股票清單發生錯誤') => {
+        alert(response);
+      });
   };
 };
 

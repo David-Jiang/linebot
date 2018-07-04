@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "cfa5bb72378b6d9a12b9"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "6ff067e6d9c2ad3e193d"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -9442,7 +9442,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.reset = exports.changeStockAmount = exports.changeDiscount = exports.calculate = exports.changeStockPrice = exports.getStockInfo = exports.changeStockId = exports.insertToList = exports.getGithub = exports.hideSpinner = exports.showSpinner = undefined;
+	exports.reset = exports.changeStockAmount = exports.changeDiscount = exports.calculate = exports.changeStockPrice = exports.getStockInfo = exports.changeStockId = exports.insertToList = exports.hideSpinner = exports.showSpinner = undefined;
 	
 	__webpack_require__(328);
 	
@@ -9456,23 +9456,6 @@
 	  return { type: 'HIDE_SPINNER' };
 	};
 	
-	var getGithub = exports.getGithub = function getGithub() {
-	  var userId = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '大同';
-	
-	  return function (dispatch) {
-	    dispatch(showSpinner());
-	    fetch('http://125.227.131.127/caseSearch/list/QueryCsmmCaseList/queryCsmmCaseList.do?lineBot=Y&regUnitCode=31&queryData=' + userId).then(function (response) {
-	      return response.json();
-	    }).then(function (json) {
-	      dispatch({ type: 'GET_GITHUB_SUCCESS', payload: { data: json } });
-	      dispatch(hideSpinner());
-	      _reactRouter.browserHistory.push('/first');
-	    }).catch(function (response) {
-	      dispatch({ type: 'GET_GITHUB_FAIL' });
-	    });
-	  };
-	};
-	
 	var insertToList = exports.insertToList = function insertToList(stockId, inputStockIdRef) {
 	  return function (dispatch) {
 	    if (isNaN(stockId) || !stockId || stockId.length != 4) {
@@ -9481,7 +9464,19 @@
 	      dispatch({ type: 'CHAGE_STOCK_ID', payload: { stockId: '' } });
 	      return;
 	    }
-	    dispatch({ type: 'INSERT_STOCK_ID_LIST', payload: { stockId: stockId } });
+	    fetch('https://stock-backend.herokuapp.com/updateStockInfo', {
+	      body: stockId
+	    }).then(function (response) {
+	      if (response.resMessage) {
+	        return Promise.reject();
+	      } else {
+	        alert('新增成功');
+	      }
+	    }).catch(function () {
+	      var response = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '新增股票清單發生錯誤';
+	
+	      alert(response);
+	    });
 	  };
 	};
 	
@@ -9492,12 +9487,17 @@
 	var getStockInfo = exports.getStockInfo = function getStockInfo() {
 	  return function (dispatch) {
 	    fetch('https://stock-backend.herokuapp.com/getStockInfo').then(function (response) {
-	      return response.json();
+	      if (response.resMessage) {
+	        return Promise.reject(new Error(response.resMessage));
+	      } else {
+	        return response.json();
+	      }
 	    }).then(function (json) {
-	      console.log(json);
 	      dispatch({ type: 'INIT_STOCK_LIST', payload: { stockList: json } });
-	    }).catch(function (response) {
-	      alert('系統錯誤');
+	    }).catch(function () {
+	      var response = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '查詢股票清單發生錯誤';
+	
+	      alert(response);
 	    });
 	  };
 	};
@@ -65190,13 +65190,33 @@
 	                  { key: stockVO.stockId },
 	                  _react2.default.createElement(
 	                    'td',
-	                    { style: { width: '30%' } },
+	                    null,
 	                    stockVO.stockName + '  (' + stockVO.stockId + ')'
 	                  ),
 	                  _react2.default.createElement(
 	                    'td',
 	                    null,
-	                    stockVO.securitiesTradeList[0].transactionDate
+	                    '買賣日期：' + stockVO.securitiesTradeList[0].transactionDate
+	                  ),
+	                  _react2.default.createElement(
+	                    'td',
+	                    null,
+	                    '外資：' + stockVO.securitiesTradeList[0].foreignAmount
+	                  ),
+	                  _react2.default.createElement(
+	                    'td',
+	                    null,
+	                    '投信：' + stockVO.securitiesTradeList[0].investAmount
+	                  ),
+	                  _react2.default.createElement(
+	                    'td',
+	                    null,
+	                    '自營商：' + stockVO.securitiesTradeList[0].nativeAmount
+	                  ),
+	                  _react2.default.createElement(
+	                    'td',
+	                    null,
+	                    '三大法人：' + stockVO.securitiesTradeList[0].totalAmount
 	                  ),
 	                  _react2.default.createElement(
 	                    'td',
