@@ -33,6 +33,17 @@ export const insertToList = (stockId, inputStockIdRef) => {
 
 export const changeStockId = (event) => ({ type: 'CHAGE_STOCK_ID', payload: { stockId: event.target.value } });
 
+export const getStockInfo = () => {
+  return (dispatch) => {
+    fetch('https://stock-backend.herokuapp.com/getStockInfo')
+      .then(function (response) { return response.json(); })
+      .then(function (json) {
+        console.log(json);
+        dispatch({ type: 'INIT_STOCK_LIST', payload: { stockList: json } });
+      })
+      .catch(function (response) { alert('系統錯誤'); });
+  };
+};
 
 
 

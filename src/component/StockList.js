@@ -7,9 +7,14 @@ class StockList extends React.Component {
     super(props);
   }
 
-  connectURL(e, url) {
+  componentDidMount() {
+    let { getStockInfo } = this.props;
+    getStockInfo();
+  }
+
+  connectURL(e, stockId) {
     e.preventDefault();
-    window.open(url);
+    window.open(`https://www.cmoney.tw/follow/channel/stock-${stockId}`);
   }
 
   render() {
@@ -41,7 +46,10 @@ class StockList extends React.Component {
                       {stockVO.stockName + '  (' + stockVO.stockId + ')'}
                     </td>
                     <td>
-                      <a href="#" onClick={(e) => this.connectURL(e, stockVO.news)}>{stockVO.news}</a>
+                      {stockVO.securitiesTradeList[0].transactionDate}
+                    </td>
+                    <td>
+                      <a href="#" onClick={(e) => this.connectURL(e, stockVO.stockId)}>連結點此</a>
                     </td>
                   </tr>
                 ))}

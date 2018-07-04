@@ -1,15 +1,10 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 
-const stockInfo = [
-  { stockId: '2456', stockName: '奇力新', news: 'https://www.cmoney.tw/follow/channel/stock-2456?chart=d' },
-  { stockId: '5317', stockName: '凱美', news: 'https://www.cmoney.tw/follow/channel/stock-5317?chart=d' },
-  { stockId: '2375', stockName: '智寶', news: 'https://www.cmoney.tw/follow/channel/stock-2375?chart=d' },
-  { stockId: '2478', stockName: '大毅', news: 'https://www.cmoney.tw/follow/channel/stock-2478?chart=d' },
-  { stockId: '2327', stockName: '國巨', news: 'https://www.cmoney.tw/follow/channel/stock-2327?chart=d' }
-];
-
-const items = (state = { arr: [], loading: false, sumStockPrice: '', selectedDiscount: 0.65, inputStockPrice: '', inputStockAmount: '', inputStockId: '', stockList: stockInfo }, action) => {
+const items = (state = {
+  arr: [], loading: false, sumStockPrice: '', selectedDiscount: 0.65, inputStockPrice: '',
+  inputStockAmount: '', inputStockId: '', stockList: []
+}, action) => {
   switch (action.type) {
     case 'SHOW_SPINNER':
       {
@@ -29,13 +24,17 @@ const items = (state = { arr: [], loading: false, sumStockPrice: '', selectedDis
         let arr = [];
         Object.assign(arr, state.stockList);
         if (!arr.find(stockVO => { return stockVO.stockId == stockId; })) {
-          arr.push({ stockId, stockName: '', news: 'https://www.cmoney.tw/follow/channel/stock-' + stockId + '?chart=d' });
+          arr.push({ stockId, stockName: '' });
         }
         return { ...state, stockList: arr };
       }
     case 'CHAGE_STOCK_ID':
       {
         return { ...state, inputStockId: action.payload.stockId };
+      }
+    case 'INIT_STOCK_LIST':
+      {
+        return { ...state, stockList: action.payload.stockList };
       }
     case 'CHAGE_STOCK_PRICE':
       {

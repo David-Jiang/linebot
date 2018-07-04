@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "1fc763640e0fc2fa8a02"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "cfa5bb72378b6d9a12b9"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -9442,7 +9442,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.reset = exports.changeStockAmount = exports.changeDiscount = exports.calculate = exports.changeStockPrice = exports.changeStockId = exports.insertToList = exports.getGithub = exports.hideSpinner = exports.showSpinner = undefined;
+	exports.reset = exports.changeStockAmount = exports.changeDiscount = exports.calculate = exports.changeStockPrice = exports.getStockInfo = exports.changeStockId = exports.insertToList = exports.getGithub = exports.hideSpinner = exports.showSpinner = undefined;
 	
 	__webpack_require__(328);
 	
@@ -9487,6 +9487,19 @@
 	
 	var changeStockId = exports.changeStockId = function changeStockId(event) {
 	  return { type: 'CHAGE_STOCK_ID', payload: { stockId: event.target.value } };
+	};
+	
+	var getStockInfo = exports.getStockInfo = function getStockInfo() {
+	  return function (dispatch) {
+	    fetch('https://stock-backend.herokuapp.com/getStockInfo').then(function (response) {
+	      return response.json();
+	    }).then(function (json) {
+	      console.log(json);
+	      dispatch({ type: 'INIT_STOCK_LIST', payload: { stockList: json } });
+	    }).catch(function (response) {
+	      alert('系統錯誤');
+	    });
+	  };
 	};
 	
 	var changeStockPrice = exports.changeStockPrice = function changeStockPrice(event) {
@@ -65099,10 +65112,17 @@
 	  }
 	
 	  _createClass(StockList, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var getStockInfo = this.props.getStockInfo;
+	
+	      getStockInfo();
+	    }
+	  }, {
 	    key: 'connectURL',
-	    value: function connectURL(e, url) {
+	    value: function connectURL(e, stockId) {
 	      e.preventDefault();
-	      window.open(url);
+	      window.open('https://www.cmoney.tw/follow/channel/stock-' + stockId);
 	    }
 	  }, {
 	    key: 'render',
@@ -65176,12 +65196,17 @@
 	                  _react2.default.createElement(
 	                    'td',
 	                    null,
+	                    stockVO.securitiesTradeList[0].transactionDate
+	                  ),
+	                  _react2.default.createElement(
+	                    'td',
+	                    null,
 	                    _react2.default.createElement(
 	                      'a',
 	                      { href: '#', onClick: function onClick(e) {
-	                          return _this2.connectURL(e, stockVO.news);
+	                          return _this2.connectURL(e, stockVO.stockId);
 	                        } },
-	                      stockVO.news
+	                      '\u9023\u7D50\u9EDE\u6B64'
 	                    )
 	                  )
 	                );
@@ -70684,10 +70709,11 @@
 	
 	var _reactRouterRedux = __webpack_require__(773);
 	
-	var stockInfo = [{ stockId: '2456', stockName: '奇力新', news: 'https://www.cmoney.tw/follow/channel/stock-2456?chart=d' }, { stockId: '5317', stockName: '凱美', news: 'https://www.cmoney.tw/follow/channel/stock-5317?chart=d' }, { stockId: '2375', stockName: '智寶', news: 'https://www.cmoney.tw/follow/channel/stock-2375?chart=d' }, { stockId: '2478', stockName: '大毅', news: 'https://www.cmoney.tw/follow/channel/stock-2478?chart=d' }, { stockId: '2327', stockName: '國巨', news: 'https://www.cmoney.tw/follow/channel/stock-2327?chart=d' }];
-	
 	var items = function items() {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { arr: [], loading: false, sumStockPrice: '', selectedDiscount: 0.65, inputStockPrice: '', inputStockAmount: '', inputStockId: '', stockList: stockInfo };
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
+	    arr: [], loading: false, sumStockPrice: '', selectedDiscount: 0.65, inputStockPrice: '',
+	    inputStockAmount: '', inputStockId: '', stockList: []
+	  };
 	  var action = arguments[1];
 	
 	  switch (action.type) {
@@ -70711,13 +70737,17 @@
 	        if (!arr.find(function (stockVO) {
 	          return stockVO.stockId == stockId;
 	        })) {
-	          arr.push({ stockId: stockId, stockName: '', news: 'https://www.cmoney.tw/follow/channel/stock-' + stockId + '?chart=d' });
+	          arr.push({ stockId: stockId, stockName: '' });
 	        }
 	        return _extends({}, state, { stockList: arr });
 	      }
 	    case 'CHAGE_STOCK_ID':
 	      {
 	        return _extends({}, state, { inputStockId: action.payload.stockId });
+	      }
+	    case 'INIT_STOCK_LIST':
+	      {
+	        return _extends({}, state, { stockList: action.payload.stockList });
 	      }
 	    case 'CHAGE_STOCK_PRICE':
 	      {
