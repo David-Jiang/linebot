@@ -13,7 +13,7 @@ export const insertToList = (stockId, inputStockIdRef) => {
       dispatch({ type: 'CHAGE_STOCK_ID', payload: { stockId: '' } });
       return;
     }
-    fetch('https://stock-backend.herokuapp.com/updateStockInfo', {
+    fetch('https://stock-backend.herokuapp.com/insertStockInfo', {
       body: stockId
     })
       .then(function (response) {
@@ -49,6 +49,8 @@ export const getStockInfo = () => {
       });
   };
 };
+
+export const showDetail = (stockVO) => ({ type: 'SHOW_DETAIL', payload: { stockVO } });
 
 
 
