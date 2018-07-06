@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "00ec33177408e5a6c5e9"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "7f38aa7af50a2b122f13"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -20988,6 +20988,13 @@
 	  }
 	
 	  _createClass(Home, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      setInterval(function () {
+	        console.log('temp');
+	      }, 3000);
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var inputStockId = this.props.inputStockId;
