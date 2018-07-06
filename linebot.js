@@ -15,9 +15,6 @@ const client = new line.Client(config);
 const app = express();
 app.listen(process.env.PORT || 80, () => {
   console.log('LineBot is running and Port is ' + process.env.PORT);
-  setInterval((function () {
-    console.log('temp');
-  }), 3000);
 });
 app.use(express.static(__dirname + '/'));
 app.get('/*', function (req, res) {
@@ -271,3 +268,18 @@ setInterval(() => {
     }
   });
 }, 20000);
+
+setInterval((function () {
+  rp({
+    uri: 'https://stock-backend.herokuapp.com/getStockInfo',
+    headers: {
+      'content-type': 'application/json',
+    }
+  })
+    .then((repos) => {
+      console.log(new Date());
+    })
+    .catch((err) => {
+      console.log(`getStockInfo發生錯誤:${err}`);
+    });
+}), 60000);
