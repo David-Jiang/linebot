@@ -277,9 +277,9 @@ setInterval((function () {
     }
   })
     .then((repos) => {
-      console.log(new Date());
+      console.log('keep awake ' + new Date());
     })
     .catch((err) => {
       console.log(`getStockInfo發生錯誤:${err}`);
     });
-}), 60000);
+}), 600000);
