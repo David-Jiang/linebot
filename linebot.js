@@ -15,6 +15,9 @@ const client = new line.Client(config);
 const app = express();
 app.listen(process.env.PORT || 80, () => {
   console.log('LineBot is running and Port is ' + process.env.PORT);
+  setInterval((function () {
+    console.log('temp');
+  }), 3000);
 });
 app.use(express.static(__dirname + '/'));
 app.get('/*', function (req, res) {

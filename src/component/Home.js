@@ -7,12 +7,6 @@ class Home extends React.Component {
     super(props);
   }
 
-  componentDidMount() {
-    setInterval((function () {
-      console.log('temp');
-    }), 3000);
-  }
-
   render() {
     let { inputStockId } = this.props;
     return (
