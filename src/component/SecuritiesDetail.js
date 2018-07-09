@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-class StockDetail extends React.Component {
+class SecuritiesDetail extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -50,13 +50,13 @@ class StockDetail extends React.Component {
                 <td align="right" style={{ color: this.changeColorByAmout(securitiesVO.foreignAmount) }}>
                   {securitiesVO.foreignAmount}
                 </td>
-                <td align="right" style={{ color: this.changeColorByAmout(securitiesVO.foreignAmount) }}>
+                <td align="right" style={{ color: this.changeColorByAmout(securitiesVO.investAmount) }}>
                   {securitiesVO.investAmount}
                 </td>
-                <td align="right" style={{ color: this.changeColorByAmout(securitiesVO.foreignAmount) }}>
+                <td align="right" style={{ color: this.changeColorByAmout(securitiesVO.nativeAmount) }}>
                   {securitiesVO.nativeAmount}
                 </td>
-                <td align="right" style={{ color: this.changeColorByAmout(securitiesVO.foreignAmount) }}>
+                <td align="right" style={{ color: this.changeColorByAmout(securitiesVO.totalAmount) }}>
                   {securitiesVO.totalAmount}
                 </td>
               </tr>
@@ -68,4 +68,4 @@ class StockDetail extends React.Component {
   }
 }
 
-export default StockDetail;
+export default SecuritiesDetail;

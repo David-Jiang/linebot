@@ -50,7 +50,7 @@ export const getStockInfo = () => {
   };
 };
 
-export const showDetail = (stockVO) => ({ type: 'SHOW_DETAIL', payload: { stockVO } });
+export const showDetail = (stockVO, detailType) => ({ type: 'SHOW_DETAIL', payload: { stockVO, detailType } });
 
 
 

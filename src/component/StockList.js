@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import * as actionCreators from '../action';
 
-import StockDetail from '../component/StockDetail';
+import SecuritiesDetail from '../component/SecuritiesDetail';
+import HistoryDetail from '../component/HistoryDetail';
 
 class StockList extends React.Component {
   constructor(props) {
@@ -31,7 +32,7 @@ class StockList extends React.Component {
   }
 
   render() {
-    let { inputStockId, stockList, data, insertToList, changeStockId, showDetail } = this.props;
+    let { inputStockId, stockList, data, detailType, insertToList, changeStockId, showDetail } = this.props;
     let inputStockIdRef = null;
     return (
       <div>
@@ -52,7 +53,8 @@ class StockList extends React.Component {
         {stockList.length > 0 &&
           <div className="col-md-4 col-md-offset-4 col-sm-12" style={{ marginTop: '20px' }}>
             <div style={{ fontSize: '16px' }}>
-              {'買賣日期' + stockList[0].securitiesTradeList[0].transactionDate}
+              {'買賣日期: ' + stockList[0].securitiesTradeList[0].transactionDate}
+              {'股價: ' + stockList[0].historyPriceList[0].endPrice}
             </div>
             <table className="table table-striped">
               <thead>
@@ -62,15 +64,15 @@ class StockList extends React.Component {
                   <td align="right">投信</td>
                   <td align="right">自營商</td>
                   <td align="right">三大法人</td>
-                  <td>連結論壇</td>
-                  <td>展開買賣統計</td>
+                  <td align="center">買賣統計</td>
+                  <td align="center">歷史股價</td>
                 </tr>
               </thead>
               <tbody>
                 {stockList.map(stockVO => (
                   <tr key={stockVO.stockId}>
                     <td>
-                      {stockVO.stockName + '  (' + stockVO.stockId + ')'}
+                      <a href="#" onClick={(e) => this.connectURL(e, stockVO.stockId)}>{stockVO.stockName + '  (' + stockVO.stockId + ')'}</a>
                     </td>
                     <td align="right" style={{ color: this.changeColorByAmout(stockVO.securitiesTradeList[0].foreignAmount) }}>
                       {stockVO.securitiesTradeList[0].foreignAmount}
@@ -84,20 +86,25 @@ class StockList extends React.Component {
                     <td align="right" style={{ color: this.changeColorByAmout(stockVO.securitiesTradeList[0].totalAmount) }}>
                       {stockVO.securitiesTradeList[0].totalAmount}
                     </td>
-                    <td>
-                      <a href="#" onClick={(e) => this.connectURL(e, stockVO.stockId)}>連結點此</a>
+                    <td align="center">
+                      <a href="#" onClick={() => showDetail(stockVO, 'securities')}>
+                        <span className="glyphicon glyphicon-plus"></span>
+                      </a>
                     </td>
                     <td align="center">
-                      <a href="#" onClick={() => showDetail(stockVO)}>
-                        <span className="glyphicon glyphicon-plus"></span>
+                      <a href="#" onClick={() => showDetail(stockVO, 'history')}>
+                        <span className="glyphicon glyphicon-signal"></span>
                       </a>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-
-            <StockDetail data={data} style={{ marginTop: '30px' }} />
+            {detailType && detailType == 'securities' ?
+              (<SecuritiesDetail data={data} style={{ marginTop: '30px' }} />)
+              :
+              (<HistoryDetail data={data} style={{ marginTop: '30px' }} />)
+            }
           </div>
         }
       </div >
@@ -109,7 +116,8 @@ const mapStateToProps = state => (
   {
     inputStockId: state.items.inputStockId,
     stockList: state.items.stockList,
-    data: state.items.stockVO
+    data: state.items.stockVO,
+    detailType: state.items.detailType
   }
 );
 

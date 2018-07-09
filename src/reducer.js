@@ -2,8 +2,8 @@ import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 
 const items = (state = {
-  arr: [], loading: false, sumStockPrice: '', selectedDiscount: 0.65, inputStockPrice: '',
-  inputStockAmount: '', inputStockId: '', stockList: [], stockVO: {}
+  arr: [], loading: false, sumStockPrice: '', selectedDiscount: 0.65, inputStockPrice: '', inputStockAmount: '',
+  inputStockId: '', stockList: [], stockVO: {}, detailType: ''
 }, action) => {
   switch (action.type) {
     case 'SHOW_SPINNER':
@@ -24,7 +24,7 @@ const items = (state = {
       }
     case 'SHOW_DETAIL':
       {
-        return { ...state, stockVO: action.payload.stockVO };
+        return { ...state, stockVO: action.payload.stockVO, detailType: action.payload.detailType };
       }
     case 'CHAGE_STOCK_PRICE':
       {
