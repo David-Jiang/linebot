@@ -18,7 +18,7 @@ class HistoryDetail extends React.Component {
     return (
       <div>
         <div style={{ fontSize: '16px' }}>
-          {data.stockName + '歷史股價'}
+          {data.stockName + '歷史股價 '}
         </div>
         <table className="table table-striped center-block" style={{ width: '70%' }}>
           <thead>
