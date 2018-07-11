@@ -12,3 +12,9 @@ export const returnFloat = (num: number) => {
 		return value;
 	}
 };
+
+export const getTWToday = () => {
+	let westDate = new Date().toISOString().substring(0, 10);
+	let twYear = parseInt(westDate.substring(0, 4)) - 1911;
+	return twYear + '/' + westDate.split('-')[1] + '/' + westDate.split('-')[2];
+};

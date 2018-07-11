@@ -4,6 +4,7 @@ import * as actionCreators from '../action';
 
 import SecuritiesDetail from '../component/SecuritiesDetail';
 import HistoryDetail from '../component/HistoryDetail';
+import { getTWToday } from '../util/Util';
 
 class StockList extends React.Component {
   constructor(props) {
@@ -31,6 +32,10 @@ class StockList extends React.Component {
     }
   }
 
+  todayStockPrice(stockVO) {
+    return stockVO.historyPriceList[0].endPrice;
+  }
+
   render() {
     let { inputStockId, stockList, data, detailType, insertToList, changeStockId, showDetail } = this.props;
     let inputStockIdRef = null;
@@ -51,10 +56,11 @@ class StockList extends React.Component {
         </div>
         <div className="clearfix"></div>
         {stockList.length > 0 &&
-          <div className="col-md-4 col-md-offset-4 col-sm-12" style={{ marginTop: '20px' }}>
+          <div className="col-md-4 col-md-offset-4 col-sm-12 col-xs-12" style={{ marginTop: '20px' }}>
             <div style={{ fontSize: '16px' }}>
-              {'買賣日期: ' + stockList[0].securitiesTradeList[0].transactionDate}
-              {'股價: ' + stockList[0].historyPriceList[0].endPrice}
+              <div className="pull-left">{'買賣日期: ' + stockList[0].securitiesTradeList[0].transactionDate}</div>
+              <div className="pull-right">{'今日日期: ' + getTWToday()}</div>
+              <div className="clearfix"></div>
             </div>
             <table className="table table-striped">
               <thead>
@@ -73,6 +79,7 @@ class StockList extends React.Component {
                   <tr key={stockVO.stockId}>
                     <td>
                       <a href="#" onClick={(e) => this.connectURL(e, stockVO.stockId)}>{stockVO.stockName + '  (' + stockVO.stockId + ')'}</a>
+                      <div>{this.todayStockPrice(stockVO)}</div>
                     </td>
                     <td align="right" style={{ color: this.changeColorByAmout(stockVO.securitiesTradeList[0].foreignAmount) }}>
                       {stockVO.securitiesTradeList[0].foreignAmount}
