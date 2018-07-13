@@ -5,6 +5,7 @@ import * as actionCreators from '../action';
 import SecuritiesDetail from '../component/SecuritiesDetail';
 import HistoryDetail from '../component/HistoryDetail';
 import FinancingDetail from '../component/FinancingDetail';
+import Spinner from '../component/Spinner';
 import { getTWToday } from '../util/Util';
 
 class StockList extends React.Component {
@@ -41,7 +42,8 @@ class StockList extends React.Component {
   }
 
   render() {
-    let { inputStockId, stockList, data, detailType, insertToList, changeStockId, showDetail } = this.props;
+    let { inputStockId, stockList, data, detailType, loading,
+      insertToList, changeStockId, showDetail } = this.props;
     let inputStockIdRef = null;
     return (
       <div>
@@ -130,6 +132,7 @@ class StockList extends React.Component {
             }
           </div>
         }
+        <Spinner loading={loading} />
       </div >
     );
   }
@@ -140,7 +143,8 @@ const mapStateToProps = state => (
     inputStockId: state.items.inputStockId,
     stockList: state.items.stockList,
     data: state.items.stockVO,
-    detailType: state.items.detailType
+    detailType: state.items.detailType,
+    loading: state.items.loading
   }
 );
 

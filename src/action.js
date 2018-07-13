@@ -1,5 +1,6 @@
 import 'whatwg-fetch';
 import { browserHistory } from 'react-router';
+import Swal from 'sweetalert2';
 
 export const showSpinner = () => ({ type: 'SHOW_SPINNER' });
 
@@ -8,21 +9,24 @@ export const hideSpinner = () => ({ type: 'HIDE_SPINNER' });
 export const insertToList = (stockId, inputStockIdRef) => {
   return (dispatch) => {
     if (isNaN(stockId) || !stockId || stockId.length != 4) {
-      alert('輸入之股票代號格式有誤，請重新輸入');
+      Swal('輸入之股票代號格式有誤，請重新輸入');
       inputStockIdRef.focus();
       dispatch({ type: 'CHAGE_STOCK_ID', payload: { stockId: '' } });
       return;
     }
-    fetch('https://stock-backend.herokuapp.com/insertStockInfo' + '?stockId=' + stockId)
+    dispatch({ type: 'SHOW_SPINNER' });
+    fetch('https://stock-backend.herokuapp.com/insertStockInfo?stockId=' + stockId)
       .then(function (response) {
         if (response.resMessage) {
           return Promise.reject();
         } else {
-          alert('新增成功');
+          dispatch({ type: 'HIDE_SPINNER' });
+          Swal('新增成功');
         }
       })
       .catch((response = '新增股票清單發生錯誤') => {
-        alert(response);
+        dispatch({ type: 'HIDE_SPINNER' });
+        Swal(response);
       });
   };
 };
@@ -43,7 +47,7 @@ export const getStockInfo = () => {
         dispatch({ type: 'INIT_STOCK_LIST', payload: { stockList: json } });
       })
       .catch((response = '查詢股票清單發生錯誤') => {
-        alert(response);
+        Swal(response);
       });
   };
 };
@@ -62,14 +66,14 @@ export const changeStockPrice = (event) => ({ type: 'CHAGE_STOCK_PRICE', payload
 export const calculate = (price, discount, amount, isCharge, inputStockPriceRef, inputStockAmountRef) => {
   return (dispatch) => {
     if (isNaN(price) || !price) {
-      alert('輸入之價格格式有誤，請重新輸入');
+      Swal('輸入之價格格式有誤，請重新輸入');
       inputStockPriceRef.focus();
       dispatch({ type: 'CHAGE_STOCK_PRICE', payload: { price: '' } });
       dispatch({ type: 'CAL_RESULT', payload: { result: '' } });
       return;
     }
     if (isNaN(amount) || !amount) {
-      alert('輸入之張數格式有誤，請重新輸入');
+      Swal('輸入之張數格式有誤，請重新輸入');
       inputStockAmountRef.focus();
       dispatch({ type: 'CHAGE_AMOUNT', payload: { amount: '' } });
       return;

@@ -2,11 +2,11 @@ import React from 'react';
 import { BeatLoader } from 'react-spinners';
 
 const Spinner = (props) => (
-  <div className='sweet-loading center-block' style={{ position: 'fixed', top: '40%', left: '40%' }}>
+  <div className='sweet-loading center-block' style={{ position: 'fixed', top: '30%', left: '50%', transform: 'translate(-50%, -50%)' }}>
     <BeatLoader
-      color={'rgb(54, 215, 183)'}
+      color={'red'}
       loading={props.loading}
-      size={100}
+      size={50}
       margin={'10px'}
     />
   </div>
