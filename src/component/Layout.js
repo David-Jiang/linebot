@@ -19,7 +19,7 @@ const Layout = ({ children }) => {
                 Home
               </NavItem>
               <NavItem eventKey={2} onClick={() => browserHistory.push('/stockList')}>
-                三大法人買賣交易統計
+                個股盤後資訊
               </NavItem>
               <NavItem eventKey={3} onClick={() => browserHistory.push('/stockPrice')}>
                 股票手續費計算

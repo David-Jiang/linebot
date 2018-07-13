@@ -31,7 +31,7 @@ class SecuritiesDetail extends React.Component {
         <div style={{ fontSize: '16px' }}>
           {data.stockName + '法人買賣統計'}
         </div>
-        <table className="table table-striped center-block" style={{ width: '70%' }}>
+        <table className="table table-striped" style={{ width: '70%' }}>
           <thead>
             <tr>
               <td>買賣日期</td>

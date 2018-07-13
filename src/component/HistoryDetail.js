@@ -6,6 +6,24 @@ class HistoryDetail extends React.Component {
     super(props);
   }
 
+  changeColorByAmout(amt) {
+    let amount = parseFloat(amt);
+    if (amount > 0) {
+      return 'red';
+    } else if (amount == 0) {
+      return 'black';
+    } else {
+      return 'green';
+    }
+  }
+
+  calStockRange(historyVO) {
+    let endPrice = historyVO.endPrice;
+    let startPrice = historyVO.startPrice;
+    let count = parseFloat(endPrice.replace(',', '')) - parseFloat(startPrice.replace(',', ''));
+    return count.toFixed(2);
+  }
+
   render() {
     let { data } = this.props;
     let exists = data.historyPriceList;
@@ -20,7 +38,7 @@ class HistoryDetail extends React.Component {
         <div style={{ fontSize: '16px' }}>
           {data.stockName + '歷史股價 '}
         </div>
-        <table className="table table-striped center-block" style={{ width: '70%' }}>
+        <table className="table table-striped" style={{ width: '70%' }}>
           <thead>
             <tr>
               <td>買賣日期</td>
@@ -46,8 +64,11 @@ class HistoryDetail extends React.Component {
                 <td align="right">
                   {historyVO.lowPrice}
                 </td>
-                <td align="right">
-                  {historyVO.endPrice}
+                <td align="right" style={{ color: this.changeColorByAmout(this.calStockRange(historyVO)) }}>
+                  <div>{historyVO.endPrice}</div>
+                  {'(' +
+                    (this.calStockRange(historyVO) > 0 ? '+' : '') +
+                    this.calStockRange(historyVO) + ')'}
                 </td>
                 <td align="right" >
                   {historyVO.transactionAmount}
