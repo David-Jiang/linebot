@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "bea418546a4f889bb087"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "8791a27cf710dc30516d"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -9466,9 +9466,7 @@
 	      dispatch({ type: 'CHAGE_STOCK_ID', payload: { stockId: '' } });
 	      return;
 	    }
-	    fetch('https://stock-backend.herokuapp.com/insertStockInfo', {
-	      body: stockId
-	    }).then(function (response) {
+	    fetch('https://stock-backend.herokuapp.com/insertStockInfo' + '?stockId=' + stockId).then(function (response) {
 	      if (response.resMessage) {
 	        return Promise.reject();
 	      } else {

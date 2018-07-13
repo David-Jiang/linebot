@@ -13,9 +13,7 @@ export const insertToList = (stockId, inputStockIdRef) => {
       dispatch({ type: 'CHAGE_STOCK_ID', payload: { stockId: '' } });
       return;
     }
-    fetch('https://stock-backend.herokuapp.com/insertStockInfo', {
-      body: stockId
-    })
+    fetch('https://stock-backend.herokuapp.com/insertStockInfo' + '?stockId=' + stockId)
       .then(function (response) {
         if (response.resMessage) {
           return Promise.reject();
