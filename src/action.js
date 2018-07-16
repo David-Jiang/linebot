@@ -18,11 +18,15 @@ export const insertToList = (stockId, inputStockIdRef) => {
     fetch('https://stock-backend.herokuapp.com/insertStockInfo?stockId=' + stockId)
       .then(function (response) {
         if (response.resMessage) {
-          return Promise.reject();
+          return Promise.reject(new Error(response.resMessage));
         } else {
           dispatch({ type: 'HIDE_SPINNER' });
           Swal('新增成功');
+          return response.json();
         }
+      })
+      .then(json => {
+        dispatch({ type: 'INIT_STOCK_LIST', payload: { stockList: json } });
       })
       .catch((response = '新增股票清單發生錯誤') => {
         dispatch({ type: 'HIDE_SPINNER' });
@@ -54,7 +58,19 @@ export const getStockInfo = () => {
 
 export const showDetail = (stockVO, detailType) => ({ type: 'SHOW_DETAIL', payload: { stockVO, detailType } });
 
-
+export const callTask = () => {
+  fetch('https://stock-backend.herokuapp.com/callTask')
+    .then((response) => {
+      if (response.resMessage) {
+        return Promise.reject(new Error(response.resMessage));
+      } else {
+        getStockInfo();
+      }
+    })
+    .catch(() => {
+      Swal('更新數據發生錯誤');
+    });
+};
 
 
 

@@ -17,13 +17,6 @@ class HistoryDetail extends React.Component {
     }
   }
 
-  calStockRange(historyVO) {
-    let endPrice = historyVO.endPrice;
-    let startPrice = historyVO.startPrice;
-    let count = parseFloat(endPrice.replace(',', '')) - parseFloat(startPrice.replace(',', ''));
-    return count.toFixed(2);
-  }
-
   render() {
     let { data } = this.props;
     let exists = data.historyPriceList;
@@ -64,11 +57,9 @@ class HistoryDetail extends React.Component {
                 <td align="right">
                   {historyVO.lowPrice}
                 </td>
-                <td align="right" style={{ color: this.changeColorByAmout(this.calStockRange(historyVO)) }}>
+                <td align="right" style={{ color: this.changeColorByAmout(stockVO.wavePrice) }}>
                   <div>{historyVO.endPrice}</div>
-                  {'(' +
-                    (this.calStockRange(historyVO) > 0 ? '+' : '') +
-                    this.calStockRange(historyVO) + ')'}
+                  {'(' + (parseFloat(stockVO.wavePrice) > 0 ? '+' : '') + stockVO.wavePrice + ')'}
                 </td>
                 <td align="right" >
                   {historyVO.transactionAmount}

@@ -269,7 +269,7 @@ setInterval(() => {
   });
 }, 20000);
 
-setInterval((function () {
+/* setInterval((function () {
   rp({
     uri: 'https://stock-backend.herokuapp.com/getStockInfo',
     headers: {
@@ -282,4 +282,4 @@ setInterval((function () {
     .catch((err) => {
       console.log(`getStockInfo發生錯誤:${err}`);
     });
-}), 600000);
+}), 600000); */

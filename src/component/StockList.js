@@ -34,16 +34,9 @@ class StockList extends React.Component {
     }
   }
 
-  calStockRange(stockVO) {
-    let endPrice = stockVO.historyPriceList[0].endPrice;
-    let startPrice = stockVO.historyPriceList[0].startPrice;
-    let count = parseFloat(endPrice.replace(',', '')) - parseFloat(startPrice.replace(',', ''));
-    return count.toFixed(2);
-  }
-
   render() {
     let { inputStockId, stockList, data, detailType, loading,
-      insertToList, changeStockId, showDetail } = this.props;
+      insertToList, changeStockId, showDetail, callTask } = this.props;
     let inputStockIdRef = null;
     return (
       <div>
@@ -60,6 +53,10 @@ class StockList extends React.Component {
           <button type="button" className="btn btn-info"
             onClick={() => insertToList(inputStockId, inputStockIdRef)}>新增股票</button>
         </div>
+        <div className="text-center col-md-4 col-md-offset-4 col-sm-10 col-sm-offset-1">
+          <button type="button" className="btn btn-info"
+            onClick={() => callTask()}>更新數據</button>
+        </div>
         <div className="clearfix"></div>
         {stockList.length > 0 &&
           <div className="col-md-4 col-md-offset-4 col-sm-12 col-xs-12" style={{ marginTop: '20px' }}>
@@ -73,8 +70,6 @@ class StockList extends React.Component {
                 <tr>
                   <td>股票代碼</td>
                   <td align="right">外資</td>
-                  <td align="right">投信</td>
-                  <td align="right">自營商</td>
                   <td align="right">三大法人</td>
                   <td align="center">買賣統計</td>
                   <td align="center">歷史股價</td>
@@ -86,20 +81,13 @@ class StockList extends React.Component {
                   <tr key={stockVO.stockId}>
                     <td>
                       <a href="#" onClick={(e) => this.connectURL(e, stockVO.stockId)}>{stockVO.stockName + '  (' + stockVO.stockId + ')'}</a>
-                      <div style={{ color: this.changeColorByAmout(this.calStockRange(stockVO)) }}>
+                      <div style={{ color: this.changeColorByAmout(stockVO.wavePrice) }}>
                         {stockVO.historyPriceList[0].endPrice + '(' +
-                          (this.calStockRange(stockVO) > 0 ? '+' : '') +
-                          this.calStockRange(stockVO) + ')'}
+                          (parseFloat(stockVO.wavePrice) > 0 ? '+' : '') + stockVO.wavePrice + ')'}
                       </div>
                     </td>
                     <td align="right" style={{ color: this.changeColorByAmout(stockVO.securitiesTradeList[0].foreignAmount) }}>
                       {stockVO.securitiesTradeList[0].foreignAmount}
-                    </td>
-                    <td align="right" style={{ color: this.changeColorByAmout(stockVO.securitiesTradeList[0].investAmount) }}>
-                      {stockVO.securitiesTradeList[0].investAmount}
-                    </td>
-                    <td align="right" style={{ color: this.changeColorByAmout(stockVO.securitiesTradeList[0].nativeAmount) }}>
-                      {stockVO.securitiesTradeList[0].nativeAmount}
                     </td>
                     <td align="right" style={{ color: this.changeColorByAmout(stockVO.securitiesTradeList[0].totalAmount) }}>
                       {stockVO.securitiesTradeList[0].totalAmount}

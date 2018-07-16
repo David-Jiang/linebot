@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "8ea03be5edf1d7873333"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "e0eeadf407ae0bdc912d"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -9444,7 +9444,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.reset = exports.changeStockAmount = exports.changeDiscount = exports.calculate = exports.changeStockPrice = exports.showDetail = exports.getStockInfo = exports.changeStockId = exports.insertToList = exports.hideSpinner = exports.showSpinner = undefined;
+	exports.reset = exports.changeStockAmount = exports.changeDiscount = exports.calculate = exports.changeStockPrice = exports.callTask = exports.showDetail = exports.getStockInfo = exports.changeStockId = exports.insertToList = exports.hideSpinner = exports.showSpinner = undefined;
 	
 	__webpack_require__(328);
 	
@@ -9475,11 +9475,14 @@
 	    dispatch({ type: 'SHOW_SPINNER' });
 	    fetch('https://stock-backend.herokuapp.com/insertStockInfo?stockId=' + stockId).then(function (response) {
 	      if (response.resMessage) {
-	        return Promise.reject();
+	        return Promise.reject(new Error(response.resMessage));
 	      } else {
 	        dispatch({ type: 'HIDE_SPINNER' });
 	        (0, _sweetalert2.default)('新增成功');
+	        return response.json();
 	      }
+	    }).then(function (json) {
+	      dispatch({ type: 'INIT_STOCK_LIST', payload: { stockList: json } });
 	    }).catch(function () {
 	      var response = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '新增股票清單發生錯誤';
 	
@@ -9513,6 +9516,18 @@
 	
 	var showDetail = exports.showDetail = function showDetail(stockVO, detailType) {
 	  return { type: 'SHOW_DETAIL', payload: { stockVO: stockVO, detailType: detailType } };
+	};
+	
+	var callTask = exports.callTask = function callTask() {
+	  fetch('https://stock-backend.herokuapp.com/callTask').then(function (response) {
+	    if (response.resMessage) {
+	      return Promise.reject(new Error(response.resMessage));
+	    } else {
+	      getStockInfo();
+	    }
+	  }).catch(function () {
+	    (0, _sweetalert2.default)('更新數據發生錯誤');
+	  });
 	};
 	
 	var changeStockPrice = exports.changeStockPrice = function changeStockPrice(event) {
@@ -24640,14 +24655,6 @@
 	      }
 	    }
 	  }, {
-	    key: 'calStockRange',
-	    value: function calStockRange(historyVO) {
-	      var endPrice = historyVO.endPrice;
-	      var startPrice = historyVO.startPrice;
-	      var count = parseFloat(endPrice.replace(',', '')) - parseFloat(startPrice.replace(',', ''));
-	      return count.toFixed(2);
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this2 = this;
@@ -24736,13 +24743,13 @@
 	                ),
 	                _react2.default.createElement(
 	                  'td',
-	                  { align: 'right', style: { color: _this2.changeColorByAmout(_this2.calStockRange(historyVO)) } },
+	                  { align: 'right', style: { color: _this2.changeColorByAmout(stockVO.wavePrice) } },
 	                  _react2.default.createElement(
 	                    'div',
 	                    null,
 	                    historyVO.endPrice
 	                  ),
-	                  '(' + (_this2.calStockRange(historyVO) > 0 ? '+' : '') + _this2.calStockRange(historyVO) + ')'
+	                  '(' + (parseFloat(stockVO.wavePrice) > 0 ? '+' : '') + stockVO.wavePrice + ')'
 	                ),
 	                _react2.default.createElement(
 	                  'td',
@@ -69061,14 +69068,6 @@
 	      }
 	    }
 	  }, {
-	    key: 'calStockRange',
-	    value: function calStockRange(stockVO) {
-	      var endPrice = stockVO.historyPriceList[0].endPrice;
-	      var startPrice = stockVO.historyPriceList[0].startPrice;
-	      var count = parseFloat(endPrice.replace(',', '')) - parseFloat(startPrice.replace(',', ''));
-	      return count.toFixed(2);
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this2 = this;
@@ -69081,7 +69080,8 @@
 	          loading = _props.loading,
 	          insertToList = _props.insertToList,
 	          changeStockId = _props.changeStockId,
-	          showDetail = _props.showDetail;
+	          showDetail = _props.showDetail,
+	          callTask = _props.callTask;
 	
 	      var inputStockIdRef = null;
 	      return _react2.default.createElement(
@@ -69120,6 +69120,18 @@
 	                return insertToList(inputStockId, inputStockIdRef);
 	              } },
 	            '\u65B0\u589E\u80A1\u7968'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'text-center col-md-4 col-md-offset-4 col-sm-10 col-sm-offset-1' },
+	          _react2.default.createElement(
+	            'button',
+	            { type: 'button', className: 'btn btn-info',
+	              onClick: function onClick() {
+	                return callTask();
+	              } },
+	            '\u66F4\u65B0\u6578\u64DA'
 	          )
 	        ),
 	        _react2.default.createElement('div', { className: 'clearfix' }),
@@ -69163,16 +69175,6 @@
 	                _react2.default.createElement(
 	                  'td',
 	                  { align: 'right' },
-	                  '\u6295\u4FE1'
-	                ),
-	                _react2.default.createElement(
-	                  'td',
-	                  { align: 'right' },
-	                  '\u81EA\u71DF\u5546'
-	                ),
-	                _react2.default.createElement(
-	                  'td',
-	                  { align: 'right' },
 	                  '\u4E09\u5927\u6CD5\u4EBA'
 	                ),
 	                _react2.default.createElement(
@@ -69211,24 +69213,14 @@
 	                    ),
 	                    _react2.default.createElement(
 	                      'div',
-	                      { style: { color: _this2.changeColorByAmout(_this2.calStockRange(stockVO)) } },
-	                      stockVO.historyPriceList[0].endPrice + '(' + (_this2.calStockRange(stockVO) > 0 ? '+' : '') + _this2.calStockRange(stockVO) + ')'
+	                      { style: { color: _this2.changeColorByAmout(stockVO.wavePrice) } },
+	                      stockVO.historyPriceList[0].endPrice + '(' + (parseFloat(stockVO.wavePrice) > 0 ? '+' : '') + stockVO.wavePrice + ')'
 	                    )
 	                  ),
 	                  _react2.default.createElement(
 	                    'td',
 	                    { align: 'right', style: { color: _this2.changeColorByAmout(stockVO.securitiesTradeList[0].foreignAmount) } },
 	                    stockVO.securitiesTradeList[0].foreignAmount
-	                  ),
-	                  _react2.default.createElement(
-	                    'td',
-	                    { align: 'right', style: { color: _this2.changeColorByAmout(stockVO.securitiesTradeList[0].investAmount) } },
-	                    stockVO.securitiesTradeList[0].investAmount
-	                  ),
-	                  _react2.default.createElement(
-	                    'td',
-	                    { align: 'right', style: { color: _this2.changeColorByAmout(stockVO.securitiesTradeList[0].nativeAmount) } },
-	                    stockVO.securitiesTradeList[0].nativeAmount
 	                  ),
 	                  _react2.default.createElement(
 	                    'td',
