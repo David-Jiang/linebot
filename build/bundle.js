@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "e0eeadf407ae0bdc912d"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "d6ad749ac4c6c1ff1a3f"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -9515,19 +9515,42 @@
 	};
 	
 	var showDetail = exports.showDetail = function showDetail(stockVO, detailType) {
-	  return { type: 'SHOW_DETAIL', payload: { stockVO: stockVO, detailType: detailType } };
+	  return function (dispatch) {
+	    dispatch({ type: 'SHOW_DETAIL', payload: { stockVO: stockVO, detailType: detailType } });
+	    setTimeout(function () {
+	      document.getElementById('detail').scrollIntoView(true);
+	    }, 100);
+	  };
 	};
 	
 	var callTask = exports.callTask = function callTask() {
-	  fetch('https://stock-backend.herokuapp.com/callTask').then(function (response) {
-	    if (response.resMessage) {
-	      return Promise.reject(new Error(response.resMessage));
-	    } else {
-	      getStockInfo();
-	    }
-	  }).catch(function () {
-	    (0, _sweetalert2.default)('更新數據發生錯誤');
-	  });
+	  return function (dispatch) {
+	    dispatch({ type: 'SHOW_SPINNER' });
+	    fetch('https://stock-backend.herokuapp.com/callTask').then(function (response) {
+	      if (response.resMessage) {
+	        return Promise.reject(new Error(response.resMessage));
+	      } else {
+	        fetch('https://stock-backend.herokuapp.com/getStockInfo').then(function (response) {
+	          if (response.resMessage) {
+	            return Promise.reject(new Error(response.resMessage));
+	          } else {
+	            return response.json();
+	          }
+	        }).then(function (json) {
+	          dispatch({ type: 'INIT_STOCK_LIST', payload: { stockList: json } });
+	          dispatch({ type: 'HIDE_SPINNER' });
+	        }).catch(function () {
+	          var response = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '查詢股票清單發生錯誤';
+	
+	          (0, _sweetalert2.default)(response);
+	          dispatch({ type: 'HIDE_SPINNER' });
+	        });
+	      }
+	    }).catch(function () {
+	      (0, _sweetalert2.default)('更新數據發生錯誤');
+	      dispatch({ type: 'HIDE_SPINNER' });
+	    });
+	  };
 	};
 	
 	var changeStockPrice = exports.changeStockPrice = function changeStockPrice(event) {
@@ -22273,7 +22296,7 @@
 	        ),
 	        _react2.default.createElement(
 	          'table',
-	          { className: 'table table-striped', style: { width: '70%' } },
+	          { className: 'table table-striped' },
 	          _react2.default.createElement(
 	            'thead',
 	            null,
@@ -24623,8 +24646,6 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRouter = __webpack_require__(329);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -24675,7 +24696,7 @@
 	        ),
 	        _react2.default.createElement(
 	          'table',
-	          { className: 'table table-striped', style: { width: '70%' } },
+	          { className: 'table table-striped' },
 	          _react2.default.createElement(
 	            'thead',
 	            null,
@@ -24695,11 +24716,8 @@
 	              _react2.default.createElement(
 	                'td',
 	                { align: 'right' },
-	                '\u6700\u9AD8\u50F9'
-	              ),
-	              _react2.default.createElement(
-	                'td',
-	                { align: 'right' },
+	                '\u6700\u9AD8\u50F9',
+	                _react2.default.createElement('br', null),
 	                '\u6700\u4F4E\u50F9'
 	              ),
 	              _react2.default.createElement(
@@ -24734,22 +24752,26 @@
 	                _react2.default.createElement(
 	                  'td',
 	                  { align: 'right' },
-	                  historyVO.highPrice
+	                  _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    historyVO.highPrice
+	                  ),
+	                  _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    historyVO.lowPrice
+	                  )
 	                ),
 	                _react2.default.createElement(
 	                  'td',
-	                  { align: 'right' },
-	                  historyVO.lowPrice
-	                ),
-	                _react2.default.createElement(
-	                  'td',
-	                  { align: 'right', style: { color: _this2.changeColorByAmout(stockVO.wavePrice) } },
+	                  { align: 'right', style: { color: _this2.changeColorByAmout(historyVO.wavePrice) } },
 	                  _react2.default.createElement(
 	                    'div',
 	                    null,
 	                    historyVO.endPrice
 	                  ),
-	                  '(' + (parseFloat(stockVO.wavePrice) > 0 ? '+' : '') + stockVO.wavePrice + ')'
+	                  '(' + (parseFloat(historyVO.wavePrice) > 0 ? '+' : '') + historyVO.wavePrice + ')'
 	                ),
 	                _react2.default.createElement(
 	                  'td',
@@ -63507,7 +63529,7 @@
 	        ),
 	        _react2.default.createElement(
 	          'table',
-	          { className: 'table table-striped', style: { width: '70%' } },
+	          { className: 'table table-striped' },
 	          _react2.default.createElement(
 	            'thead',
 	            null,
@@ -69120,14 +69142,10 @@
 	                return insertToList(inputStockId, inputStockIdRef);
 	              } },
 	            '\u65B0\u589E\u80A1\u7968'
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'text-center col-md-4 col-md-offset-4 col-sm-10 col-sm-offset-1' },
+	          ),
 	          _react2.default.createElement(
 	            'button',
-	            { type: 'button', className: 'btn btn-info',
+	            { type: 'button', className: 'btn btn-warning', style: { margin: '10px' },
 	              onClick: function onClick() {
 	                return callTask();
 	              } },
@@ -69213,8 +69231,8 @@
 	                    ),
 	                    _react2.default.createElement(
 	                      'div',
-	                      { style: { color: _this2.changeColorByAmout(stockVO.wavePrice) } },
-	                      stockVO.historyPriceList[0].endPrice + '(' + (parseFloat(stockVO.wavePrice) > 0 ? '+' : '') + stockVO.wavePrice + ')'
+	                      { style: { color: _this2.changeColorByAmout(stockVO.historyPriceList[0].wavePrice) } },
+	                      stockVO.historyPriceList[0].endPrice + '(' + (parseFloat(stockVO.historyPriceList[0].wavePrice) > 0 ? '+' : '') + stockVO.historyPriceList[0].wavePrice + ')'
 	                    )
 	                  ),
 	                  _react2.default.createElement(
@@ -69264,7 +69282,11 @@
 	              })
 	            )
 	          ),
-	          detailType && detailType == 'securities' ? _react2.default.createElement(_SecuritiesDetail2.default, { data: data, style: { marginTop: '30px' } }) : detailType == 'history' ? _react2.default.createElement(_HistoryDetail2.default, { data: data, style: { marginTop: '30px' } }) : _react2.default.createElement(_FinancingDetail2.default, { data: data, style: { marginTop: '30px' } })
+	          _react2.default.createElement(
+	            'div',
+	            { id: 'detail' },
+	            detailType && detailType == 'securities' ? _react2.default.createElement(_SecuritiesDetail2.default, { data: data, style: { marginTop: '30px' } }) : detailType == 'history' ? _react2.default.createElement(_HistoryDetail2.default, { data: data, style: { marginTop: '30px' } }) : _react2.default.createElement(_FinancingDetail2.default, { data: data, style: { marginTop: '30px' } })
+	          )
 	        ),
 	        _react2.default.createElement(_Spinner2.default, { loading: loading })
 	      );

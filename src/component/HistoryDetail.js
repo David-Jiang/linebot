@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router';
 
 class HistoryDetail extends React.Component {
   constructor(props) {
@@ -31,13 +30,12 @@ class HistoryDetail extends React.Component {
         <div style={{ fontSize: '16px' }}>
           {data.stockName + '歷史股價 '}
         </div>
-        <table className="table table-striped" style={{ width: '70%' }}>
+        <table className="table table-striped">
           <thead>
             <tr>
               <td>買賣日期</td>
               <td align="right">開盤價</td>
-              <td align="right">最高價</td>
-              <td align="right">最低價</td>
+              <td align="right">最高價<br />最低價</td>
               <td align="right">收盤價</td>
               <td align="right">交易量</td>
             </tr>
@@ -52,16 +50,14 @@ class HistoryDetail extends React.Component {
                   {historyVO.startPrice}
                 </td>
                 <td align="right">
-                  {historyVO.highPrice}
+                  <div>{historyVO.highPrice}</div>
+                  <div>{historyVO.lowPrice}</div>
+                </td>
+                <td align="right" style={{ color: this.changeColorByAmout(historyVO.wavePrice) }}>
+                  <div>{historyVO.endPrice}</div>
+                  {'(' + (parseFloat(historyVO.wavePrice) > 0 ? '+' : '') + historyVO.wavePrice + ')'}
                 </td>
                 <td align="right">
-                  {historyVO.lowPrice}
-                </td>
-                <td align="right" style={{ color: this.changeColorByAmout(stockVO.wavePrice) }}>
-                  <div>{historyVO.endPrice}</div>
-                  {'(' + (parseFloat(stockVO.wavePrice) > 0 ? '+' : '') + stockVO.wavePrice + ')'}
-                </td>
-                <td align="right" >
                   {historyVO.transactionAmount}
                 </td>
               </tr>

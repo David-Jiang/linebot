@@ -31,7 +31,7 @@ class FinancingDetail extends React.Component {
         <div style={{ fontSize: '16px' }}>
           {data.stockName + '融資融券餘額 '}
         </div>
-        <table className="table table-striped" style={{ width: '70%' }}>
+        <table className="table table-striped">
           <thead>
             <tr>
               <td>買賣日期</td>

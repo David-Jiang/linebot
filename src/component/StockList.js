@@ -52,9 +52,7 @@ class StockList extends React.Component {
         <div className="text-center col-md-4 col-md-offset-4 col-sm-10 col-sm-offset-1">
           <button type="button" className="btn btn-info"
             onClick={() => insertToList(inputStockId, inputStockIdRef)}>新增股票</button>
-        </div>
-        <div className="text-center col-md-4 col-md-offset-4 col-sm-10 col-sm-offset-1">
-          <button type="button" className="btn btn-info"
+          <button type="button" className="btn btn-warning" style={{ margin: '10px' }}
             onClick={() => callTask()}>更新數據</button>
         </div>
         <div className="clearfix"></div>
@@ -81,9 +79,9 @@ class StockList extends React.Component {
                   <tr key={stockVO.stockId}>
                     <td>
                       <a href="#" onClick={(e) => this.connectURL(e, stockVO.stockId)}>{stockVO.stockName + '  (' + stockVO.stockId + ')'}</a>
-                      <div style={{ color: this.changeColorByAmout(stockVO.wavePrice) }}>
+                      <div style={{ color: this.changeColorByAmout(stockVO.historyPriceList[0].wavePrice) }}>
                         {stockVO.historyPriceList[0].endPrice + '(' +
-                          (parseFloat(stockVO.wavePrice) > 0 ? '+' : '') + stockVO.wavePrice + ')'}
+                          (parseFloat(stockVO.historyPriceList[0].wavePrice) > 0 ? '+' : '') + stockVO.historyPriceList[0].wavePrice + ')'}
                       </div>
                     </td>
                     <td align="right" style={{ color: this.changeColorByAmout(stockVO.securitiesTradeList[0].foreignAmount) }}>
@@ -111,13 +109,15 @@ class StockList extends React.Component {
                 ))}
               </tbody>
             </table>
-            {detailType && detailType == 'securities' ?
-              (<SecuritiesDetail data={data} style={{ marginTop: '30px' }} />)
-              : detailType == 'history' ?
-                (<HistoryDetail data={data} style={{ marginTop: '30px' }} />)
-                :
-                (<FinancingDetail data={data} style={{ marginTop: '30px' }} />)
-            }
+            <div id="detail">
+              {detailType && detailType == 'securities' ?
+                (<SecuritiesDetail data={data} style={{ marginTop: '30px' }} />)
+                : detailType == 'history' ?
+                  (<HistoryDetail data={data} style={{ marginTop: '30px' }} />)
+                  :
+                  (<FinancingDetail data={data} style={{ marginTop: '30px' }} />)
+              }
+            </div>
           </div>
         }
         <Spinner loading={loading} />
