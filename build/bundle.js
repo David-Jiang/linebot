@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "d6ad749ac4c6c1ff1a3f"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "85018a7f7d97f9410ed8"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -69075,7 +69075,7 @@
 	    key: 'connectURL',
 	    value: function connectURL(e, stockId) {
 	      e.preventDefault();
-	      window.open('https://www.cmoney.tw/follow/channel/stock-' + stockId);
+	      window.open('https://www.cmoney.tw/follow/channel/stock-' + stockId + '?chart=r');
 	    }
 	  }, {
 	    key: 'changeColorByAmout',

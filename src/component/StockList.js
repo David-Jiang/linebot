@@ -20,7 +20,7 @@ class StockList extends React.Component {
 
   connectURL(e, stockId) {
     e.preventDefault();
-    window.open(`https://www.cmoney.tw/follow/channel/stock-${stockId}`);
+    window.open(`https://www.cmoney.tw/follow/channel/stock-${stockId}?chart=r`);
   }
 
   changeColorByAmout(amt) {
