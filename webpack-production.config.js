@@ -14,7 +14,6 @@ const getEntry = () => {
   paths.forEach(function (path) {
     arr.push('./' + path.split('.')[0]);
   });
-
   return arr;
 };
 

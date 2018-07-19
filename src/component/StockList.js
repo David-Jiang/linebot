@@ -36,7 +36,7 @@ class StockList extends React.Component {
 
   render() {
     let { inputStockId, stockList, data, detailType, loading,
-      insertToList, changeStockId, showDetail, callTask } = this.props;
+      insertToList, changeStockId, showDetail } = this.props;
     let inputStockIdRef = null;
     return (
       <div>
@@ -52,8 +52,6 @@ class StockList extends React.Component {
         <div className="text-center col-md-4 col-md-offset-4 col-sm-10 col-sm-offset-1">
           <button type="button" className="btn btn-info"
             onClick={() => insertToList(inputStockId, inputStockIdRef)}>新增股票</button>
-          <button type="button" className="btn btn-warning" style={{ margin: '10px' }}
-            onClick={() => callTask()}>更新數據</button>
         </div>
         <div className="clearfix"></div>
         {stockList.length > 0 &&

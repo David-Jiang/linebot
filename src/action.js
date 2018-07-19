@@ -15,7 +15,7 @@ export const insertToList = (stockId, inputStockIdRef) => {
       return;
     }
     dispatch({ type: 'SHOW_SPINNER' });
-    fetch('https://stock-backend.herokuapp.com/insertStockInfo?stockId=' + stockId)
+    fetch('https://stock-backend-210502.appspot.com/insertStockInfo?stockId=' + stockId)
       .then(function (response) {
         if (response.resMessage) {
           return Promise.reject(new Error(response.resMessage));
@@ -39,7 +39,7 @@ export const changeStockId = (event) => ({ type: 'CHAGE_STOCK_ID', payload: { st
 
 export const getStockInfo = () => {
   return (dispatch) => {
-    fetch('https://stock-backend.herokuapp.com/getStockInfo')
+    fetch('https://stock-backend-210502.appspot.com/getStockInfo')
       .then((response) => {
         if (response.resMessage) {
           return Promise.reject(new Error(response.resMessage));
@@ -62,39 +62,6 @@ export const showDetail = (stockVO, detailType) => {
     setTimeout(() => {
       document.getElementById('detail').scrollIntoView(true);
     }, 100);
-  };
-};
-
-export const callTask = () => {
-  return (dispatch) => {
-    dispatch({ type: 'SHOW_SPINNER' });
-    fetch('https://stock-backend.herokuapp.com/callTask')
-      .then((response) => {
-        if (response.resMessage) {
-          return Promise.reject(new Error(response.resMessage));
-        } else {
-          fetch('https://stock-backend.herokuapp.com/getStockInfo')
-            .then((response) => {
-              if (response.resMessage) {
-                return Promise.reject(new Error(response.resMessage));
-              } else {
-                return response.json();
-              }
-            })
-            .then(json => {
-              dispatch({ type: 'INIT_STOCK_LIST', payload: { stockList: json } });
-              dispatch({ type: 'HIDE_SPINNER' });
-            })
-            .catch((response = '查詢股票清單發生錯誤') => {
-              Swal(response);
-              dispatch({ type: 'HIDE_SPINNER' });
-            });
-        }
-      })
-      .catch(() => {
-        Swal('更新數據發生錯誤');
-        dispatch({ type: 'HIDE_SPINNER' });
-      });
   };
 };
 

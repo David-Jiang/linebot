@@ -5,12 +5,16 @@ import _ from 'lodash';
 import { returnFloat } from './src/util/Util';
 import { UserInfo, StockInfo, CarouselTemplate, CarouselModel } from './src/model/LineBotModel';
 
-var path = require('path');
+const path = require('path');
 
 const config = {
+  channelAccessToken: 'NgamlfgqtFtz/wpiz0zQQyVhM2gwtSB3HK7UYxXppJat+353tD9j7YZ/JRe64UW3PgLfnOoxm4LDJ5pbJRmrPlJUCllejaWDH24hAhZ+Okv0aKD1c/QwjNf24KKzJKzpIcBkN8kQEQJdGLrj570ibQdB04t89/1O/w1cDnyilFU=',
+  channelSecret: 'e2dd514a9ba6200e517fb9d12ad3c0a3',
+};
+/* const config = {
   channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
   channelSecret: process.env.CHANNEL_SECRET,
-};
+}; */
 const client = new line.Client(config);
 const app = express();
 app.listen(process.env.PORT || 80, () => {
@@ -268,18 +272,3 @@ setInterval(() => {
     }
   });
 }, 20000);
-
-/* setInterval((function () {
-  rp({
-    uri: 'https://stock-backend.herokuapp.com/getStockInfo',
-    headers: {
-      'content-type': 'application/json',
-    }
-  })
-    .then((repos) => {
-      console.log('keep awake ' + new Date());
-    })
-    .catch((err) => {
-      console.log(`getStockInfo發生錯誤:${err}`);
-    });
-}), 600000); */
