@@ -6,7 +6,7 @@ const Spinner = (props) => (
     <BeatLoader
       color={'red'}
       loading={props.loading}
-      size={50}
+      size={40}
       margin={'10px'}
     />
   </div>
