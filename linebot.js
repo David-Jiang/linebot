@@ -2,8 +2,7 @@ import * as line from '@line/bot-sdk';
 import express from 'express';
 import rp from 'request-promise';
 import _ from 'lodash';
-import { returnFloat } from './src/util/Util';
-import { UserInfo, StockInfo, CarouselTemplate, CarouselModel } from './src/model/LineBotModel';
+import { UserInfo, CarouselTemplate, CarouselModel } from './src/model/LineBotModel';
 
 const path = require('path');
 
@@ -11,14 +10,11 @@ const config = {
   channelAccessToken: 'NgamlfgqtFtz/wpiz0zQQyVhM2gwtSB3HK7UYxXppJat+353tD9j7YZ/JRe64UW3PgLfnOoxm4LDJ5pbJRmrPlJUCllejaWDH24hAhZ+Okv0aKD1c/QwjNf24KKzJKzpIcBkN8kQEQJdGLrj570ibQdB04t89/1O/w1cDnyilFU=',
   channelSecret: 'e2dd514a9ba6200e517fb9d12ad3c0a3',
 };
-/* const config = {
-  channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
-  channelSecret: process.env.CHANNEL_SECRET,
-}; */
+
 const client = new line.Client(config);
 const app = express();
-app.listen(process.env.PORT || 80, () => {
-  console.log('LineBot is running and Port is ' + process.env.PORT);
+app.listen(80, () => {
+  console.log('LineBot is running');
 });
 app.use(express.static(__dirname + '/'));
 app.get('/*', function (req, res) {
@@ -37,9 +33,6 @@ app.post('/linewebhook', line.middleware(config), (req, res) => {
       res.status(500).end();
     });
 });
-
-let userInfoArr = [];
-let stockList = [];
 
 const handleEvent = (event: any) => {
   switch (event.type) {
@@ -62,73 +55,10 @@ const handleText = (text: string, replyToken: any, source: any) => {
   client.getProfile(source.userId)
     .then((profile) => { return profile.displayName; })
     .then((userName) => {
-      if (!userInfoArr.find((o) => { return o.userId === source.userId; })) {
-        let userInfo = new UserInfo();
-        userInfo.userId = source.userId;
-        userInfoArr.push(userInfo);
-      }
+      //let userInfo = new UserInfo()
 
       if (messageText.startsWith('-a')) {
-        let stockIdArrBySplit = messageText.replace('-a', '').trim().split('-');
-        let userInfo = userInfoArr.find((o) => { return o.userId === source.userId; });
-        let responseSuccessId = [];
-
-        stockIdArrBySplit.forEach((stockId) => {
-          if (stockId.length === 4 && !userInfo.stockIdArr.includes(stockId)) {
-            userInfo.subscr = true;
-            userInfo.stockIdArr.push(stockId);
-            addToStockList(stockId);
-            responseSuccessId.push(stockId);
-          }
-        });
-        if (responseSuccessId.length > 0) {
-          replyText(replyToken, `您好${userName}，已成功開啟推播\n股票代號:${responseSuccessId.join(',')}`);
-        }
-      } else if (messageText.startsWith('-r')) {
-        let stockIdArrBySplit = messageText.replace('-r', '').trim().split('-');
-        let userInfo = userInfoArr.find((o) => { return o.userId === source.userId; });
-
-        stockIdArrBySplit.forEach((stockIdneedDel) => {
-          _.remove(userInfo.stockIdArr, (stockIdown) => { return stockIdneedDel === stockIdown; });
-        });
-        replyText(replyToken, `您好${userName}，股票代號:${stockIdArrBySplit.join(',')}，已移除推播清單`);
-      } else if (messageText.startsWith('-i')) {
-        let stockIdArrBySplit = messageText.replace('-i', '').trim().split('-');
-        let showMessage = '';
-
-        stockIdArrBySplit.forEach((stockId) => {
-          if (stockId.length === 4) {
-            addToStockList(stockId);
-            let obj = stockList.find((o) => { return o.stockId === stockId && o.currPrice > 0; });
-            if (obj) {
-              showMessage += `股票${obj.stockName}(${obj.stockId})
-目前價:${obj.currPrice}(${(obj.currPrice - obj.startPrice > 0 ? '+' : '')}${returnFloat(obj.currPrice - obj.startPrice)})
-最高價:${obj.hightPrice}
-最低價:${obj.lowPrice}`;
-            }
-          }
-        });
-
-        if (showMessage) {
-          replyText(replyToken, showMessage);
-        }
-      } else if (messageText.startsWith('-s') || messageText.startsWith('-c')) {
-        let type = messageText.trim();
-        let userInfo = userInfoArr.find((o) => { return o.userId === source.userId; });
-        if (type === '-s') {
-          userInfo.subscr = true;
-          replyText(replyToken, `您好${userName}，已開啟推播`);
-        } else {
-          userInfo.subscr = false;
-          replyText(replyToken, `您好${userName}，已暫停推播`);
-        }
-      } else if (messageText.startsWith('-v')) {
-        let showMessage = '輸入-a 股票代號 可定時推播該股票資訊\n\t(例如: -a 2327-2330)\n';
-        showMessage += '輸入-i 股票代號 可回應該股票資訊\n\t(例如: -i 2327-2330)\n';
-        showMessage += '輸入-s 可開啟推播\n';
-        showMessage += '輸入-c 可暫停推播\n';
-        showMessage += '輸入-r 股票代號 可移除該股票資訊推播\n\t(例如: -r 2327-2330)\n';
-        replyText(replyToken, showMessage);
+        replyText();
       } else if (messageText === 'image') {
         replyTemplate(replyToken);
       } else {
@@ -196,79 +126,15 @@ const replyTemplate = (token: any) => {
   );
 };
 
-const addToStockList = (stockId: string) => {
-  if (!stockList.find((o) => { return o.stockId === stockId; })) {
-    let stockInfo = new StockInfo();
-    stockInfo.stockId = stockId;
-    stockList.push(stockInfo);
-  }
-};
-
-
 const reqOpt = {
-  uri: 'http://mis.twse.com.tw/stock/fibest.jsp?lang=zh_tw',
+  uri: '',
   headers: {
     'content-type': 'application/json',
-  },
-  jar: rp.jar()
+  }
 };
 rp(reqOpt)
   .then((repost) => {
-    setInterval(() => {
-      let temp = '';
-      _.forEach(stockList, (stockVO) => {
-        temp += `tse_${stockVO.stockId}.tw%7c`;
-      });
-      reqOpt.uri = `http://mis.twse.com.tw/stock/api/getStockInfo.jsp?cp=0&json=1&delay=0&_=${Date.now()}&ex_ch=${temp.substring(0, temp.length - 3)}`;
-      if (stockList.length > 0) {
-        rp(reqOpt)
-          .then((repos) => {
-            let jsonObject = JSON.parse(repos);
-            if (jsonObject.msgArray) {
-              console.log('取值成功');
-            } else {
-              console.log('取值失敗');
-            }
-            _.forEach(jsonObject.msgArray, (vo) => {
-              let info = stockList.find((o) => { return o.stockId === vo.ch.replace('.tw', ''); });
-              info.startPrice = vo.y;
-              info.lowPrice = vo.l;
-              info.hightPrice = vo.h;
-              info.currPrice = vo.z;
-              info.stockName = vo.n;
-            });
-          })
-          .catch((err) => {
-            console.log(`getStockInfo發生錯誤:${err}`);
-          });
-      }
-    }, 60000);
   })
   .catch((err) => {
-    console.log(`前導網頁get cookie發生錯誤:${err}`);
+    console.log(`ajax發生錯誤:${err}`);
   });
-
-
-setInterval(() => {
-  userInfoArr.forEach((vo) => {
-    if (vo.subscr && vo.stockIdArr.length > 0) {
-      let showMessage = '';
-      vo.stockIdArr.forEach((stockId) => {
-        let obj = stockList.find((o) => { return o.stockId === stockId && o.currPrice > 0; });
-        if (obj) {
-          showMessage += `股票:${obj.stockName}(${obj.stockId})
-目前價:${obj.currPrice}(${(obj.currPrice - obj.startPrice > 0 ? '+' : '')}${returnFloat(obj.currPrice - obj.startPrice)})${(obj.currPrice - obj.startPrice > 0 ? '漲' : '跌')}
-最高價:${obj.hightPrice}
-最低價:${obj.lowPrice}\n\n`;
-        }
-      });
-
-      if (showMessage) {
-        client.pushMessage(vo.userId, {
-          type: 'text',
-          text: showMessage,
-        });
-      }
-    }
-  });
-}, 20000);
