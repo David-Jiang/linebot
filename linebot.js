@@ -13,13 +13,17 @@ const config = {
 
 const client = new line.Client(config);
 const app = express();
-app.listen(80, () => {
+app.listen(process.env.PORT, () => {
   console.log('LineBot is running');
 });
-app.use(express.static(__dirname + '/'));
+/* app.use(express.static(__dirname + '/'));
 app.get('/*', function (req, res) {
   res.sendFile(path.resolve(__dirname, 'index.html'));
-});
+}); */
+/* app.use((req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+}); */
 app.post('/linewebhook', line.middleware(config), (req, res) => {
   if (!Array.isArray(req.body.events)) {
     return res.status(500).end();
@@ -41,28 +45,29 @@ const handleEvent = (event: any) => {
         case 'text':
           return handleText(event.message.text, event.replyToken, event.source);
         default:
-          return replyText(event.replyToken, '請輸入正確訊息唷');
+          return replyText(event.replyToken, '不好意思，請輸入訊息唷');
       }
     case 'postback':
       return handlePostback(event.postback, event.replyToken, event.source);
     default:
-      throw new Error(`Unknown event: ${JSON.stringify(event)}`);
+      throw new Error(`handleEvent error : ${JSON.stringify(event)}`);
   }
 };
 
-const handleText = (text: string, replyToken: any, source: any) => {
+const handleText = (text, replyToken, source) => {
   let messageText = text;
   client.getProfile(source.userId)
     .then((profile) => { return profile.displayName; })
     .then((userName) => {
       //let userInfo = new UserInfo()
 
-      if (messageText.startsWith('-a')) {
-        replyText();
+      if (messageText === 'poa') {
+        console.log(`${userName} userId is ${source.userId}`)
+        replyText(replyToken, `成功綁定Line Bot ID -> ${source.userId}`);
       } else if (messageText === 'image') {
         replyTemplate(replyToken);
       } else {
-        replyText(replyToken, `您好${userName}，歡迎使用\n輸入-v 可以查看功能列表`);
+        replyText(replyToken, `您好${userName}`);
       }
     });
 
@@ -81,7 +86,7 @@ const handlePostback = (postback: any, replyToken: any, source: any) => {
     });
 };
 
-const replyText = (token: any, message: string) => {
+const replyText = (token, message) => {
   return client.replyMessage(
     token,
     { type: 'text', text: message }
@@ -126,7 +131,7 @@ const replyTemplate = (token: any) => {
   );
 };
 
-const reqOpt = {
+/* const reqOpt = {
   uri: '',
   headers: {
     'content-type': 'application/json',
@@ -137,4 +142,4 @@ rp(reqOpt)
   })
   .catch((err) => {
     console.log(`ajax發生錯誤:${err}`);
-  });
+  }); */
