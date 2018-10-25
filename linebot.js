@@ -3,30 +3,35 @@ import express from 'express';
 import rp from 'request-promise';
 import _ from 'lodash';
 import { UserInfo, CarouselTemplate, CarouselModel } from './src/model/LineBotModel';
-
 const path = require('path');
+const bodyParser = require('body-parser');
 
 const config = {
   channelAccessToken: 'NgamlfgqtFtz/wpiz0zQQyVhM2gwtSB3HK7UYxXppJat+353tD9j7YZ/JRe64UW3PgLfnOoxm4LDJ5pbJRmrPlJUCllejaWDH24hAhZ+Okv0aKD1c/QwjNf24KKzJKzpIcBkN8kQEQJdGLrj570ibQdB04t89/1O/w1cDnyilFU=',
   channelSecret: 'e2dd514a9ba6200e517fb9d12ad3c0a3',
 };
+const administerIdArr = ['Ude5b0ad0a50f55c0e74d0de95f9800d1', 'Ucb4720559edda7096b1cc0ff0f842ce6'];
 
 const client = new line.Client(config);
 const app = express();
-app.listen(process.env.PORT, () => {
-  console.log('LineBot is running');
+const server = app.listen(process.env.PORT, () => {
+  console.log(`LineBot is running port : ${server.address().port}`);
 });
 /* app.use(express.static(__dirname + '/'));
 app.get('/*', function (req, res) {
   res.sendFile(path.resolve(__dirname, 'index.html'));
 }); */
-/* app.use((req, res) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-}); */
+app.use(bodyParser.text({ type: 'text/plain' }));
+app.post('/test', (req, res) => {
+  const { message, type } = JSON.parse(req.body);
+  administerIdArr.forEach((administerId) => {
+    pushText(administerId, `有一則${type}新留言，來自${message}，詢問為何我這麼智障`);
+  });
+  res.end();
+});
 app.post('/linewebhook', line.middleware(config), (req, res) => {
   if (!Array.isArray(req.body.events)) {
-    return res.status(500).end();
+    res.status(500).end();
   }
 
   Promise
@@ -86,10 +91,15 @@ const handlePostback = (postback: any, replyToken: any, source: any) => {
     });
 };
 
+const pushText = (userId, message) => {
+  return client.pushMessage(
+    userId, { type: 'text', text: message }
+  );
+}
+
 const replyText = (token, message) => {
   return client.replyMessage(
-    token,
-    { type: 'text', text: message }
+    token, { type: 'text', text: message }
   );
 };
 
@@ -126,8 +136,7 @@ const replyTemplate = (token: any) => {
   carouselArr.push(carouselModel);
 
   return client.replyMessage(
-    token,
-    carouselTemplate
+    token, carouselTemplate
   );
 };
 
