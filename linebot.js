@@ -21,11 +21,22 @@ const server = app.listen(process.env.PORT, () => {
 app.get('/*', function (req, res) {
   res.sendFile(path.resolve(__dirname, 'index.html'));
 }); */
-app.use(bodyParser.text({ type: 'text/plain' }));
-app.post('/test', (req, res) => {
-  const { message, type } = JSON.parse(req.body);
+app.post('/pushNotification', bodyParser.text({ type: 'text/plain' }), (req, res) => {
+  let message = '';
+  let pushJson = JSON.parse(req.body);
+  if (pushJson.notification == 'question') {
+    message = `${pushJson.questionAuthor}，新增了一條問題：${pushJson.questionTitle}`;
+  } else if (pushJson.notification == 'chat') {
+    message = `${pushJson.chatAuthor}，在問題：${pushJson.questionTitle}，回覆了一則留言`;
+  } else if (pushJson.notification == 'feedback') {
+    if (pushJson.feedbackType == 'reserve') {
+      message = `${pushJson.name}，想要預約${pushJson.contactDate} ${pushJson.contactTime}，聯絡方式：${pushJson.feedbackContact}`;
+    } else {
+      message = `有一則建議有關：${pushJson.suggestion}，聯絡方式：${pushJson.feedbackContact}`;
+    }
+  }
   administerIdArr.forEach((administerId) => {
-    pushText(administerId, `有一則${type}新留言，來自${message}，詢問為何我這麼智障`);
+    pushText(administerId, message);
   });
   res.end();
 });
